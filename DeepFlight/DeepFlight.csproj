@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controller.cs" />
+    <Compile Include="FPSCounter.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="LehmerRng.cs" />
     <Compile Include="Program.cs" />

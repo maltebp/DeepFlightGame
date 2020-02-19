@@ -8,6 +8,8 @@ using System.Collections.Generic;
 
 public class Controller : Game {
 
+
+
     private const int CAMERA_MOVE_SPEED = 10;
     private const int GENERATION_DISTANCE = 2;
 
@@ -21,11 +23,20 @@ public class Controller : Game {
     private Texture2D tex_Wall;
     private Texture2D tex_Circle;
 
+    // FPS
+    private double FPS_UPDATE_FREQ = 0.5;
+    private double fpsUpdateCounter = 0;
+    private double currentFps = -1;
+    private FPSCounter fpsCounter = new FPSCounter();
+
     private Random random = new Random();
     
 
     public Controller() {
         graphics = new GraphicsDeviceManager(this);
+        graphics.PreferredBackBufferWidth = 1080;  // set this value to the desired width of your window
+        graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
+        graphics.ApplyChanges();
     }
 
 
@@ -37,6 +48,8 @@ public class Controller : Game {
 
 
     protected override void LoadContent() {
+
+
 
         // Create a new SpriteBatch, which can be used to draw textures.
         spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -57,9 +70,7 @@ public class Controller : Game {
         tex_Circle = Content.Load<Texture2D>("Content/CircleTexture2");
 
         // Font
-        font = Content.Load<SpriteFont>("Content/DefaultFont");
-
-        
+        font = Content.Load<SpriteFont>("Content/DefaultFont");        
 
     }
 
@@ -70,6 +81,8 @@ public class Controller : Game {
     protected override void Update(GameTime gameTime) {
         newState = Keyboard.GetState();
 
+        fpsCounter.Update(gameTime);        
+    
 
         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
@@ -114,6 +127,13 @@ public class Controller : Game {
 
     protected override void Draw(GameTime time) {
 
+        fpsCounter.Update(time);
+        fpsUpdateCounter += time.ElapsedGameTime.TotalSeconds;
+        if (fpsUpdateCounter > FPS_UPDATE_FREQ) {
+            currentFps = fpsCounter.GetFPS();
+            fpsUpdateCounter %= FPS_UPDATE_FREQ;
+        }
+
         GraphicsDevice.Clear(Color.White);
 
         spriteBatch.Begin();
@@ -141,8 +161,8 @@ public class Controller : Game {
         spriteBatch.DrawString(font, String.Format("Block: {0}, {1}", Generator.GetBlockX((int) camera.X), Generator.GetBlockY((int) camera.Y)), new Vector2(50, 100), Color.Red);
         spriteBatch.DrawString(font, String.Format("N. Blocks: {0}", Generator.GetSector().Count), new Vector2(50, 150), Color.Red);
 
-        spriteBatch.DrawString(font, String.Format("FPS: {0}", 1 / time.ElapsedGameTime.TotalSeconds ), new Vector2(50, 200), Color.Red);
 
+        spriteBatch.DrawString(font, String.Format("FPS: {0:N2}", currentFps ), new Vector2(50, 200), Color.Red);
 
         spriteBatch.End();
         base.Draw(time);
