@@ -66,7 +66,7 @@ namespace DeepFlight
 
             base.Update(gameTime);
         }
-
+        
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
