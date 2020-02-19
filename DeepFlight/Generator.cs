@@ -8,9 +8,13 @@ using System.Threading.Tasks;
 
 class Generator {
 
+	
+
 	private static LinkedList<Block> sector = new LinkedList<Block>();
+	
 	public static int BLOCK_SIZE = 2000;
 	public static int CELL_SIZE = 10;
+
 	private static ulong masterSeed;
 
 	public static void setMasterSeed(ulong seed) {
