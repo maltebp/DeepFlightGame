@@ -46,6 +46,8 @@
     <Compile Include="Game1.cs" />
     <Compile Include="LehmerRng.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="NodeChunk.cs" />
+    <Compile Include="PathGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -30,7 +30,8 @@ public class Controller : Game {
     private FPSCounter fpsCounter = new FPSCounter();
 
     private Random random = new Random();
-    
+    private PathGenerator path = new PathGenerator(0, 0);
+
 
     public Controller() {
         graphics = new GraphicsDeviceManager(this);
@@ -41,7 +42,15 @@ public class Controller : Game {
 
 
     protected override void Initialize() {
-        
+
+        for(int i=0; i<1000; i++) {
+            path.Update();
+        }
+
+        //foreach(Node node in path.GetNodes()) {
+        //    Console.WriteLine(node);
+        //}
+
 
         base.Initialize();
     }
@@ -55,22 +64,22 @@ public class Controller : Game {
         spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // Wall Texture
-        tex_Wall = new Texture2D(graphics.GraphicsDevice, Generator.CELL_SIZE, Generator.CELL_SIZE);
+        //tex_Wall = new Texture2D(graphics.GraphicsDevice, Generator.CELL_SIZE, Generator.CELL_SIZE);
 
-        Color[] data = new Color[Generator.CELL_SIZE * Generator.CELL_SIZE];
-        for (int i = 0; i < data.Length; ++i)
-            data[i] = new Color(75, 75, 75);
-        tex_Wall.SetData(data);
+        //Color[] data = new Color[Generator.CELL_SIZE * Generator.CELL_SIZE];
+        //for (int i = 0; i < data.Length; ++i)
+        //    data[i] = new Color(75, 75, 75);
+        //tex_Wall.SetData(data);
 
         // Line Texture
-        tex_Line = new Texture2D(graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-        tex_Line.SetData(new[] { Color.White });
+        //tex_Line = new Texture2D(graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+        //tex_Line.SetData(new[] { Color.White });
 
         // Circle Texture
         tex_Circle = Content.Load<Texture2D>("Content/CircleTexture2");
 
         // Font
-        font = Content.Load<SpriteFont>("Content/DefaultFont");        
+        font = Content.Load<SpriteFont>("Content/DefaultFont");
 
     }
 
@@ -81,8 +90,8 @@ public class Controller : Game {
     protected override void Update(GameTime gameTime) {
         newState = Keyboard.GetState();
 
-        fpsCounter.Update(gameTime);        
-    
+        fpsCounter.Update(gameTime);
+
 
         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
@@ -95,20 +104,20 @@ public class Controller : Game {
         if (Keyboard.GetState().IsKeyDown(Keys.Down))
             camera.Y += CAMERA_MOVE_SPEED;
 
-        Generator.GenerateSector(camera, GENERATION_DISTANCE);
+        //Generator.GenerateSector(camera, GENERATION_DISTANCE);
 
-        if (KeypressTest(Keys.R)) {
-            Console.WriteLine("\n\nSECTOR (Size: {0})", Generator.GetSector());
-            foreach (Block block in Generator.GetSector()) {
-                Console.WriteLine("Block ({0}, {1}):", block.getX(), block.getY());
-                foreach (Node node in block.GetNodes()) {
-                    Console.WriteLine("\t{0}", node.GetPos());
-                }
-            }
-        }
-        
-        
-  
+        //if (KeypressTest(Keys.R)) {
+        //    Console.WriteLine("\n\nSECTOR (Size: {0})", Generator.GetSector());
+        //    foreach (Block block in Generator.GetSector()) {
+        //        Console.WriteLine("Block ({0}, {1}):", block.getX(), block.getY());
+        //        foreach (Node node in block.GetNodes()) {
+        //            Console.WriteLine("\t{0}", node.GetPos());
+        //        }
+        //    }
+        //}
+
+
+
         base.Update(gameTime);
         oldState = newState;
     }
@@ -150,19 +159,24 @@ public class Controller : Game {
 
         //DrawLine(spriteBatch, new Vector2(0,0), new Vector2(500,500), Color.Red, 10);
 
-        foreach (Block block in Generator.GetSector()) {
-            foreach (Node node in block.GetNodes() ) {
-                Vector2 drawPos = node.GetPos() - camera;
-                spriteBatch.Draw(tex_Circle, new Rectangle((int)drawPos.X, (int)drawPos.Y, Generator.CELL_SIZE, Generator.CELL_SIZE), Color.Black);
-            }
+        //foreach (Block block in Generator.GetSector()) {
+        //    foreach (Node node in block.GetNodes()) {
+        //        Vector2 drawPos = node.GetPos() - camera;
+        //        spriteBatch.Draw(tex_Circle, new Rectangle((int)drawPos.X, (int)drawPos.Y, Generator.CELL_SIZE, Generator.CELL_SIZE), Color.Black);
+        //    }
+        //}
+
+        foreach( Node node in path.GetNodes()) {
+            double x = node.x - camera.X;
+            double y = node.y - camera.Y;
+            spriteBatch.Draw(tex_Circle, new Rectangle( (int) x-5, (int) y-5, 10, 10), Color.Black);
         }
 
-        spriteBatch.DrawString(font, String.Format("Cam: {0}, {1}", camera.X, camera.Y), new Vector2(50, 50), Color.Red );
-        spriteBatch.DrawString(font, String.Format("Block: {0}, {1}", Generator.GetBlockX((int) camera.X), Generator.GetBlockY((int) camera.Y)), new Vector2(50, 100), Color.Red);
-        spriteBatch.DrawString(font, String.Format("N. Blocks: {0}", Generator.GetSector().Count), new Vector2(50, 150), Color.Red);
+        spriteBatch.DrawString(font, String.Format("Cam: {0}, {1}", camera.X, camera.Y), new Vector2(50, 50), Color.Red);
+        //spriteBatch.DrawString(font, String.Format("Block: {0}, {1}", Generator.GetBlockX((int)camera.X), Generator.GetBlockY((int)camera.Y)), new Vector2(50, 100), Color.Red);
+        //spriteBatch.DrawString(font, String.Format("N. Blocks: {0}", Generator.GetSector().Count), new Vector2(50, 150), Color.Red);
 
-
-        spriteBatch.DrawString(font, String.Format("FPS: {0:N2}", currentFps ), new Vector2(50, 200), Color.Red);
+        spriteBatch.DrawString(font, String.Format("FPS: {0:N2}", currentFps), new Vector2(50, 200), Color.Red);
 
         spriteBatch.End();
         base.Draw(time);
@@ -174,16 +188,16 @@ public class Controller : Game {
 
 
     // Line source: http://community.monogame.net/t/line-drawing/6962/4
-    public void DrawLine( SpriteBatch spriteBatch, Vector2 point1, Vector2 point2, Color color, float thickness = 1f) {
+    public void DrawLine(SpriteBatch spriteBatch, Vector2 point1, Vector2 point2, Color color, float thickness = 1f) {
         var distance = Vector2.Distance(point1, point2);
         var angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
         DrawLine(spriteBatch, point1, distance, angle, color, thickness);
     }
 
-    public void DrawLine( SpriteBatch spriteBatch, Vector2 point, float length, float angle, Color color, float thickness = 1f) {
+    public void DrawLine(SpriteBatch spriteBatch, Vector2 point, float length, float angle, Color color, float thickness = 1f) {
         var origin = new Vector2(0f, 0.5f);
         var scale = new Vector2(length, thickness);
-        spriteBatch.Draw( tex_Line, point, null, color, angle, origin, scale, SpriteEffects.None, 0);
+        spriteBatch.Draw(tex_Line, point, null, color, angle, origin, scale, SpriteEffects.None, 0);
     }
 
 
