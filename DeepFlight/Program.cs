@@ -6,12 +6,10 @@ public static class Program {
         var game = new Controller();
         game.Run();
 
-        uint n1 = 43;
-        uint n2 = 43 % 100;
+        //int n1 = Mod(200, 500);
+        //int n2 = Mod(-200, 500);
 
-        Console.WriteLine(n1);
-        Console.WriteLine(n2);
+        //Console.WriteLine(n1);
+        //Console.WriteLine(n2);
     }
-
-    // Testing git 3 
 }

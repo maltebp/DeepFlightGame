@@ -45,6 +45,7 @@
     <Compile Include="FPSCounter.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="LehmerRng.cs" />
+    <Compile Include="MathExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="NodeChunk.cs" />
     <Compile Include="PathGenerator.cs" />

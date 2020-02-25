@@ -8,14 +8,16 @@ using System.Collections.Generic;
 
 public class Controller : Game {
 
-
-
-    private const int CAMERA_MOVE_SPEED = 10;
+    private const double SCALE = 20;
+    private const int CAMERA_MOVE_SPEED = 5;
     private const int GENERATION_DISTANCE = 2;
 
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
     private SpriteFont font;
+
+    private int CAM_WIDTH = 1920;
+    private int CAM_HEIGHT = 1080;
 
     private Vector2 camera = new Vector2(0, 0);
 
@@ -27,25 +29,30 @@ public class Controller : Game {
     private double FPS_UPDATE_FREQ = 0.5;
     private double fpsUpdateCounter = 0;
     private double currentFps = -1;
+
+    private double simUpdateCounter = 0;
+    private double currentSim = -1;
+
     private FPSCounter fpsCounter = new FPSCounter();
+    private FPSCounter simCounter = new FPSCounter();
 
     private Random random = new Random();
-    private PathGenerator path = new PathGenerator(0, 0);
+    private Generator generator = new Generator();
 
+
+    LinkedList<Vector2> wallsToDraw = new LinkedList<Vector2>();
 
     public Controller() {
         graphics = new GraphicsDeviceManager(this);
-        graphics.PreferredBackBufferWidth = 1080;  // set this value to the desired width of your window
-        graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
+        graphics.PreferredBackBufferWidth = CAM_WIDTH;  // set this value to the desired width of your window
+        graphics.PreferredBackBufferHeight = CAM_HEIGHT;   // set this value to the desired height of your window
         graphics.ApplyChanges();
     }
 
 
     protected override void Initialize() {
 
-        for(int i=0; i<1000; i++) {
-            path.Update();
-        }
+        generator.GenerateTrack();
 
         //foreach(Node node in path.GetNodes()) {
         //    Console.WriteLine(node);
@@ -63,13 +70,12 @@ public class Controller : Game {
         // Create a new SpriteBatch, which can be used to draw textures.
         spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // Wall Texture
-        //tex_Wall = new Texture2D(graphics.GraphicsDevice, Generator.CELL_SIZE, Generator.CELL_SIZE);
+        tex_Wall = new Texture2D(graphics.GraphicsDevice, 10, 10);
 
-        //Color[] data = new Color[Generator.CELL_SIZE * Generator.CELL_SIZE];
-        //for (int i = 0; i < data.Length; ++i)
-        //    data[i] = new Color(75, 75, 75);
-        //tex_Wall.SetData(data);
+        Color[] data = new Color[10 * 10];
+        for (int i = 0; i < data.Length; ++i)
+            data[i] = new Color(75, 75, 75);
+        tex_Wall.SetData(data);
 
         // Line Texture
         //tex_Line = new Texture2D(graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
@@ -81,6 +87,7 @@ public class Controller : Game {
         // Font
         font = Content.Load<SpriteFont>("Content/DefaultFont");
 
+
     }
 
 
@@ -90,7 +97,7 @@ public class Controller : Game {
     protected override void Update(GameTime gameTime) {
         newState = Keyboard.GetState();
 
-        fpsCounter.Update(gameTime);
+        simCounter.Update(gameTime);
 
 
         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -104,6 +111,8 @@ public class Controller : Game {
         if (Keyboard.GetState().IsKeyDown(Keys.Down))
             camera.Y += CAMERA_MOVE_SPEED;
 
+        
+
         //Generator.GenerateSector(camera, GENERATION_DISTANCE);
 
         //if (KeypressTest(Keys.R)) {
@@ -116,7 +125,10 @@ public class Controller : Game {
         //    }
         //}
 
+        generator.UpdateOffset((int) camera.X, (int) camera.Y);
 
+        wallsToDraw.Clear();
+        
 
         base.Update(gameTime);
         oldState = newState;
@@ -143,6 +155,12 @@ public class Controller : Game {
             fpsUpdateCounter %= FPS_UPDATE_FREQ;
         }
 
+        simUpdateCounter += time.ElapsedGameTime.TotalSeconds;
+        if (simUpdateCounter > FPS_UPDATE_FREQ) {
+            currentSim = simCounter.GetFPS();
+            simUpdateCounter %= FPS_UPDATE_FREQ;
+        }
+
         GraphicsDevice.Clear(Color.White);
 
         spriteBatch.Begin();
@@ -166,17 +184,33 @@ public class Controller : Game {
         //    }
         //}
 
-        foreach( Node node in path.GetNodes()) {
-            double x = node.x - camera.X;
-            double y = node.y - camera.Y;
-            spriteBatch.Draw(tex_Circle, new Rectangle( (int) x-5, (int) y-5, 10, 10), Color.Black);
-        }
+        int size = (int)SCALE;
+        int adjust = (int) SCALE/2;
+        generator.ForEachBlock((block, x, y) => {
+            if (block == BlockType.NONE) {
+                double drawX = (x - camera.X) * SCALE + CAM_WIDTH / 2;// - (CAM_WIDTH*SCALE)/2;
+                double drawY = (y - camera.Y) * SCALE + CAM_HEIGHT / 2;
+
+                if (drawX >= 0 && drawX < CAM_WIDTH && drawY >= 0 && drawY < CAM_HEIGHT)
+                    spriteBatch.Draw(tex_Wall, new Rectangle((int)(drawX - adjust), (int)(drawY - adjust), size, size), Color.Black);
+            }
+        });
+
+
+
+        //foreach( Node node in path.GetNodes()) {
+        //    double x = node.x - camera.X;
+        //    double y = node.y - camera.Y;
+        //    spriteBatch.Draw(tex_Circle, new Rectangle( (int) x-5, (int) y-5, 10, 10), Color.Black);
+        //}
 
         spriteBatch.DrawString(font, String.Format("Cam: {0}, {1}", camera.X, camera.Y), new Vector2(50, 50), Color.Red);
         //spriteBatch.DrawString(font, String.Format("Block: {0}, {1}", Generator.GetBlockX((int)camera.X), Generator.GetBlockY((int)camera.Y)), new Vector2(50, 100), Color.Red);
         //spriteBatch.DrawString(font, String.Format("N. Blocks: {0}", Generator.GetSector().Count), new Vector2(50, 150), Color.Red);
 
         spriteBatch.DrawString(font, String.Format("FPS: {0:N2}", currentFps), new Vector2(50, 200), Color.Red);
+        spriteBatch.DrawString(font, String.Format("Sim.: {0:N2}", currentSim), new Vector2(50, 250), Color.Red);
+
 
         spriteBatch.End();
         base.Draw(time);
