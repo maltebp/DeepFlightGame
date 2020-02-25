@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 class Generator {
 
-    private const int SIZE = 100;
+    private const int SIZE = 300;
     private const int MARGIN = 15;
 
     private int offsetX;

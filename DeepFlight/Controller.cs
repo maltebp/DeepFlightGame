@@ -8,9 +8,11 @@ using System.Collections.Generic;
 
 public class Controller : Game {
 
-    private const double SCALE = 20;
+    private const double SCALE = 5;
     private const int CAMERA_MOVE_SPEED = 5;
     private const int GENERATION_DISTANCE = 2;
+    private float rotation = 0.0f;
+    private float ROTATION_SPEED = 0.1f;
 
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
@@ -74,7 +76,7 @@ public class Controller : Game {
 
         Color[] data = new Color[10 * 10];
         for (int i = 0; i < data.Length; ++i)
-            data[i] = new Color(75, 75, 75);
+            data[i] = new Color(255, 255, 255);
         tex_Wall.SetData(data);
 
         // Line Texture
@@ -111,7 +113,12 @@ public class Controller : Game {
         if (Keyboard.GetState().IsKeyDown(Keys.Down))
             camera.Y += CAMERA_MOVE_SPEED;
 
-        
+        if (Keyboard.GetState().IsKeyDown(Keys.W))
+            rotation = (rotation - ROTATION_SPEED) % (float)(Math.PI * 2);
+        if (Keyboard.GetState().IsKeyDown(Keys.E))
+            rotation = (rotation+ROTATION_SPEED) % (float) (Math.PI*2);
+
+
 
         //Generator.GenerateSector(camera, GENERATION_DISTANCE);
 
@@ -161,7 +168,7 @@ public class Controller : Game {
             simUpdateCounter %= FPS_UPDATE_FREQ;
         }
 
-        GraphicsDevice.Clear(Color.White);
+        GraphicsDevice.Clear(Color.Black);
 
         spriteBatch.Begin();
         //Vector2 pos = new Vector2(0, 0);
@@ -184,15 +191,28 @@ public class Controller : Game {
         //    }
         //}
 
+//        p'x = cos(theta) * (px-ox) - sin(theta) * (py-oy) + ox
+
+//p'y       =   sin(theta) * (px-ox) + cos(theta) * (py-oy) + oy
+
         int size = (int)SCALE;
-        int adjust = (int) SCALE/2;
+        int adjust = (int)SCALE / 2;
+        double centerX = CAM_WIDTH / 2;
+        double centerY = CAM_HEIGHT / 2;
+
         generator.ForEachBlock((block, x, y) => {
-            if (block == BlockType.NONE) {
+            if (block == BlockType.WALL) {
                 double drawX = (x - camera.X) * SCALE + CAM_WIDTH / 2;// - (CAM_WIDTH*SCALE)/2;
                 double drawY = (y - camera.Y) * SCALE + CAM_HEIGHT / 2;
 
-                if (drawX >= 0 && drawX < CAM_WIDTH && drawY >= 0 && drawY < CAM_HEIGHT)
-                    spriteBatch.Draw(tex_Wall, new Rectangle((int)(drawX - adjust), (int)(drawY - adjust), size, size), Color.Black);
+                double rotatedX = Math.Cos(rotation) * (drawX - centerX) - Math.Sin(rotation) * (drawY - centerY) + centerX;
+                double rotatedY = Math.Sin(rotation) * (drawX - centerX) + Math.Cos(rotation) * (drawY - centerY) + centerY;
+
+                if (rotatedX >= 0 && rotatedX < CAM_WIDTH && rotatedY >= 0 && rotatedY < CAM_HEIGHT)
+                    //spriteBatch.Draw(cannon.image, new Rectangle(300, 300, cannon.image.Width, cannon.image.Height), null, Color.White, y, origin, SpriteEffects.None, 0f);
+
+                    //spriteBatch.Draw(tex_Wall, new Rectangle((int)(drawX - adjust), (int)(drawY - adjust), size, size), null, Color.White, rotation, new Vector2((float) drawX, (float) drawY), SpriteEffects.None, 0f );
+                    spriteBatch.Draw(tex_Wall, new Rectangle((int)(rotatedX - adjust), (int)(rotatedY - adjust), size, size), Color.White);
             }
         });
 
@@ -205,6 +225,8 @@ public class Controller : Game {
         //}
 
         spriteBatch.DrawString(font, String.Format("Cam: {0}, {1}", camera.X, camera.Y), new Vector2(50, 50), Color.Red);
+        spriteBatch.DrawString(font, String.Format("Rotation.: {0:N2}", rotation), new Vector2(50, 80), Color.Red);
+
         //spriteBatch.DrawString(font, String.Format("Block: {0}, {1}", Generator.GetBlockX((int)camera.X), Generator.GetBlockY((int)camera.Y)), new Vector2(50, 100), Color.Red);
         //spriteBatch.DrawString(font, String.Format("N. Blocks: {0}", Generator.GetSector().Count), new Vector2(50, 150), Color.Red);
 
