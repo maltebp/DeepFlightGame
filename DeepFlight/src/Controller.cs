@@ -226,8 +226,6 @@ public class Controller : Game {
         });
 
 
-
-
             
         spriteBatch.DrawString(font, String.Format("Cam: {0}, {1}", camera.X, camera.Y), new Vector2(50, 50), Color.Red);
         spriteBatch.DrawString(font, String.Format("Rotation.: {0:N2}", rotation), new Vector2(50, 80), Color.Red);

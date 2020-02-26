@@ -35,21 +35,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>src\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Controller.cs" />
-    <Compile Include="FPSCounter.cs" />
-    <Compile Include="Game1.cs" />
-    <Compile Include="LehmerRng.cs" />
-    <Compile Include="MathExtension.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="NodeChunk.cs" />
-    <Compile Include="PathGenerator.cs" />
+    <Compile Include="src\Camera.cs" />
+    <Compile Include="src\Controller.cs" />
+    <Compile Include="src\Drawable.cs" />
+    <Compile Include="src\Entity.cs" />
+    <Compile Include="src\FPSCounter.cs" />
+    <Compile Include="src\Game1.cs" />
+    <Compile Include="src\GameController.cs" />
+    <Compile Include="src\InputController.cs" />
+    <Compile Include="src\LehmerRng.cs" />
+    <Compile Include="src\MathExtension.cs" />
+    <Compile Include="src\Movable.cs" />
+    <Compile Include="src\Mover.cs" />
+    <Compile Include="src\Program.cs" />
+    <Compile Include="src\NodeChunk.cs" />
+    <Compile Include="src\PathGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Renderer.cs" />
+    <Compile Include="src\Ship.cs" />
+    <Compile Include="src\System.cs" />
+    <Compile Include="src\Textures.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -60,12 +71,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CircleTexture.png" />
-    <Content Include="Icon.ico" />
+    <Content Include="src\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
-    <Compile Include="Generator.cs" />
+    <Compile Include="src\Generator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
