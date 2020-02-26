@@ -1,6 +1,6 @@
 ﻿
 using System;
-
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,6 +12,7 @@ class GameController : Game {
     private Camera camera;
     private Ship ship;
     private Mover mover;
+    private LinkedList<Space> spaces = new LinkedList<Space>();
 
     public GameController() {
         graphics = new GraphicsDeviceManager(this);
@@ -23,19 +24,24 @@ class GameController : Game {
 
     protected override void Initialize() {
         renderer = new Renderer(new SpriteBatch(GraphicsDevice));
+
         
        
         base.Initialize();
     }
 
     protected override void LoadContent() {
-        Textures.LoadTextures(Content);
+        Textures.LoadTextures(graphics.GraphicsDevice, Content);
 
 
         // Ship must be created after loading textures
         ship = new Ship();
 
-        
+        Random rand = new Random();
+        for (int i = 0; i < 100; i++) {
+            spaces.AddLast(new Space(rand.Next(-2000, 2000), rand.Next(-2000, 2000), (float)rand.NextDouble()));
+        }
+
 
         base.LoadContent();
     }
@@ -62,6 +68,21 @@ class GameController : Game {
         }
 
 
+        
+        camera.Rotation = ship.Rotation;
+
+        //if (Keys.W.IsHeld()) {
+        //    camera.Rotation -= 0.05f;
+        //}
+
+        //if (Keys.E.IsHeld()) {
+        //    camera.Rotation += 0.05f;
+        //}
+
+
+
+
+
         if ( Keys.Space.IsHeld()) {
             double rotation = ship.Rotation + Math.PI * 1.5;
             ship.AccelerationY = (float) (Math.Sin(rotation) * 0.5);
@@ -73,6 +94,8 @@ class GameController : Game {
         }
 
         mover.Move(ship);
+        camera.X = ship.X;
+        camera.Y = ship.Y;
 
         base.Update(gameTime);
     }
@@ -83,6 +106,10 @@ class GameController : Game {
         GraphicsDevice.Clear(Color.Black);
 
         renderer.Draw(camera, ship);
+
+        foreach(Space space in spaces) {
+            renderer.Draw(camera, space);
+        }
 
         renderer.Flush();
       

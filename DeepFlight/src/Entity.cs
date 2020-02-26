@@ -14,7 +14,8 @@ public abstract class Entity {
     private float rotation = 0f;
     public float Rotation {
         get => rotation;
-        set => rotation = MathExtension.Mod(value, (float)(2 * Math.PI)); }
+        set => rotation = MathExtension.Mod(value, (float)(2 * Math.PI));
+    }
 
     public float scale = 1.0f;
 

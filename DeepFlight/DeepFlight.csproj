@@ -59,7 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Renderer.cs" />
     <Compile Include="src\Ship.cs" />
-    <Compile Include="src\System.cs" />
+    <Compile Include="src\Space.cs" />
     <Compile Include="src\Textures.cs" />
   </ItemGroup>
   <ItemGroup>

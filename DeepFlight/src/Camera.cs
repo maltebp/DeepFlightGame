@@ -1,6 +1,8 @@
 ﻿
 
 
+using System;
+
 class Camera {
 
     public double X { get; set; } = 0;
@@ -10,7 +12,12 @@ class Camera {
     public int Height { get; private set; }
 
     // TODO: Adjust rotation interval to 2 PI
-    public float Rotation { get; set; } = 0f;
+    private float rotation = 0f;
+    public float Rotation {
+        get => rotation;
+        set => rotation = MathExtension.Mod(value, (float)(2 * Math.PI));
+    }
+
     public float Zoom { get; set; } = 1f;
 
     public Camera(int width, int height) {
