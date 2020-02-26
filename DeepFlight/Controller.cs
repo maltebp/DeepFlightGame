@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class Controller : Game {
 
-    private const double SCALE = 5;
+    private const double SCALE = 10;
     private const int CAMERA_MOVE_SPEED = 5;
     private const int GENERATION_DISTANCE = 2;
     private float rotation = 0.0f;
@@ -26,6 +26,8 @@ public class Controller : Game {
     private Texture2D tex_Line;
     private Texture2D tex_Wall;
     private Texture2D tex_Circle;
+    private Texture2D tex_Glow;
+    private Texture2D tex_Ship;
 
     // FPS
     private double FPS_UPDATE_FREQ = 0.5;
@@ -49,6 +51,7 @@ public class Controller : Game {
         graphics.PreferredBackBufferWidth = CAM_WIDTH;  // set this value to the desired width of your window
         graphics.PreferredBackBufferHeight = CAM_HEIGHT;   // set this value to the desired height of your window
         graphics.ApplyChanges();
+        this.IsMouseVisible = true;
     }
 
 
@@ -79,12 +82,16 @@ public class Controller : Game {
             data[i] = new Color(255, 255, 255);
         tex_Wall.SetData(data);
 
+        tex_Glow = Content.Load<Texture2D>("Content/GlowTexture");
+
         // Line Texture
         //tex_Line = new Texture2D(graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
         //tex_Line.SetData(new[] { Color.White });
 
         // Circle Texture
         tex_Circle = Content.Load<Texture2D>("Content/CircleTexture2");
+
+        tex_Ship = Content.Load<Texture2D>("Content/Ship");
 
         // Font
         font = Content.Load<SpriteFont>("Content/DefaultFont");
@@ -100,7 +107,6 @@ public class Controller : Game {
         newState = Keyboard.GetState();
 
         simCounter.Update(gameTime);
-
 
         if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
@@ -155,6 +161,8 @@ public class Controller : Game {
 
     protected override void Draw(GameTime time) {
 
+        
+
         fpsCounter.Update(time);
         fpsUpdateCounter += time.ElapsedGameTime.TotalSeconds;
         if (fpsUpdateCounter > FPS_UPDATE_FREQ) {
@@ -208,22 +216,19 @@ public class Controller : Game {
                 double rotatedX = Math.Cos(rotation) * (drawX - centerX) - Math.Sin(rotation) * (drawY - centerY) + centerX;
                 double rotatedY = Math.Sin(rotation) * (drawX - centerX) + Math.Cos(rotation) * (drawY - centerY) + centerY;
 
+
                 if (rotatedX >= 0 && rotatedX < CAM_WIDTH && rotatedY >= 0 && rotatedY < CAM_HEIGHT)
                     //spriteBatch.Draw(cannon.image, new Rectangle(300, 300, cannon.image.Width, cannon.image.Height), null, Color.White, y, origin, SpriteEffects.None, 0f);
 
-                    //spriteBatch.Draw(tex_Wall, new Rectangle((int)(drawX - adjust), (int)(drawY - adjust), size, size), null, Color.White, rotation, new Vector2((float) drawX, (float) drawY), SpriteEffects.None, 0f );
-                    spriteBatch.Draw(tex_Wall, new Rectangle((int)(rotatedX - adjust), (int)(rotatedY - adjust), size, size), Color.White);
+                    spriteBatch.Draw(tex_Wall, new Rectangle((int)(rotatedX - adjust), (int)(rotatedY - adjust), size+1, size+1), null, Color.White, rotation, new Vector2(5,5), SpriteEffects.None, 0f);
+                //spriteBatch.Draw(tex_Wall, new Rectangle((int)(rotatedX - adjust), (int)(rotatedY - adjust), size, size), Color.White);
             }
         });
 
 
 
-        //foreach( Node node in path.GetNodes()) {
-        //    double x = node.x - camera.X;
-        //    double y = node.y - camera.Y;
-        //    spriteBatch.Draw(tex_Circle, new Rectangle( (int) x-5, (int) y-5, 10, 10), Color.Black);
-        //}
 
+            
         spriteBatch.DrawString(font, String.Format("Cam: {0}, {1}", camera.X, camera.Y), new Vector2(50, 50), Color.Red);
         spriteBatch.DrawString(font, String.Format("Rotation.: {0:N2}", rotation), new Vector2(50, 80), Color.Red);
 
@@ -232,7 +237,6 @@ public class Controller : Game {
 
         spriteBatch.DrawString(font, String.Format("FPS: {0:N2}", currentFps), new Vector2(50, 200), Color.Red);
         spriteBatch.DrawString(font, String.Format("Sim.: {0:N2}", currentSim), new Vector2(50, 250), Color.Red);
-
 
         spriteBatch.End();
         base.Draw(time);
