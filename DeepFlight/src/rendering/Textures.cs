@@ -8,6 +8,7 @@ static class Textures {
 
     public static Texture2D SHIP { get; private set; }
     public static Texture2D SQUARE { get; private set; }
+    public static Texture2D CIRCLE { get; private set; }
 
 
     // Load the textures
@@ -22,5 +23,8 @@ static class Textures {
         for (int i = 0; i < data.Length; ++i)
             data[i] = new Color(255, 255, 255);
         SQUARE.SetData(data);
+
+        // CIRCLE
+        CIRCLE = content.Load<Texture2D>("Content/CircleTexture");
     }
 }

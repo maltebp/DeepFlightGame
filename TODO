@@ -6,13 +6,15 @@ Must have:
 
     Map Generation:
         ✔ Map generation framework
-        ☐ Base randomization on master seed
+        ✔ Base randomization on master seed
 
     Renderer:
         ✔ Drawable Scaling
-        Make renderer use the scaling value of drawable
+        ☐ Adjust drawable size to double rather than int
 
     Collision:
+        ✔ Collision system
+        ☐ Point Collider
         ☐ Ship / wall collision
 
     UI:
@@ -48,5 +50,22 @@ Bonus:
     ☐ Change color throughout map
 
     ☐ Particle effects
-        ☐ Ship "fire" effect
+        ☐ Ship "fire" effect  
         
+    ☐ Implement polygon collisions with "ray casting"
+    See: https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
+
+
+Collision Design:
+
+
+    SquareCollider
+    Circle Collider
+
+
+
+
+    Square detect collision with point
+    
+
+

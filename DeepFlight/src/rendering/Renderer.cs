@@ -31,14 +31,12 @@ class Renderer {
         // Adjust to center of entity
         drawX -= drawable.Width / 2;
         drawY -= drawable.Height / 2;
-
         double centerX = camera.Width / 2;
         double centerY = camera.Height / 2;
 
+        // Rotate around camera center
         double rotatedX = Math.Cos(-camera.Rotation) * (drawX - centerX) - Math.Sin(-camera.Rotation) * (drawY - centerY) + centerX;
         double rotatedY = Math.Sin(-camera.Rotation) * (drawX - centerX) + Math.Cos(-camera.Rotation) * (drawY - centerY) + centerY;
-
-        
 
         spriteBatch.Draw(
             drawable.Texture,

@@ -49,7 +49,6 @@ class GameController : Game {
         }
         track = Generator.GenerateTrack(seed);        
        
-
         base.Initialize();
     }
 
@@ -107,19 +106,36 @@ class GameController : Game {
     }
 
 
+    bool shipCollision = false;
+
     protected override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.Black);
 
+        shipCollision = false;
 
         track.ForBlocksInRange((int)(-100 + camera.X), (int)(-100 + camera.Y), (int)(100 + camera.X), (int)(100 + camera.Y), (type, x, y) => {
+            
             Space space = new Space(0, 0);
+
             space.X = x;
             space.Y = y;
             renderer.Draw(camera, space);
+
+            if (space.CollidesWith(ship))
+                shipCollision = true;
         });
 
         renderer.Draw(camera, ship);
 
+        if (shipCollision)
+            ship.Col = Color.Green;
+        else
+            ship.Col = Color.Red;
+
+
+        foreach (CollisionPoint point in CollisionPoint.GetCollisionPoints(ship)) {
+            renderer.Draw(camera, point);
+        }
 
         renderer.Flush();
       
