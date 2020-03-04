@@ -11,11 +11,14 @@ class GameController : Game {
     private Renderer renderer;
     private Camera camera;
     private Ship ship;
+    private Track track;
     private Mover mover;
     private LinkedList<Space> spaces = new LinkedList<Space>();
 
     public GameController() {
         graphics = new GraphicsDeviceManager(this);
+        graphics.PreferredBackBufferWidth = 1080;
+        graphics.PreferredBackBufferHeight = 720;
         //graphics.ToggleFullScreen();
 
         camera = new Camera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -24,8 +27,7 @@ class GameController : Game {
 
     protected override void Initialize() {
         renderer = new Renderer(new SpriteBatch(GraphicsDevice));
-
-        
+        track = Generator.GenerateTrack();        
        
         base.Initialize();
     }
@@ -39,7 +41,7 @@ class GameController : Game {
 
         Random rand = new Random();
         for (int i = 0; i < 100; i++) {
-            spaces.AddLast(new Space(rand.Next(-2000, 2000), rand.Next(-2000, 2000), (float)rand.NextDouble()));
+            spaces.AddLast(new Space(rand.Next(-100, 100), rand.Next(-100, 100)));
         }
 
 
@@ -69,7 +71,7 @@ class GameController : Game {
 
 
         
-        camera.Rotation = ship.Rotation;
+        //camera.Rotation = ship.Rotation;
 
         //if (Keys.W.IsHeld()) {
         //    camera.Rotation -= 0.05f;
@@ -80,13 +82,15 @@ class GameController : Game {
         //}
 
 
-
-
+        if( Keys.F.IsPressed()) {
+            camera.Zoom = 10 + (camera.Zoom + 2.5f) % 10;
+            
+        }
 
         if ( Keys.Space.IsHeld()) {
             double rotation = ship.Rotation + Math.PI * 1.5;
-            ship.AccelerationY = (float) (Math.Sin(rotation) * 0.5);
-            ship.AccelerationX = (float) (Math.Cos(rotation) * 0.5);
+            ship.AccelerationY = (float) (Math.Sin(rotation) * 0.05);
+            ship.AccelerationX = (float) (Math.Cos(rotation) * 0.05);
         }
         else {
             ship.AccelerationY = 0;
@@ -101,15 +105,24 @@ class GameController : Game {
     }
 
 
-
     protected override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.Black);
 
+
+        track.ForBlocksInRange((int)(-100 + camera.X), (int)(-100 + camera.Y), (int)(100 + camera.X), (int)(100 + camera.Y), (type, x, y) => {
+            Space space = new Space(0, 0);
+            space.X = x;
+            space.Y = y;
+            renderer.Draw(camera, space);
+        });
+
         renderer.Draw(camera, ship);
 
-        foreach(Space space in spaces) {
-            renderer.Draw(camera, space);
-        }
+        //foreach (Space space in spaces) {
+        //    renderer.Draw(camera, space);
+        //}
+
+
 
         renderer.Flush();
       

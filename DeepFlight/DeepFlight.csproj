@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\Block.cs" />
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\Controller.cs" />
     <Compile Include="src\Drawable.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="src\FPSCounter.cs" />
     <Compile Include="src\Game1.cs" />
     <Compile Include="src\GameController.cs" />
+    <Compile Include="src\Generator.cs" />
     <Compile Include="src\InputController.cs" />
     <Compile Include="src\LehmerRng.cs" />
     <Compile Include="src\MathExtension.cs" />
@@ -61,8 +63,16 @@
     <Compile Include="src\Ship.cs" />
     <Compile Include="src\Space.cs" />
     <Compile Include="src\Textures.cs" />
+    <Compile Include="src\BlockMap.cs" />
+    <Compile Include="test\BlockMapTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.2.1.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.2.1.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -76,7 +86,8 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
-    <Compile Include="src\Generator.cs" />
+    <Compile Include="src\GeneratorOld.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NewFolder1\" />
