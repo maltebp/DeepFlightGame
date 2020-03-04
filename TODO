@@ -3,12 +3,14 @@
 
 Must have:    
 
+    ☐ Zoom with mouse (for testing)
+
     Map Generation:
         ✔ Map generation framework
         ☐ Base randomization on master seed
 
     Renderer:
-        ☐ Drawable Scaling
+        ✔ Drawable Scaling
         Make renderer use the scaling value of drawable
 
     Collision:
@@ -17,7 +19,15 @@ Must have:
     UI:
         ☐ Create HUD camera
         ☐ Intro menu
-        ☐ Create Debug Text handler
+        
+        Debug View:
+            ☐ Debug View system
+            ☐ FPS
+            ☐ Posision
+            ☐ Acceleration
+            ☐ Velocity
+            ☐ Camera zoom
+
         Make a system, which makes it possible to display a series of custom debug values.
         
     Gameplay:
@@ -31,6 +41,9 @@ Bonus:
     ☐ Speed zoom effect
     The faster the ship goes, the more it should zoom out
 
+    ☐ Smoothen map generation
+    Map generation is a bit jagged, and remains the same size through the entire track.
+    Consider "acceleration" of tunnel width.
     
     ☐ Parallax effect on "space"
     ☐ Change color throughout map

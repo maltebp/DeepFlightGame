@@ -5,7 +5,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
 class GameController : Game {
+
+    private static readonly float ZOOM_DEFAULT = 8f;
+    private static readonly float ZOOM_MAX = 30f;
+    private static readonly float ZOOM_MIN = 0.5f;
+    private static readonly float ZOOM_FACTOR = 0.001f; // How "fast" to zoom
 
     private GraphicsDeviceManager graphics;
     private Renderer renderer;
@@ -44,7 +50,6 @@ class GameController : Game {
             spaces.AddLast(new Space(rand.Next(-100, 100), rand.Next(-100, 100)));
         }
 
-
         base.LoadContent();
     }
 
@@ -52,14 +57,10 @@ class GameController : Game {
 
     protected override void Update(GameTime gameTime) {
         InputController.UpdateState();
-
-        
  
         // TODO: Replace this with a better solution
         if (Keys.Escape.IsPressed())
             Exit();
-
-
 
         if (Keys.Left.IsHeld()) {
             ship.Rotation -= 0.05f;
@@ -82,6 +83,11 @@ class GameController : Game {
         mover.Move(ship);
         camera.X = ship.X;
         camera.Y = ship.Y;
+
+        // Update zoom
+        camera.Zoom += InputController.MouseWheelDiff() * ZOOM_FACTOR;
+        if (camera.Zoom < ZOOM_MIN) camera.Zoom = ZOOM_MIN;       
+        if (camera.Zoom > ZOOM_MAX) camera.Zoom = ZOOM_MAX;       
 
         base.Update(gameTime);
     }
