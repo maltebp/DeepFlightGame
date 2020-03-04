@@ -28,6 +28,8 @@ class GameController : Game {
         //graphics.ToggleFullScreen();
 
         camera = new Camera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+        camera.Zoom = ZOOM_DEFAULT;
+
         mover = new Mover();
     }
 
