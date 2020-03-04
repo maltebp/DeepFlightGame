@@ -6,10 +6,12 @@ using System.Collections.Generic;
 
 static class Generator {
     
-    public static Track GenerateTrack() {
+    public static Track GenerateTrack(int seed) {
+
+        Random rand = new Random(seed);
 
         Track track = new Track();
-        LinkedList<TrackNode> nodes = GenerateNodes();
+        LinkedList<TrackNode> nodes = GenerateNodes(rand);
 
         TrackNode node = nodes.First.Value;
         do {
@@ -51,7 +53,7 @@ static class Generator {
 
 
 
-    public static LinkedList<TrackNode> GenerateNodes() {
+    public static LinkedList<TrackNode> GenerateNodes(Random rand) {
 
         LinkedList<TrackNode> nodes = new LinkedList<TrackNode>();
 
@@ -62,7 +64,6 @@ static class Generator {
         double shiftCooldown = 0;
         double directionAccel = 0;
         double speed = 15;
-        Random rand = new Random();
 
         for (int i = 1; i < 500; i++) {
             previous = nodes.Last.Value;

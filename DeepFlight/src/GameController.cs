@@ -8,6 +8,10 @@ using Microsoft.Xna.Framework.Input;
 
 class GameController : Game {
 
+    private static readonly bool RANDOM_TRACK = true;
+    private static readonly int TRACK_SEED = 2000; // Seed to use if RANDOM_TRACK is false
+
+    // Zoom Settings
     private static readonly float ZOOM_DEFAULT = 8f;
     private static readonly float ZOOM_MAX = 30f;
     private static readonly float ZOOM_MIN = 0.5f;
@@ -35,14 +39,23 @@ class GameController : Game {
 
     protected override void Initialize() {
         renderer = new Renderer(new SpriteBatch(GraphicsDevice));
-        track = Generator.GenerateTrack();        
+
+
+        // Generate track
+        var seed = TRACK_SEED;
+        if( RANDOM_TRACK) {
+            Random rand = new Random();
+            seed = rand.Next(0, 999999);
+        }
+        track = Generator.GenerateTrack(seed);        
        
+
         base.Initialize();
     }
 
+
     protected override void LoadContent() {
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
-
 
         // Ship must be created after loading textures
         ship = new Ship();
@@ -54,7 +67,6 @@ class GameController : Game {
 
         base.LoadContent();
     }
-
 
 
     protected override void Update(GameTime gameTime) {
