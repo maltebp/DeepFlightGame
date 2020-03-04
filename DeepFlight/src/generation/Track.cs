@@ -1,10 +1,9 @@
-﻿
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
+
 public delegate void BlockCallback(BlockType type, int x, int y);
+
 
 public class Track {
     private LinkedList<Chunk> chunks = new LinkedList<Chunk>();

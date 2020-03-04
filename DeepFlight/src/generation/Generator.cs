@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 
+
 static class Generator {
     
     public static Track GenerateTrack() {
@@ -37,25 +38,7 @@ static class Generator {
                     for (int x = -size; x <= size; x++) {
                         int distance = Math.Abs(x) + Math.Abs(y);
                         if (distance <= size) {
-                            track.SetBlock( BlockType.SPACE, (int) (currentX+x), (int) (currentY+y) );
-
-
-                            //int indexX = (int)currentX + x;
-                            //int indexY = (int)currentY + y;
-
-                            //if (indexX >= 0 && indexX < SIZE && indexY >= 0 && indexY < SIZE) {
-
-                            //    indexX += indexOffsetX;
-                            //    indexY += indexOffsetY;
-
-                            //    indexX = MathExtension.Mod(indexX, SIZE);
-                            //    indexY = MathExtension.Mod(indexY, SIZE);
-
-                            //    if (x == 0 && y == 0)
-                            //        blocks[indexY, indexX] = BlockType.CENTER;
-                            //    else
-                            //        blocks[indexY, indexX] = BlockType.WALL;
-                            //}
+                            track.SetBlock(BlockType.SPACE, (int)(currentX + x), (int)(currentY + y));
                         }
                     }
                 }
@@ -63,11 +46,8 @@ static class Generator {
             }
         } while ((node = node.Next) != null && node.Next != null);
 
-
-
         return track;
     }
-
 
 
 

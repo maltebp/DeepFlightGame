@@ -1,0 +1,40 @@
+
+
+
+Must have:    
+
+    Map Generation:
+        ✔ Map generation framework
+        ☐ Base randomization on master seed
+
+    Renderer:
+        ☐ Drawable Scaling
+        Make renderer use the scaling value of drawable
+
+    Collision:
+        ☐ Ship / wall collision
+
+    UI:
+        ☐ Create HUD camera
+        ☐ Intro menu
+        ☐ Create Debug Text handler
+        Make a system, which makes it possible to display a series of custom debug values.
+        
+    Gameplay:
+        ☐ Turbo
+        Hold turbo key to go faster
+
+        ☐ Check points
+        Create check points which you have to pass through in order to finish
+
+Bonus:
+    ☐ Speed zoom effect
+    The faster the ship goes, the more it should zoom out
+
+    
+    ☐ Parallax effect on "space"
+    ☐ Change color throughout map
+
+    ☐ Particle effects
+        ☐ Ship "fire" effect
+        

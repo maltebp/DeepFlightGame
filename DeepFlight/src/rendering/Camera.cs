@@ -11,8 +11,7 @@ class Camera {
     public int Width { get; private set; }
     public int Height { get; private set; }
 
-    // TODO: Adjust rotation interval to 2 PI
-    private float rotation = 0f;
+    private float rotation = 0f; // Radians
     public float Rotation {
         get => rotation;
         set => rotation = MathExtension.Mod(value, (float)(2 * Math.PI));

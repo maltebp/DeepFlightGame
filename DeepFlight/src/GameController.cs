@@ -48,13 +48,13 @@ class GameController : Game {
         base.LoadContent();
     }
 
-    protected override void Update(GameTime gameTime) {
 
+
+    protected override void Update(GameTime gameTime) {
         InputController.UpdateState();
 
         
-        
-
+ 
         // TODO: Replace this with a better solution
         if (Keys.Escape.IsPressed())
             Exit();
@@ -67,24 +67,6 @@ class GameController : Game {
 
         if (Keys.Right.IsHeld()) {
             ship.Rotation += 0.05f;
-        }
-
-
-        
-        //camera.Rotation = ship.Rotation;
-
-        //if (Keys.W.IsHeld()) {
-        //    camera.Rotation -= 0.05f;
-        //}
-
-        //if (Keys.E.IsHeld()) {
-        //    camera.Rotation += 0.05f;
-        //}
-
-
-        if( Keys.F.IsPressed()) {
-            camera.Zoom = 10 + (camera.Zoom + 2.5f) % 10;
-            
         }
 
         if ( Keys.Space.IsHeld()) {
@@ -118,24 +100,10 @@ class GameController : Game {
 
         renderer.Draw(camera, ship);
 
-        //foreach (Space space in spaces) {
-        //    renderer.Draw(camera, space);
-        //}
-
-
 
         renderer.Flush();
       
         base.Draw(gameTime);
     }
-
-
-
-
-
-
-
-
-
 
 }

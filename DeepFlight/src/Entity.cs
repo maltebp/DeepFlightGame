@@ -1,7 +1,8 @@
-﻿
+﻿using System;
 
-using System;
 
+// The absolute base class for game objects.
+// Defines an object position, dimensions and scale.
 public abstract class Entity {
 
     public double X { get; set; } = 0;
@@ -10,7 +11,6 @@ public abstract class Entity {
     public float Width { get; private set; }
     public float Height { get; private set; }
 
-    // TODO: Adjust rotation interval to 2 PI
     private float rotation = 0f;
     public float Rotation {
         get => rotation;
@@ -23,5 +23,4 @@ public abstract class Entity {
         Width = width;
         Height = height;
     }
-
 }
