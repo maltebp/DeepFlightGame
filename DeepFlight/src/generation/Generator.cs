@@ -40,11 +40,12 @@ static class Generator {
                     for (int x = -size; x <= size; x++) {
                         int distance = Math.Abs(x) + Math.Abs(y);
                         if (distance <= size) {
-                            track.SetBlock(BlockType.SPACE, (int)(currentX + x), (int)(currentY + y));
+                            int centerX = (int) (currentX + x);
+                            int centerY = (int) (currentY + y);
+                            track.SetBlock(BlockType.SPACE, centerX, centerY );
                         }
                     }
                 }
-
             }
         } while ((node = node.Next) != null && node.Next != null);
 

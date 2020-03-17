@@ -114,15 +114,19 @@ class GameController : Game {
         shipCollision = false;
 
         track.ForBlocksInRange((int)(-100 + camera.X), (int)(-100 + camera.Y), (int)(100 + camera.X), (int)(100 + camera.Y), (type, x, y) => {
-            
+
             Space space = new Space(0, 0);
 
             space.X = x;
             space.Y = y;
+
+            space.Col = type == BlockType.SPACE ? Color.White : Color.Orange;
+
             renderer.Draw(camera, space);
 
-            if (space.CollidesWith(ship))
-                shipCollision = true;
+            if( type == BlockType.BORDER)
+                if (space.CollidesWith(ship))
+                    shipCollision = true;
         });
 
         renderer.Draw(camera, ship);

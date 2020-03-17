@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\rendering\Camera.cs" />
     <Compile Include="src\rendering\Drawable.cs" />
     <Compile Include="src\Entity.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="src\gameobjects\Space.cs" />
     <Compile Include="src\rendering\Textures.cs" />
     <Compile Include="src\generation\Track.cs" />
+    <Compile Include="src\utility\Point.cs" />
     <Compile Include="test\TrackTest.cs" />
   </ItemGroup>
   <ItemGroup>

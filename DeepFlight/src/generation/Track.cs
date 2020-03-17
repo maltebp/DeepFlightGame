@@ -6,6 +6,7 @@ public delegate void BlockCallback(BlockType type, int x, int y);
 
 
 public class Track {
+
     private LinkedList<Chunk> chunks = new LinkedList<Chunk>();
 
     public void SetBlock(BlockType block, int x, int y) {
