@@ -5,11 +5,12 @@ public static class BlockMapTest {
     public static int blockCount = 0;
     
     public static void RunTests() {
-        GetSetBlockTest();
-        LargeMapTest();
-        ChunkBorderTest();
-        ForEachCoordinatesTest();
-        CoordinateConversionTest();
+        MassTest();
+        //GetSetBlockTest();
+        //LargeMapTest();
+        //ChunkBorderTest();
+        //ForEachCoordinatesTest();
+        //CoordinateConversionTest();
     }
 
     private static void GetSetBlockTest() {
@@ -68,7 +69,7 @@ public static class BlockMapTest {
         blockMap.SetBlock(BlockType.SPACE, 100, 99);
         Console.WriteLine(blockMap.GetChunkCount());
     }
-    
+
     private static void ForEachCoordinatesTest() {
 
         Console.WriteLine("\nForEachCoordinatesTest()");
@@ -79,6 +80,12 @@ public static class BlockMapTest {
         blockMap.SetBlock(BlockType.SPACE, -1337, 300);
         blockMap.SetBlock(BlockType.SPACE, -9999, -4000);
 
+        Console.WriteLine("Getters");
+        Console.WriteLine("0, 0 = {0}", blockMap.GetBlock(0,0) );
+        Console.WriteLine("10, -10 = {0}", blockMap.GetBlock(10, -10));
+        Console.WriteLine("1337, 1337 = {0}", blockMap.GetBlock(1337, 1337));
+
+        Console.WriteLine("For each");
         blockMap.ForBlocksInRange(-10000,-10000, 10000, 10000, (type,x,y) => {
             Console.WriteLine("x={0}  y={1}", x,y);
         });
@@ -105,6 +112,27 @@ public static class BlockMapTest {
             Track.ToChunkCoordinate(x), Track.ToChunkCoordinate(y),
             Chunk.ToCellIndexInChunk(x), Chunk.ToCellIndexInChunk(y),
             Cell.ToBlockIndexInCell(x), Cell.ToBlockIndexInCell(y) );
+    }
+
+    private static void MassTest() {
+
+        Console.WriteLine("\n\nMass Test");
+
+        Track blockMap = new Track();
+
+        for( int x=-100; x<100; x++) {
+            for( int y=-100; y<100; y++) {
+                Console.WriteLine("Is none:\t{0}", blockMap.GetBlock(x,y) == null);
+                blockMap.SetBlock(BlockType.SPACE, x, y);
+                Block block = blockMap.GetBlock(x, y);
+                Console.WriteLine("Is space:\t{0}", block.type == BlockType.SPACE);
+                Console.WriteLine("x correct:\t{0}", block.x == x);
+                Console.WriteLine("y correct:\t{0}", block.y == y);
+                blockMap.SetBlock(BlockType.NONE, x, y);
+                Console.WriteLine("Is none:\t{0}", blockMap.GetBlock(x, y).type == BlockType.NONE);
+            }
+        }
+
     }
 
 }

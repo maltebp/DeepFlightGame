@@ -2,17 +2,22 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 
 static class Generator {
     
     public static Track GenerateTrack(int seed) {
+
+        Console.WriteLine("Starting Track Generation...");
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
 
         Random rand = new Random(seed);
 
         Track track = new Track();
         LinkedList<TrackNode> nodes = GenerateNodes(rand);
 
+        int minX=10000000, minY=1000000, maxX=-100000, maxY =-100000;
         TrackNode node = nodes.First.Value;
         do {
             double centerIndexX = node.X;
@@ -42,12 +47,41 @@ static class Generator {
                         if (distance <= size) {
                             int centerX = (int) (currentX + x);
                             int centerY = (int) (currentY + y);
+                            if (centerX < minX)
+                                minX = centerX;
+                            if (centerX > maxX)
+                                maxX = centerX;
+                            if (centerY < minY)
+                                minY = centerY;
+                            if (centerY > maxY)
+                                maxY = centerY;
                             track.SetBlock(BlockType.SPACE, centerX, centerY );
+
+                            if (track.GetBlock(centerX - 1, centerY) == null)
+                                track.SetBlock(BlockType.BORDER, centerX - 1, centerY);
+
+                            if (track.GetBlock(centerX + 1, centerY) == null)
+                                track.SetBlock(BlockType.BORDER, centerX + 1, centerY);
+
+                            if (track.GetBlock(centerX, centerY - 1) == null)
+                                track.SetBlock(BlockType.BORDER, centerX, centerY - 1);
+
+                            if (track.GetBlock(centerX, centerY + 1) == null)
+                                track.SetBlock(BlockType.BORDER, centerX, centerY + 1);
+
                         }
                     }
                 }
             }
         } while ((node = node.Next) != null && node.Next != null);
+
+        stopwatch.Stop();
+
+        Console.WriteLine("\nTrack Generation Done!");
+        Console.WriteLine("\nTime: {0} ms", stopwatch.ElapsedMilliseconds);
+        Console.WriteLine("Range:\n  x:\t{0} - {1}\n  y:\t{2} - {3}", minX, maxX, minY, maxY);
+        Console.WriteLine("Block count: {0}", Track.blockCount);
+
 
         return track;
     }

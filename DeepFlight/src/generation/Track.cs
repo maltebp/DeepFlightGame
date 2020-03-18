@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 
 
-public delegate void BlockCallback(BlockType type, int x, int y);
+public delegate void BlockCallback(Block type, int x, int y);
 
 
 public class Track {
 
     private LinkedList<Chunk> chunks = new LinkedList<Chunk>();
+    public static int blockCount = 0;
 
     public void SetBlock(BlockType block, int x, int y) {
         int chunkX = ToChunkCoordinate(x);
@@ -18,6 +19,14 @@ public class Track {
             chunks.AddLast(chunk);
         }
         chunk.SetBlock(block, x, y );
+    }
+
+    public Block GetBlock(int x, int y) {
+        int chunkX = ToChunkCoordinate(x);
+        int chunkY = ToChunkCoordinate(y);
+        Chunk chunk = GetChunk(chunkX, chunkY);
+        if (chunk == null) return null;
+        return chunk.GetBlock(x, y);
     }
 
     public void ForBlocksInRange(int minX, int minY, int maxX, int maxY, BlockCallback callback) {
@@ -74,12 +83,21 @@ public class Chunk {
         cells[cellY,cellX].SetBlock(block, x, y);
     }
 
+    public Block GetBlock(int x, int y) {
+        int cellX = ToCellIndexInChunk(x);
+        int cellY = ToCellIndexInChunk(y);
+        if (cells[cellY, cellX] == null) return null;
+        return cells[cellY, cellX].GetBlock(x,y);
+    }
+
     public void ForEachBlock(BlockCallback callback) {
         foreach( Cell cell in cells) {
             if (cell != null)
                 cell.ForEachBlock(callback);
         }
     }
+
+
 
     public int ToCellCoordinate(int coordinate) {
         return (coordinate / Cell.SIZE);
@@ -105,10 +123,17 @@ public class Cell {
         indexY = y;
     }
 
-    private BlockType[,] blocks = new BlockType[SIZE, SIZE];
+    private Block[,] blocks = new Block[SIZE, SIZE];
 
     public void SetBlock(BlockType block, int x, int y) {
-        blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)] = block;
+        if (blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)] == null)
+            blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)] = new Block(x,y,block);
+            Track.blockCount++;
+        blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)].type = block;
+    }
+
+    public Block GetBlock(int x, int y) {
+        return blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)];
     }
 
     public void ForEachBlock(BlockCallback callback) {
@@ -124,7 +149,7 @@ public class Cell {
 
         for (int y=0; y < blocks.GetLength(0); y++) {
             for( int x=0; x < blocks.GetLength(1); x++) {
-                if( blocks[y,x] != BlockType.NONE ) {
+                if( blocks[y,x] != null ) {
                     callback(blocks[y,x], cellOffsetX + x*directionX, cellOffsetY + y*directionY);
                 }
             }
@@ -141,6 +166,22 @@ public class Cell {
 
 }
 
+
+public class Block {
+    public int x;
+    public int y;
+    public BlockType type;
+
+    public Block(int x, int y, BlockType type) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+    }
+
+    public String ToString() {
+        return String.Format("Block( x: {0}, y: {1}, type: {2})", x, y, type);
+    }
+}
 
 public enum BlockType {
     NONE,

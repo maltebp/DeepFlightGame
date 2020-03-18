@@ -15,4 +15,11 @@ class Movable : Drawable {
     public Movable(Texture2D texture, int width, int height, float maxVelocity) : base(texture, width, height) {
         MaxVelocity = maxVelocity;
     }
+
+    public void ResetMovement() {
+        VelocityX = 0;
+        VelocityY = 0;
+        AccelerationX = 0;
+        AccelerationY = 0;
+    }
 }

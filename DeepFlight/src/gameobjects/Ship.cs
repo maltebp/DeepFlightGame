@@ -10,4 +10,5 @@ class Ship : Movable {
         AddCollider(new TriangleCollider(this));
     }
 
+
 }

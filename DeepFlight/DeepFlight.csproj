@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\generation\TrackGeneratorcs.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\rendering\Camera.cs" />
     <Compile Include="src\rendering\Drawable.cs" />

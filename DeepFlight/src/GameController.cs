@@ -93,9 +93,32 @@ class GameController : Game {
             ship.AccelerationX = 0;
         }
 
-        mover.Move(ship);
-        camera.X = ship.X;
-        camera.Y = ship.Y;
+        if (shipCollision) {
+            ship.X = 0;
+            ship.Y = 0;
+            ship.ResetMovement();
+        }
+        else {
+            mover.Move(ship);
+            camera.X = ship.X;
+            camera.Y = ship.Y;
+        }
+
+        
+
+
+        shipCollision = false;
+        // Check ship collision
+        track.ForBlocksInRange((int) ship.X-20, (int) ship.Y-20, (int) ship.X+20, (int) ship.Y+20, (block, x, y) => {
+            Space space = new Space(x, y);
+            if (block.type == BlockType.BORDER)
+                if (space.CollidesWith(ship))
+                    shipCollision = true;
+        });
+
+        
+
+        
 
         // Update zoom
         camera.Zoom += InputController.MouseWheelDiff() * ZOOM_FACTOR;
@@ -111,22 +134,15 @@ class GameController : Game {
     protected override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.Black);
 
-        shipCollision = false;
-
-        track.ForBlocksInRange((int)(-100 + camera.X), (int)(-100 + camera.Y), (int)(100 + camera.X), (int)(100 + camera.Y), (type, x, y) => {
-
+        track.ForBlocksInRange((int)(-100 + camera.X), (int)(-100 + camera.Y), (int)(100 + camera.X), (int)(100 + camera.Y), (block, x, y) => {
             Space space = new Space(0, 0);
 
             space.X = x;
             space.Y = y;
 
-            space.Col = type == BlockType.SPACE ? Color.White : Color.Orange;
+            space.Col = block.type == BlockType.SPACE ? Color.White : Color.Orange;
 
             renderer.Draw(camera, space);
-
-            if( type == BlockType.BORDER)
-                if (space.CollidesWith(ship))
-                    shipCollision = true;
         });
 
         renderer.Draw(camera, ship);
@@ -135,8 +151,6 @@ class GameController : Game {
             ship.Col = Color.Green;
         else
             ship.Col = Color.Red;
-
-
         foreach (CollisionPoint point in CollisionPoint.GetCollisionPoints(ship)) {
             renderer.Draw(camera, point);
         }
