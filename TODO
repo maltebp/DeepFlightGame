@@ -7,6 +7,7 @@ Must have:
     Map Generation:
         ✔ Map generation framework
         ✔ Base randomization on master seed
+        ☐ Read map from byte file
 
     Renderer:
         ✔ Drawable Scaling
@@ -14,20 +15,27 @@ Must have:
 
     Collision:
         ✔ Collision system
-        ☐ Point Collider
-        ☐ Ship / wall collision
+        ✔ Rect Collider
+        ✔ Circle collider
+        ✔ Ship / wall collision
+
+    Control:
+        ☐ Create Game frame work (according to classdiagram)
 
     UI:
-        ☐ Create HUD camera
-        ☐ Intro menu
         
         Debug View:
             ☐ Debug View system
+            ☐ Create Debug Overlay camera
             ☐ FPS
             ☐ Posision
             ☐ Acceleration
             ☐ Velocity
             ☐ Camera zoom
+
+    Scenes:
+        ☐ Game Scene
+        ☐ Intro menu
 
         Make a system, which makes it possible to display a series of custom debug values.
         
@@ -56,16 +64,9 @@ Bonus:
     See: https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
 
 
-Collision Design:
 
 
-    SquareCollider
-    Circle Collider
+Track Data File:
 
 
-
-
-    Square detect collision with point
-    
-
-
+    x, y, type

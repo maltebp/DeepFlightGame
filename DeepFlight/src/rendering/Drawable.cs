@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 public abstract class Drawable : Collidable {
@@ -9,6 +10,9 @@ public abstract class Drawable : Collidable {
     public Color Col { get; set; } = Color.White;
 
     protected Drawable(Texture2D texture, int width, int height) : base(width, height) {
+        // When I forget to initialize texture before drawable
+        if (texture == null)
+            throw new NullReferenceException("Texture was is null. Drawable probably created before loading textures.");
         Texture = texture;
     }
 

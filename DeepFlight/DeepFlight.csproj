@@ -42,10 +42,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\generation\TrackGeneratorcs.cs" />
+    <Compile Include="src\generation\TrackSerializer.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\rendering\Camera.cs" />
     <Compile Include="src\rendering\Drawable.cs" />
     <Compile Include="src\Entity.cs" />
+    <Compile Include="src\scenes\GameScene.cs" />
+    <Compile Include="src\scenes\Scene.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
     <Compile Include="src\GameController.cs" />
     <Compile Include="src\generation\Generator.cs" />

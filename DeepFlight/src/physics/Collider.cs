@@ -119,8 +119,7 @@ public class CircleCollidable : Collider {
 
 
 
-// Collider which detects collision within a radius.
-// Radius is determined by either Entity width or height, depending on which is largest.
+// Collider which detects collision within rectangular boundary
 public class RectCollider : Collider {
 
     public RectCollider(Entity entity) : base(entity) { }

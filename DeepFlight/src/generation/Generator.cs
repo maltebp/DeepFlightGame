@@ -80,7 +80,7 @@ static class Generator {
         Console.WriteLine("\nTrack Generation Done!");
         Console.WriteLine("\nTime: {0} ms", stopwatch.ElapsedMilliseconds);
         Console.WriteLine("Range:\n  x:\t{0} - {1}\n  y:\t{2} - {3}", minX, maxX, minY, maxY);
-        Console.WriteLine("Block count: {0}", Track.blockCount);
+        Console.WriteLine("Block count: {0}", track.BlockCount);
 
 
         return track;

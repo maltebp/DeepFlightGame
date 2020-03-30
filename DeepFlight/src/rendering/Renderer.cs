@@ -38,7 +38,10 @@ class Renderer {
         double rotatedX = Math.Cos(-camera.Rotation) * (drawX - centerX) - Math.Sin(-camera.Rotation) * (drawY - centerY) + centerX;
         double rotatedY = Math.Sin(-camera.Rotation) * (drawX - centerX) + Math.Cos(-camera.Rotation) * (drawY - centerY) + centerY;
 
-        spriteBatch.Draw(
+        if (spriteBatch == null)
+            throw new NullReferenceException("Sprite batch is null");
+
+         spriteBatch.Draw(
             drawable.Texture,
             new Rectangle( (int) rotatedX, (int) rotatedY, (int) (drawable.Width*camera.Zoom*drawable.scale+2), (int) (drawable.Height*camera.Zoom*drawable.scale+2)),
             null,
@@ -46,7 +49,6 @@ class Renderer {
             drawable.Rotation - camera.Rotation,
             new Vector2(drawable.Texture.Width/2, drawable.Texture.Height/2),
             SpriteEffects.None, 0f);
-
     }
 
 

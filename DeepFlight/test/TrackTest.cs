@@ -125,11 +125,11 @@ public static class BlockMapTest {
                 Console.WriteLine("Is none:\t{0}", blockMap.GetBlock(x,y) == null);
                 blockMap.SetBlock(BlockType.SPACE, x, y);
                 Block block = blockMap.GetBlock(x, y);
-                Console.WriteLine("Is space:\t{0}", block.type == BlockType.SPACE);
-                Console.WriteLine("x correct:\t{0}", block.x == x);
-                Console.WriteLine("y correct:\t{0}", block.y == y);
+                Console.WriteLine("Is space:\t{0}", block.Type == BlockType.SPACE);
+                Console.WriteLine("x correct:\t{0}", block.X == x);
+                Console.WriteLine("y correct:\t{0}", block.Y == y);
                 blockMap.SetBlock(BlockType.NONE, x, y);
-                Console.WriteLine("Is none:\t{0}", blockMap.GetBlock(x, y).type == BlockType.NONE);
+                Console.WriteLine("Is none:\t{0}", blockMap.GetBlock(x, y).Type == BlockType.NONE);
             }
         }
 
