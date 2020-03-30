@@ -202,7 +202,7 @@ public class Block : Drawable {
         this.Type = type;
     }
 
-    public String ToString() {
+    public override string ToString() {
         return String.Format("Block( x: {0}, y: {1}, type: {2})", X, Y, Type);
     }
 }

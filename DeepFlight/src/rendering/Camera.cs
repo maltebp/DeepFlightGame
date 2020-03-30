@@ -3,7 +3,7 @@
 
 using System;
 
-class Camera {
+public class Camera {
 
     public double X { get; set; } = 0;
     public double Y { get; set; } = 0;

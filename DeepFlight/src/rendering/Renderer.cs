@@ -4,21 +4,34 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-class Renderer {
+
+// Responsible for rendering stuff (sort of a Camera controller)
+public class Renderer {
 
     private SpriteBatch spriteBatch;
     private bool drawing = false;
+    private GraphicsDeviceManager graphics;
 
-    public Renderer(SpriteBatch spriteBatch) {
-        this.spriteBatch = spriteBatch;
+
+    public Renderer(GraphicsDeviceManager graphics) {
+        this.graphics = graphics;
+
+        graphics.PreferredBackBufferWidth = 1080;
+        graphics.PreferredBackBufferHeight = 720;
+
+        spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
     }
+
 
     public void Draw(Camera camera, Drawable drawable) {
 
         // Initialize Renderer draw batch
         if (!drawing) {
             drawing = true;
-            spriteBatch.Begin();}
+            graphics.GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin();
+        }
+
 
         // Scale the object to camera
         double drawX = drawable.X * camera.Zoom;

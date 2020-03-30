@@ -41,23 +41,25 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\GameController.cs" />
     <Compile Include="src\generation\TrackGeneratorcs.cs" />
     <Compile Include="src\generation\TrackSerializer.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\rendering\Camera.cs" />
     <Compile Include="src\rendering\Drawable.cs" />
-    <Compile Include="src\Entity.cs" />
+    <Compile Include="src\gameobjects\Entity.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
+    <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />
+    <Compile Include="src\Settings.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
-    <Compile Include="src\GameController.cs" />
+    <Compile Include="src\Application.cs" />
     <Compile Include="src\generation\Generator.cs" />
     <Compile Include="src\utility\InputController.cs" />
-    <Compile Include="src\LehmerRng.cs" />
     <Compile Include="src\utility\MathExtension.cs" />
     <Compile Include="src\physics\Movable.cs" />
     <Compile Include="src\physics\Mover.cs" />
-    <Compile Include="src\Program.cs" />
+    <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\rendering\Renderer.cs" />
     <Compile Include="src\gameobjects\Ship.cs" />
