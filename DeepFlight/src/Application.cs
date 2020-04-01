@@ -32,6 +32,7 @@ class ApplicationController : Game {
 
 
     protected override void Update(GameTime gameTime) {
+        InputController.UpdateState();
 
         // Check for scene switch
         if (currentScene.RequestedScene != null)

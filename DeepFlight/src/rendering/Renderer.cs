@@ -80,11 +80,13 @@ public class Renderer {
 
         spriteBatch.DrawString(
             drawable.Font,
-            drawable.Text,
-            new Vector2((int)transformed.X, (int)transformed.Y),
+            drawable.Text
+            // Apparently, the origin affects the drawing position as well (unlike with textures),
+            // so we have to adjust this transformed position with the same amount as the origin.
+            new Vector2((int)transformed.X+transformed.Width/2, (int)transformed.Y+transformed.Height/2),
             drawable.Col,
             transformed.Rotation,
-            new Vector2(drawable.Width / 2, drawable.Height / 2), // Center of rotation
+            new Vector2( transformed.Width/2, transformed.Height/2), // Center of rotation (apparently doesn't work the same way as for texture)
             transformed.scale,
             SpriteEffects.None,
             0f // Layer depth Not sure what this means
@@ -92,6 +94,8 @@ public class Renderer {
 
         if (first) {
             first = false;
+
+            Console.WriteLine(((Entity)drawable).ToString());
             Console.WriteLine("Transformed: " + transformed);
         }
 
