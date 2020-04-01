@@ -1,27 +1,23 @@
 ﻿
+
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 
-public abstract class Drawable : Collidable {
+public class DrawableTexture : Movable {
 
-    public Texture2D Texture { get; private set; }
+    public Texture2D Texture { get; private set; } = null;
     public Color Col { get; set; } = Color.White;
 
-    protected Drawable(Texture2D texture, int width, int height) : base(width, height) {
-        // When I forget to initialize texture before drawable
-        if (texture == null)
-            throw new NullReferenceException("Texture was is null. Drawable probably created before loading textures.");
+    public DrawableTexture(Texture2D texture, int width, int height) : base(width, height) {
         Texture = texture;
     }
-
-
 }
 
 
-
-public class CollisionPoint : Drawable {
+// TODO: Move this to an appropriate place
+public class CollisionPoint : DrawableTexture {
 
     protected CollisionPoint(Point point) : base(Textures.CIRCLE, 1, 1) {
         X = point.X;
@@ -33,8 +29,8 @@ public class CollisionPoint : Drawable {
     public static LinkedList<CollisionPoint> GetCollisionPoints(Collidable collidable) {
         var points = new LinkedList<CollisionPoint>();
 
-        foreach( Collider collider in collidable.GetColliders() ) {
-            foreach( Point point in collider.GetCollisionPoints() ) {
+        foreach (Collider collider in collidable.GetColliders()) {
+            foreach (Point point in collider.GetCollisionPoints()) {
                 points.AddLast(new CollisionPoint(point));
             }
         }

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 // The absolute base class for game objects.
 // Defines an object position, dimensions and scale.
-public abstract class Entity {
+public class Entity {
 
     public double X { get; set; } = 0;
     public double Y { get; set; } = 0;
 
-    public float Width { get; set; }
-    public float Height { get; set; }
+    public float Width { get; set; } = 1f;
+    public float Height { get; set; } = 1f;
 
     private float rotation = 0f;
     public float Rotation {
@@ -21,9 +21,23 @@ public abstract class Entity {
     public float scale = 1.0f;
 
 
-    protected Entity(float width, float height) {
+    public Entity() { }
+
+    public Entity(float width, float height) {
         Width = width;
         Height = height;
     }
 
+    public override string ToString() {
+        return string.Format(
+            "Entity( " +
+            "x={0}, " +
+            "y={1}, " +
+            "width={2}, " +
+            "height={3}, " +
+            "rotation={4}" +
+            " )",
+            X, Y, Width, Height, Rotation
+           );
+    }
 }

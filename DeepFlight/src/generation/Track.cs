@@ -192,7 +192,7 @@ public class Cell {
 }
 
 
-public class Block : Drawable {
+public class Block : DrawableTexture {
     public BlockType Type { get; set; }
 
     public Block(int x, int y, BlockType type) : base(Textures.SQUARE, 1, 1){

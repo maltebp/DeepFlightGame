@@ -46,8 +46,10 @@
     <Compile Include="src\generation\TrackSerializer.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\rendering\Camera.cs" />
-    <Compile Include="src\rendering\Drawable.cs" />
     <Compile Include="src\gameobjects\Entity.cs" />
+    <Compile Include="src\rendering\DrawableText.cs" />
+    <Compile Include="src\rendering\DrawableTexture.cs" />
+    <Compile Include="src\rendering\Fonts.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />

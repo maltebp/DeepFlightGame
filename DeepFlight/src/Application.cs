@@ -16,7 +16,6 @@ class ApplicationController : Game {
 
     // Is being run first
     protected override void Initialize() {
-        SwitchScene(new MainMenuScene());
         base.Initialize();
     }
 
@@ -25,6 +24,9 @@ class ApplicationController : Game {
     protected override void LoadContent() {
         renderer = new Renderer(graphics);
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
+        Fonts.Load(Content);
+
+        SwitchScene(new MainMenuScene());
         base.LoadContent();
     }
 
@@ -53,7 +55,7 @@ class ApplicationController : Game {
             currentScene.Terminate();
 
         currentScene = scene;
-        currentScene.Initialize();
+        currentScene.Initialize(renderer);
     }
 
 }

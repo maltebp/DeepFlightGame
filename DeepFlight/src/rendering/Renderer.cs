@@ -22,52 +22,93 @@ public class Renderer {
         spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
     }
 
+    public Vector2 GetScreenSize() {
+        return new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+    }
 
-    public void Draw(Camera camera, Drawable drawable) {
 
+    private void InitializeDraw() {
         // Initialize Renderer draw batch
         if (!drawing) {
+            if (spriteBatch == null)
+                throw new NullReferenceException("Sprite batch is null");
             drawing = true;
             graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
         }
-
-
-        // Scale the object to camera
-        double drawX = drawable.X * camera.Zoom;
-        double drawY = drawable.Y * camera.Zoom;
-
-        // Adjust to camera position
-        drawX += (camera.Width / 2 - camera.X*camera.Zoom);
-        drawY += (camera.Height / 2 - camera.Y*camera.Zoom);
-
-        // Adjust to center of entity
-        drawX -= drawable.Width / 2;
-        drawY -= drawable.Height / 2;
-        double centerX = camera.Width / 2;
-        double centerY = camera.Height / 2;
-
-        // Rotate around camera center
-        double rotatedX = Math.Cos(-camera.Rotation) * (drawX - centerX) - Math.Sin(-camera.Rotation) * (drawY - centerY) + centerX;
-        double rotatedY = Math.Sin(-camera.Rotation) * (drawX - centerX) + Math.Cos(-camera.Rotation) * (drawY - centerY) + centerY;
-
-        if (spriteBatch == null)
-            throw new NullReferenceException("Sprite batch is null");
-
-         spriteBatch.Draw(
-            drawable.Texture,
-            new Rectangle( (int) rotatedX, (int) rotatedY, (int) (drawable.Width*camera.Zoom*drawable.scale+2), (int) (drawable.Height*camera.Zoom*drawable.scale+2)),
-            null,
-            drawable.Col,
-            drawable.Rotation - camera.Rotation,
-            new Vector2(drawable.Texture.Width/2, drawable.Texture.Height/2),
-            SpriteEffects.None, 0f);
     }
 
 
+    public void DrawTexture(Camera camera, DrawableTexture drawable) {
+        InitializeDraw();
+
+        // Transform the drawables dimensions and coordinates to camera space
+        Entity transformed = camera.Transform(
+            drawable,
+            graphics.PreferredBackBufferWidth,
+            graphics.PreferredBackBufferHeight
+        );
+        //Entity transformed = drawable;
+
+        // Draw the texture
+        spriteBatch.Draw(
+               drawable.Texture,
+               new Rectangle((int)transformed.X, (int)transformed.Y, (int)transformed.Width, (int)transformed.Height),
+               null,
+               drawable.Col,
+               transformed.Rotation,
+               new Vector2(drawable.Texture.Width / 2, drawable.Texture.Height / 2),
+               SpriteEffects.None, 0f);
+
+        if( first ) {
+            first = false;
+            Console.WriteLine("Transformed: " + transformed);
+        }
+    }
+
+    bool first = true;
+
+    public void DrawText(Camera camera, DrawableText drawable) {
+        InitializeDraw();
+
+        // Transform the drawables dimensions and coordinates to camera space
+        Entity transformed = camera.Transform(
+            drawable,
+            graphics.PreferredBackBufferWidth,
+            graphics.PreferredBackBufferHeight
+        );
+
+        spriteBatch.DrawString(
+            drawable.Font,
+            drawable.Text,
+            new Vector2((int)transformed.X, (int)transformed.Y),
+            drawable.Col,
+            transformed.Rotation,
+            new Vector2(drawable.Width / 2, drawable.Height / 2), // Center of rotation
+            transformed.scale,
+            SpriteEffects.None,
+            0f // Layer depth Not sure what this means
+        );
+
+        if (first) {
+            first = false;
+            Console.WriteLine("Transformed: " + transformed);
+        }
+
+
+        //spriteBatch.DrawString(
+        //    drawable.Font,
+        //    drawable.Text,
+        //    new Vector2((int)transformed.X, (int)transformed.Y),
+        //    drawable.Col
+        //);
+    }
+
     // Flush Renderer draw batch
     public void Flush() {
-        drawing = false;
-        spriteBatch.End();
+        if( drawing ) {
+            drawing = false;
+            spriteBatch.End();
+        }
     }
 }

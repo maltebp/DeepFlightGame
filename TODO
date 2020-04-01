@@ -1,13 +1,12 @@
 
 
-
 Must have:    
     ✔ Zoom with mouse (for testing)
 
     Map Generation:
         ✔ Map generation framework
         ✔ Base randomization on master seed
-        ☐ Read map from byte file
+        ✔ Read map from byte file
 
     Renderer:
         ✔ Drawable Scaling
@@ -23,7 +22,9 @@ Must have:
         ☐ Create Game frame work (according to classdiagram)
 
     UI:
-        
+
+        ☐ Text rendering
+
         Debug View:
             ☐ Debug View system
             ☐ Create Debug Overlay camera
@@ -70,3 +71,6 @@ Track Data File:
 
 
     x, y, type
+
+
+    

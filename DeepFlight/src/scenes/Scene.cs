@@ -14,7 +14,7 @@ public abstract class Scene {
     }
 
     // First method which is run, once the scene has been "switched" in
-    public virtual void Initialize() { }
+    public virtual void Initialize(Renderer renderer) { }
 
     // Is run once the scene is "switched out"
     public virtual void Terminate() { }
