@@ -18,8 +18,13 @@ public class Entity {
         set => rotation = MathExtension.Mod(value, (float)(2 * Math.PI));
     }
 
+    /// <summary>
+    ///  WARNING: Probably shouldn't this too much (not fully integrated)
+    /// </summary>
     public float scale = 1.0f;
 
+    public HorizontalOrigin HOrigin { get; set; } = HorizontalOrigin.CENTER;
+    public VerticalOrigin VOrigin { get; set; } = VerticalOrigin.CENTER;
 
     public Entity() { }
 
@@ -39,6 +44,22 @@ public class Entity {
         Height = height;
     }
 
+    public double GetCenterX() {
+        if (HOrigin == HorizontalOrigin.LEFT)
+            return X + Width/2f;
+        if (HOrigin == HorizontalOrigin.RIGHT )
+            return X - Width/2f;
+        return X;
+    }
+
+    public double GetCenterY() {
+        if (VOrigin == VerticalOrigin.TOP)
+            return Y + Height / 2f;
+        if (VOrigin == VerticalOrigin.BOTTOM)
+            return Y - Height / 2f;
+        return Y;
+    }
+
     public override string ToString() {
         return string.Format(
             "Entity( " +
@@ -46,9 +67,40 @@ public class Entity {
             "y={1}, " +
             "width={2}, " +
             "height={3}, " +
-            "rotation={4}" +
-            " )",
-            X, Y, Width, Height, Rotation
+            "rotation={4}, " +
+            "h.origin={5}, " +
+            "v.origin={6} )",
+            X, Y, Width, Height, Rotation, HOrigin.GetName(), VOrigin.GetName()
            );
+    }
+
+    
+}
+
+
+public enum HorizontalOrigin {
+    LEFT, CENTER, RIGHT,
+}
+
+public enum VerticalOrigin {
+    TOP, CENTER, BOTTOM
+}
+
+public static class OriginMethods {
+
+    /// <summary>
+    /// Gets the name of the given VerticalOrigin, as it's
+    /// written in the code (i.e. CENTER = "CENTER").
+    /// </summary>
+    public static string GetName(this HorizontalOrigin origin) {
+        return Enum.GetName(typeof(HorizontalOrigin), origin);
+    }
+
+    /// <summary>
+    /// Gets the name of the given VerticalOrigin, as it's
+    /// written in the code (i.e. CENTER = "CENTER").
+    /// </summary>
+    public static string GetName(this VerticalOrigin origin) {
+        return Enum.GetName(typeof(VerticalOrigin), origin);
     }
 }

@@ -127,6 +127,8 @@ public class Renderer {
             transformed,
             false
         );
+        transformed.HOrigin = drawable.HOrigin;
+        transformed.VOrigin = drawable.VOrigin;
 
         // Scale to screen resolution
         transformed.X *= screenScale;
@@ -161,7 +163,7 @@ public class Renderer {
 
             // Apparently, the origin affects the drawing position as well (unlike with textures),
             // so we have to adjust this transformed position with the same amount as the origin.
-            new Vector2((int)transformed.X, (int)transformed.Y),
+            new Vector2((int) transformed.GetCenterX(), (int) transformed.GetCenterY() ),
 
             drawable.Col,
             transformed.Rotation,
@@ -177,7 +179,6 @@ public class Renderer {
             0f // Layer depth Not sure what this means
         );
     }
-
 
 
     // Flush Renderer draw batch

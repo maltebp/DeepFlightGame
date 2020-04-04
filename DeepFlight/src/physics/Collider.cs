@@ -58,7 +58,7 @@ public abstract class Collider {
 
     
     public bool CollidesWith(Collider collider) {
-        var center = new Point(entity.X, entity.Y);
+        var center = new Point(entity.GetCenterX(), entity.GetCenterY());
         if (!collider.IsCollisionPossible(center, FilterDistance()))
             return false;
         return CollidesWithPoints(collider.GetCollisionPoints());
@@ -66,7 +66,7 @@ public abstract class Collider {
 
 
     protected bool IsCollisionPossible(Point filterCenter, double filterDistance) {
-        return filterCenter.DistanceTo(new Point(entity.X, entity.Y)) - filterDistance - FilterDistance() <= 0;
+        return filterCenter.DistanceTo(new Point(entity.GetCenterX(), entity.GetCenterY() )) - filterDistance - FilterDistance() <= 0;
     }
 
     /// <summary>
@@ -99,10 +99,12 @@ public class CircleCollidable : Collider {
        
         Point[] points = new Point[ numberOfPoints ];
 
+        var centerX = entity.GetCenterX();
+        var centerY = entity.GetCenterY();
         var angle = 0.0;
         var angleStep = (2 * Math.PI) / numberOfPoints;
         for(int i=0; i<numberOfPoints; i++) {
-            points[i] = new Point(entity.X + Math.Cos(angle) * radius, entity.Y + Math.Cos(angle) * radius); 
+            points[i] = new Point(centerX + Math.Cos(angle) * radius, centerY + Math.Cos(angle) * radius); 
         }
 
         return points;
@@ -110,8 +112,10 @@ public class CircleCollidable : Collider {
 
     protected override bool CollidesWithPoints( params Point[] points) {
         var radius = (entity.Width > entity.Height ? entity.Width : entity.Height) / 2;
+        var centerX = entity.GetCenterX();
+        var centerY = entity.GetCenterY();
         foreach( Point point in points) {
-            var distance = Math.Sqrt(Math.Pow(entity.X - point.X, 2) + Math.Pow(entity.Y - point.Y, 2));
+            var distance = Math.Sqrt(Math.Pow(centerX - point.X, 2) + Math.Pow(centerY - point.Y, 2));
             if (distance < radius)
                 return true;
         }
@@ -133,10 +137,12 @@ public class RectCollider : Collider {
     public RectCollider(Entity entity) : base(entity) { }
 
     public override Point[] GetCollisionPoints() {
-        double x1 = entity.X - entity.Width / 2;
-        double x2 = entity.X + entity.Width / 2;
-        double y1 = entity.Y - entity.Height / 2;
-        double y2 = entity.Y + entity.Height / 2;
+        var centerX = entity.GetCenterX();
+        var centerY = entity.GetCenterY();
+        double x1 = centerX - entity.Width / 2;
+        double x2 = centerX + entity.Width / 2;
+        double y1 = centerY - entity.Height / 2;
+        double y2 = centerY + entity.Height / 2;
 
         return new Point[]{
             new Point(x1, y1),
@@ -147,10 +153,12 @@ public class RectCollider : Collider {
     }
 
     protected override bool CollidesWithPoints(params Point[] points) {
-        double x1 = entity.X - entity.Width / 2;
-        double x2 = entity.X + entity.Width / 2;
-        double y1 = entity.Y - entity.Height / 2;
-        double y2 = entity.Y + entity.Height / 2;
+        var centerX = entity.GetCenterX();
+        var centerY = entity.GetCenterY();
+        double x1 = centerX - entity.Width / 2;
+        double x2 = centerX + entity.Width / 2;
+        double y1 = centerY - entity.Height / 2;
+        double y2 = centerY + entity.Height / 2;
 
         foreach (Point point in points) {
             if (point.X >= x1 && point.X <= x2 && point.Y >= y1 && point.Y <= y2)
@@ -166,19 +174,26 @@ public class RectCollider : Collider {
 }
 
 
-
-
 public class TriangleCollider : Collider {
 
     public TriangleCollider(Entity entity) : base(entity) { }
 
     public override Point[] GetCollisionPoints() {
         Point center = new Point(entity.X, entity.Y);
-
+       
+        // Calculate the points of the Triangle, where
+        // the points are: 
+        //     p0    
+        //    /  \
+        //   /    \
+        // p2------p1
         return new Point[]{
-            new Point(entity.X, entity.Y - entity.Height / 2).Rotate(center, entity.Rotation),
-            new Point(entity.X+entity.Width/2, entity.Y + entity.Height/2).Rotate(center, entity.Rotation),
-            new Point(entity.X-entity.Width/2, entity.Y + entity.Height/2).Rotate(center, entity.Rotation)
+            // p0
+            new Point(center.X, center.Y - entity.Height / 2).Rotate(center, entity.Rotation),
+            // p1
+            new Point(center.X+entity.Width/2, center.Y + entity.Height/2).Rotate(center, entity.Rotation),
+            // p2
+            new Point(center.X-entity.Width/2, center.Y + entity.Height/2).Rotate(center, entity.Rotation)
         };
     }
 

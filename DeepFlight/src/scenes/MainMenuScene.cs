@@ -12,7 +12,9 @@ class MainMenuScene : Scene {
     private int[] resolutions = { 1280, 720, 1600, 900, 1920, 1080 };
     private int resolution = 2;
 
-    public override void Initialize(Renderer renderer) {
+    public override void Initialize(Renderer renderer) { 
+        DrawableTexture ship = new Ship();
+        Console.WriteLine(ship);
     }
 
     public override void Draw(Renderer renderer) {
@@ -62,6 +64,8 @@ class MainMenuScene : Scene {
         //dot.Y = Mouse.GetState().Y;
         dot.X = 0;
         dot.Y = 0;
+
+
 
         renderer.Draw(camera, new DrawableTexture(Textures.SQUARE, Color.Black, 10,10, 0, 0));
         renderer.Draw(camera, new DrawableTexture(Textures.SQUARE, Color.Green, 10,10, 250, -250));
