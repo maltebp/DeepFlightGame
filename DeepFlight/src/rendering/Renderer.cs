@@ -1,5 +1,6 @@
 ﻿
 
+using DeepFlight.rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -8,60 +9,16 @@ using System;
 // Responsible for rendering stuff (sort of a Camera controller)
 public class Renderer {
 
-    private static readonly Color CLEAR_COLOR = Color.White;
+    private static readonly Color CLEAR_COLOR = Color.Green;
     private SpriteBatch spriteBatch;
     private bool drawing = false;
     private GraphicsDeviceManager graphics;
 
-    private int screenWidth;
-    private int screenHeight;
-
-    private float screenScale = 0;
-
-    private int LOGICAL_SCREEN_HEIGHT = 500;
-
-    // 1080 / 500 -> 2,.. = the scaling factor
-    //
-
 
     public Renderer(GraphicsDeviceManager graphics) {
         this.graphics = graphics;
-
-        // Fetch screen dimensions
-        screenWidth = graphics.GraphicsDevice.DisplayMode.Width;
-        screenHeight = graphics.GraphicsDevice.DisplayMode.Height;
-
-        // Get the actual screen dimensions
-        graphics.ToggleFullScreen();
-
-        SetResolution(1920, 1080);            
-
-        Console.WriteLine("Screen width: " + screenWidth);
-        Console.WriteLine("Sceren height: " + screenHeight);
-
         spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
     }
-
-
-    public Vector2 GetScreenSize() {
-        return new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-    }
-
-
-    public void SetResolution(int width, int height) {
-        Console.WriteLine("Setting resolution: {0}x{1}", width, height);
-        graphics.PreferredBackBufferWidth = width;
-        graphics.PreferredBackBufferHeight = height;
-        graphics.ApplyChanges();
-
-        //float scaleX = graphics.PreferredBackBufferHeight / (float) screenHeight;// graphics.PreferredBackBufferWidth / screenWidth;
-        //float scaleY = scaleX;// graphics.PreferredBackBufferHeight / screenHeight;
-
-        Console.WriteLine("Screen height: " + screenHeight);
-        screenScale = graphics.PreferredBackBufferHeight / (float) LOGICAL_SCREEN_HEIGHT;
-        Console.WriteLine("Scaling: " + screenScale);
-    }
-
 
     /// <summary>
     /// Initialize a new drawing session, by clearing the screen
@@ -94,10 +51,11 @@ public class Renderer {
         transformed.Height *= transformed.scale;
 
         // Scale to screen resolution
+        var screenScale = ScreenManager.ScreenScale;
         transformed.X *= screenScale;
         transformed.Y *= screenScale;
-        transformed.Width *= screenScale;
-        transformed.Height *= screenScale;
+        transformed.Width *= (float) screenScale;
+        transformed.Height *= (float) screenScale;
 
         // Set draw origin to center of screen
         transformed.X += graphics.PreferredBackBufferWidth / 2;
@@ -131,6 +89,7 @@ public class Renderer {
         transformed.VOrigin = drawable.VOrigin;
 
         // Scale to screen resolution
+        var screenScale = ScreenManager.ScreenScale;
         transformed.X *= screenScale;
         transformed.Y *= screenScale;
 
@@ -141,7 +100,7 @@ public class Renderer {
         // Find best SpriteFont for size
         // Since the text has been scaled, best Font size might have
         // changed, so we check and see if a better SpriteFont exists 
-        float fontScale = transformed.scale * (screenScale/2);
+        float fontScale = transformed.scale * ((float)screenScale/2);
         float scaledSize = drawable.Size * fontScale;
         int bestSize = 0;
         float bestDiff = 100000;

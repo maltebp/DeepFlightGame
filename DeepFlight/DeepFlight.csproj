@@ -50,6 +50,7 @@
     <Compile Include="src\rendering\DrawableText.cs" />
     <Compile Include="src\rendering\DrawableTexture.cs" />
     <Compile Include="src\rendering\Fonts.cs" />
+    <Compile Include="src\rendering\ScreenManager.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />

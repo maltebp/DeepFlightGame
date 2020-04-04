@@ -9,6 +9,7 @@ static class Textures {
     public static Texture2D SHIP { get; private set; }
     public static Texture2D SQUARE { get; private set; }
     public static Texture2D CIRCLE { get; private set; }
+    public static Texture2D TITLE { get; private set; }
 
 
     // Load the textures
@@ -16,6 +17,8 @@ static class Textures {
         
         // SHIP
         SHIP = content.Load<Texture2D>("Content/Ship");
+
+        TITLE = content.Load<Texture2D>("Content/Images/GameTitle");
 
         // SQUARE (custom texture)
         SQUARE = new Texture2D(graphics, 10, 10);

@@ -1,4 +1,5 @@
 ﻿
+using DeepFlight.rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -23,6 +24,8 @@ class ApplicationController : Game {
 
     // Is run after initialization
     protected override void LoadContent() {
+        ScreenManager.Initialize(graphics);
+
         renderer = new Renderer(graphics);
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
         Fonts.Load(Content);

@@ -10,7 +10,11 @@ public class DrawableTexture : Movable {
     public Texture2D Texture { get; private set; } = null;
     public Color Col { get; set; } = Color.White;
 
-    public DrawableTexture(Texture2D texture, int width, int height) : base(width, height) {
+    public DrawableTexture(Texture2D texture) : base(texture.Width, texture.Height) {
+        Texture = texture;
+    }
+
+    public DrawableTexture(Texture2D texture, int width, int height) : base(width, height ) {
         Texture = texture;
     }
 
