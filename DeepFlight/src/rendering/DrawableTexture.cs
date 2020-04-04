@@ -40,7 +40,7 @@ public class CollisionPoint : DrawableTexture {
             foreach (Point point in collider.GetCollisionPoints()) {
                 points.AddLast(new CollisionPoint(point));
             }
-        }
+        }   
 
         return points;
     }

@@ -6,7 +6,7 @@ using System;
 class MainMenuScene : Scene {
 
     private DrawableTexture dot = new DrawableTexture(Textures.CIRCLE, 5, 5);
-    private DrawableText title = new DrawableText("Deep Flight", Fonts.ARIAL.GetFont(24), Color.White, 0, 0);
+    private DrawableText title = new DrawableText("Deep Flight", Fonts.ARIAL, 24, Color.White, 0, 0);
     private Camera camera = new Camera();
 
     private int[] resolutions = { 1280, 720, 1600, 900, 1920, 1080 };
@@ -69,11 +69,11 @@ class MainMenuScene : Scene {
         renderer.Draw(camera, new DrawableTexture(Textures.SQUARE, Color.Red, 10,10, -250, 250));
         renderer.Draw(camera, new DrawableTexture(Textures.SQUARE, Color.Orange, 10,10, -250, -250));
 
-        renderer.DrawText(camera, new DrawableText("Center",    Fonts.ARIAL.GetFont(24), Color.Black, 0, 0));
-        renderer.DrawText(camera, new DrawableText("Top-Right", Fonts.ARIAL.GetFont(24), Color.Black, 250, -250));
-        renderer.DrawText(camera, new DrawableText("Bot-Right",    Fonts.ARIAL.GetFont(24), Color.Black, 250, 250));
-        renderer.DrawText(camera, new DrawableText("Bot-Left",    Fonts.ARIAL.GetFont(24), Color.Black, -250, 250));
-        renderer.DrawText(camera, new DrawableText("Top-Left",    Fonts.ARIAL.GetFont(24), Color.Black, -250, -250));
+        renderer.Draw(camera, new DrawableText("Center",    Fonts.ARIAL, 24, Color.Black, 0, 0));
+        renderer.Draw(camera, new DrawableText("Top-Right", Fonts.ARIAL, 24, Color.Black, 250, -250));
+        renderer.Draw(camera, new DrawableText("Bot-Right",    Fonts.ARIAL, 24, Color.Black, 250, 250));
+        renderer.Draw(camera, new DrawableText("Bot-Left",    Fonts.ARIAL, 24, Color.Black, -250, 250));
+        renderer.Draw(camera, new DrawableText("Top-Left",    Fonts.ARIAL, 24, Color.Black, -250, -250));
     }
 
     public override void Update(double timeDelta) {

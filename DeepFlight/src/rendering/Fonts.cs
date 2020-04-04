@@ -4,9 +4,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Linq;
 
-// Holds the various textures in the game
-static class Fonts {
+// Holds and initialize the loading, of the variious fonts in the game
+public static class Fonts {
 
     public static readonly Font ARIAL = new Font("Arial");
 
@@ -77,7 +78,7 @@ public class Font {
         }
 
         if (loadedSizes.Count == 0)
-            throw new ContentLoadException(string.Format("Couldn't load Font '{0}' in any sizes.", Name));
+            throw new ContentLoadException(string.Format("Couldn't load Font '{0}' in any sizes.", Name));      
 
         // Print successfull load
         Console.Write("Loaded font 'Arial' in sizes: ");
@@ -102,4 +103,18 @@ public class Font {
             throw new NullReferenceException( string.Format("Font '{0}' hasn't loaded size {1}.", Name, size));
         return fontMap[size];
     }
+
+    public Dictionary<int, SpriteFont> GetFontMap() {
+        return fontMap;
+    }
+
+    /// <summary>
+    /// Calculate the dimensions of the output text with this Font,
+    /// at a given size.
+    /// </summary>
+    public Vector2 MeasureString(string text, float size) {
+        var firstSprite = fontMap.First();
+        return firstSprite.Value.MeasureString(text) * (size / firstSprite.Key);        
+    }
+
 }

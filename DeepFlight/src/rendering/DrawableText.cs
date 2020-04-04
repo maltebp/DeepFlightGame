@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class DrawableText : Movable {
 
-    private SpriteFont font;
-    public SpriteFont Font {
+    private Font font;
+    public Font Font {
         get { return font; }
         set { font = value; UpdateSize(); }
     }
@@ -18,9 +18,18 @@ public class DrawableText : Movable {
         
     public Color Col { get; set; } = Color.White;
 
-    public DrawableText(string text, SpriteFont font, Color col, double x, double y) : base(0,0) {
+    // Font size
+    private float size;
+    public float Size {
+        get => size;
+        set { size = value < 0 ? 0 : value; UpdateSize(); }
+    }
+
+
+    public DrawableText(string text, Font font, float size, Color col, double x, double y) : base(0,0) {
         this.text = text;
         this.font = font;
+        this.size = size;
         X = x;
         Y = y;
         Col = col;
@@ -34,7 +43,7 @@ public class DrawableText : Movable {
     }
 
     private void UpdateSize() {
-        Width = (int) Font.MeasureString(Text).X;
-        Height = (int) Font.MeasureString(Text).Y;
+        Width = (int) Font.MeasureString(Text, size).X;
+        Height = (int) Font.MeasureString(Text, size).Y;
     }
 }

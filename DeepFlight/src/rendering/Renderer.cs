@@ -79,8 +79,6 @@ public class Renderer {
     }
 
 
-    bool first = true;
-
     public void Draw(Camera camera, DrawableTexture drawable) {
         InitializeDraw();
 
@@ -90,14 +88,16 @@ public class Renderer {
             transformed,
             true
         );
-        //Entity transformed = drawable;
+
+        // Scale width and height
+        transformed.Width *= transformed.scale;
+        transformed.Height *= transformed.scale;
 
         // Scale to screen resolution
         transformed.X *= screenScale;
         transformed.Y *= screenScale;
-        transformed.Width *= (screenScale*transformed.scale);
-        transformed.Height *= (screenScale*transformed.scale);
-
+        transformed.Width *= screenScale;
+        transformed.Height *= screenScale;
 
         // Set draw origin to center of screen
         transformed.X += graphics.PreferredBackBufferWidth / 2;
@@ -116,23 +116,17 @@ public class Renderer {
                SpriteEffects.None, 0f);
     }
 
-    public void DrawText(Camera camera, DrawableText drawable) {
+
+
+    public void Draw(Camera camera, DrawableText drawable) {
         InitializeDraw();
 
-        if( first ) {
-            Console.WriteLine("Original: " + drawable);
-        }
-
         // Transform the drawables dimensions and coordinates to camera space
-        DrawableText transformed = new DrawableText(drawable.Text, drawable.Font, drawable.Col, drawable.X, drawable.Y);
+        DrawableText transformed = new DrawableText(drawable.Text, drawable.Font, drawable.Size, drawable.Col, drawable.X, drawable.Y);
         camera.Transform(
             transformed,
             false
         );
-
-        if (first) {
-            Console.WriteLine("Cam Transformed: " + transformed);
-        }
 
         // Scale to screen resolution
         transformed.X *= screenScale;
@@ -142,16 +136,27 @@ public class Renderer {
         transformed.X += graphics.PreferredBackBufferWidth / 2;
         transformed.Y += graphics.PreferredBackBufferHeight / 2;
 
-        if (first) {
-            Console.WriteLine("Screen Transformed: " + transformed);
+        // Find best SpriteFont for size
+        // Since the text has been scaled, best Font size might have
+        // changed, so we check and see if a better SpriteFont exists 
+        float fontScale = transformed.scale * (screenScale/2);
+        float scaledSize = drawable.Size * fontScale;
+        int bestSize = 0;
+        float bestDiff = 100000;
+        foreach( var entry in drawable.Font.GetFontMap()) {
+            var fontSize = entry.Key;
+            var sizeDiff = Math.Abs(scaledSize - fontSize);
+            if ( sizeDiff < bestDiff) {
+                bestDiff = sizeDiff;
+                bestSize = fontSize;
+            }
         }
+        float finalScale = scaledSize / bestSize;
+        transformed.Size = bestSize;
 
-        // Test
-        //DrawableText transformed = drawable
-        //drawable.Rotation = (float) (Math.PI / 2);
-
+        // Draw the text 
         spriteBatch.DrawString(
-            drawable.Font,
+            drawable.Font.GetFont(bestSize),
             drawable.Text,
 
             // Apparently, the origin affects the drawing position as well (unlike with textures),
@@ -163,26 +168,17 @@ public class Renderer {
 
             // Adjusts the drawing origin, including rotation. (Doesnn't work quite the same as when drawing textures)
             // Setting it to width and height divided by two, it centers the text (not sure why)
-            new Vector2( transformed.Width/2, transformed.Height/2),
+            new Vector2(transformed.Width / 2, transformed.Height / 2),
 
             // This ensure that text remains same size, regardless of screen resolution
-            transformed.scale * screenScale/2,
+            finalScale,
             SpriteEffects.None,
+
             0f // Layer depth Not sure what this means
         );
-
-        if (first) {
-            first = false;
-        }
-
-
-        //spriteBatch.DrawString(
-        //    drawable.Font,
-        //    drawable.Text,
-        //    new Vector2((int)transformed.X, (int)transformed.Y),
-        //    drawable.Col
-        //);
     }
+
+
 
     // Flush Renderer draw batch
     public void Flush() {
