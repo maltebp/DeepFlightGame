@@ -13,6 +13,13 @@ public class DrawableTexture : Movable {
     public DrawableTexture(Texture2D texture, int width, int height) : base(width, height) {
         Texture = texture;
     }
+
+    public DrawableTexture(Texture2D texture, Color col, int width, int height, int x, int y) : base(width, height) {
+        Texture = texture;
+        X = x;
+        Y = y;
+        Col = col; 
+    }
 }
 
 

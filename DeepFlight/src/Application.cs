@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 
 // Central controller class of the application
@@ -33,6 +34,10 @@ class ApplicationController : Game {
 
     protected override void Update(GameTime gameTime) {
         InputController.UpdateState();
+
+        if (Keys.Escape.IsPressed()) {
+            Exit();
+        }
 
         // Check for scene switch
         if (currentScene.RequestedScene != null)

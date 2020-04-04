@@ -16,35 +16,59 @@ public class Camera {
 
     public float Zoom { get; set; } = 1f;
 
-    public Entity Transform(Entity drawable, int screenWidth, int screenHeight) {
-        Entity trans = new Entity();
+    /// <summary>
+    /// Transform the given Entity to the camera view, by
+    /// scaling, moving and rotation the entity
+    /// </summary>
+    /// <param name="transformed">The Entity object to be transformed</param>
+    /// <param name="rotateObject">Whether or not to rotate the object with the camera
+    /// (i.e. it might be useful to not rotate text)</param>
+    public void Transform(Entity transformed, bool rotateObject) {
 
-        // Scale the object to camera
-       
-        trans.X = drawable.X * Zoom;
-        trans.Y = drawable.Y * Zoom;
+        ////float scaleVal = graphics.PreferredBackBufferHeight / (float)LOGICAL_SCREEN_HEIGHT
+        //transformed.X = entity.X;
+        //transformed.Y = entity.Y;
+        //transformed.Width = entity.Width;
+        //transformed.Height = entity.Height;
 
-        // Adjust to camera position
-        trans.X += (screenWidth / 2 - X * Zoom);
-        trans.Y += (screenHeight / 2 - Y * Zoom);
+        //// Adjust to camera view
+        transformed.X -= X;
+        transformed.Y -= Y;
+
+        //// Apply camera zoom
+        transformed.X *= Zoom;
+        transformed.Y *= Zoom;
+        transformed.scale *= Zoom;
+        //transformed.Width *= Zoom;
+        //transformed.Height *= Zoom;
+
+        //// Rotate position around cameras center (which is now 0,0)
+        double centerX = 0;
+        double centerY = 0;
+
+        //p'x = cos(theta) * (px-ox) - sin(theta) * (py-oy) + ox
+        double x = Math.Cos(-Rotation) * (transformed.X - centerX) - Math.Sin(-Rotation) * (transformed.Y - centerY) + centerX;
+        double y = Math.Sin(-Rotation) * (transformed.X - centerX) + Math.Cos(-Rotation) * (transformed.Y - centerY) + centerY;
+
+        transformed.X = x;
+        transformed.Y = y;
+
+        //p'y = sin(theta) * (px-ox) + cos(theta) * (py-oy) + oy
+
+        // Adjust the entity's rotation with camera's rotation
+        if( rotateObject )
+            transformed.Rotation = transformed.Rotation - Rotation;
+
+        //// Adjust to camera position
+        //trans.X += X * Zoom;
+        //trans.Y += Y * Zoom;
 
         // Adjust to center of entity
-        trans.X -= drawable.Width / 2;
-        trans.Y -= drawable.Height / 2;
-        double centerX = screenWidth / 2;
-        double centerY = screenHeight / 2;
+        //trans.X -= drawable.Width / 2;
+        //trans.Y -= drawable.Height / 2;
+        //double centerX = X;
+        //double centerY = Y;
 
-        // Rotate around camera center
-        trans.X = Math.Cos(-Rotation) * (trans.X - centerX) - Math.Sin(-Rotation) * (trans.Y - centerY) + centerX;
-        trans.Y = Math.Sin(-Rotation) * (trans.X - centerX) + Math.Cos(-Rotation) * (trans.Y - centerY) + centerY;
-
-        // Scale width and height
-        trans.Width = drawable.Width * Zoom * drawable.scale;
-        trans.Height = drawable.Height * Zoom * drawable.scale;
-
-        trans.Rotation = drawable.Rotation - Rotation;
-
-        return trans;
     }
 
 }

@@ -23,6 +23,17 @@ public class Entity {
 
     public Entity() { }
 
+    /// <summary>
+    /// Create an entity as a copy of another
+    /// </summary>
+    public Entity(Entity entity) {
+        X = entity.X;
+        Y = entity.Y;
+        Width = entity.Width;
+        Height = entity.Height;
+        Rotation = entity.Rotation;
+    }
+
     public Entity(float width, float height) {
         Width = width;
         Height = height;

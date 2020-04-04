@@ -18,13 +18,19 @@ public class DrawableText : Movable {
         
     public Color Col { get; set; } = Color.White;
 
-    public DrawableText(string text, SpriteFont font, Color col, int x, int y) : base(0,0) {
+    public DrawableText(string text, SpriteFont font, Color col, double x, double y) : base(0,0) {
         this.text = text;
         this.font = font;
         X = x;
         Y = y;
         Col = col;
         UpdateSize();
+    }
+
+    public DrawableText(DrawableText original) : base(original) {
+        text = original.Text;
+        font = original.Font;
+        Col = original.Col;
     }
 
     private void UpdateSize() {

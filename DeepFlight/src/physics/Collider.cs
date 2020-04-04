@@ -11,6 +11,14 @@ public abstract class Collidable : Entity {
 
     protected Collidable(int width, int height) : base(width, height) { }
 
+    /// <summary>
+    /// Deep copy constructor.
+    /// WARNING: Colliders are not copied.
+    /// </summary>
+    public Collidable(Collidable original) : base(original) {
+        // TODO: WARNING!!! Colliders are not copied
+    }
+
     protected void AddCollider(Collider collider) {
         colliders.AddLast(collider);
     }

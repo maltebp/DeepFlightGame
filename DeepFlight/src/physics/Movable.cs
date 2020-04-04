@@ -14,6 +14,19 @@ public abstract class Movable : Collidable {
 
     public Movable(int width, int height) : base(width, height) { }
 
+    /// <summary>
+    /// Deep copy constructor
+    /// WARNING: Colliders are NOT copied!
+    /// </summary>
+    public Movable(Movable original) : base(original) {
+        VelocityX = original.VelocityX;
+        VelocityY = original.VelocityY;
+        AccelerationX = original.AccelerationX;
+        AccelerationY = original.AccelerationY;
+        Resistance = original.Resistance;
+        MaxVelocity = original.MaxVelocity;
+    }
+
     public void ResetMovement() {
         VelocityX = 0;
         VelocityY = 0;
