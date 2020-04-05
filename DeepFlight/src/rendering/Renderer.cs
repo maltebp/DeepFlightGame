@@ -100,7 +100,7 @@ public class Renderer {
         // Find best SpriteFont for size
         // Since the text has been scaled, best Font size might have
         // changed, so we check and see if a better SpriteFont exists 
-        float fontScale = transformed.scale * ((float)screenScale/2);
+        float fontScale = transformed.scale * (float)screenScale;
         float scaledSize = drawable.Size * fontScale;
         int bestSize = 0;
         float bestDiff = 100000;

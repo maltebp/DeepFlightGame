@@ -44,6 +44,7 @@
     <Compile Include="src\GameController.cs" />
     <Compile Include="src\generation\TrackGeneratorcs.cs" />
     <Compile Include="src\generation\TrackSerializer.cs" />
+    <Compile Include="src\gui\TextInput.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\rendering\Camera.cs" />
     <Compile Include="src\gameobjects\Entity.cs" />
@@ -52,13 +53,16 @@
     <Compile Include="src\rendering\Fonts.cs" />
     <Compile Include="src\rendering\ScreenManager.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
+    <Compile Include="src\Globals.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />
     <Compile Include="src\Settings.cs" />
+    <Compile Include="src\utility\Dictionary.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
     <Compile Include="src\Application.cs" />
     <Compile Include="src\generation\Generator.cs" />
     <Compile Include="src\utility\InputController.cs" />
+    <Compile Include="src\utility\KeyboardController.cs" />
     <Compile Include="src\utility\MathExtension.cs" />
     <Compile Include="src\physics\Movable.cs" />
     <Compile Include="src\physics\Mover.cs" />
@@ -70,6 +74,7 @@
     <Compile Include="src\rendering\Textures.cs" />
     <Compile Include="src\generation\Track.cs" />
     <Compile Include="src\utility\Point.cs" />
+    <Compile Include="src\View.cs" />
     <Compile Include="test\TrackTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +87,7 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>

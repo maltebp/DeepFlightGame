@@ -12,7 +12,10 @@ public abstract class Movable : Collidable {
     public float Resistance { get; set; } = 1f; // 1 = no resistance
     public float MaxVelocity { get; set; } = 0f;
 
+    public Movable() : base(0,0) { }
+
     public Movable(int width, int height) : base(width, height) { }
+
 
     /// <summary>
     /// Deep copy constructor

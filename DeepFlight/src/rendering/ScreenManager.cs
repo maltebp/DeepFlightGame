@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DeepFlight.rendering {
     public static class ScreenManager {
         private static readonly double  BASE_HEIGHT = 720;
-        private static readonly bool    FULLSCREEN  = true;
+        private static readonly bool    FULLSCREEN  = false;
 
         public static double BaseWidth { get; private set; }
         public static double BaseHeight { get; private set; } = BASE_HEIGHT;

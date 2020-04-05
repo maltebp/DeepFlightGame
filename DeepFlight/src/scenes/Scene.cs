@@ -1,11 +1,16 @@
 ﻿
+using DeepFlight;
+using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using System;
 
-public abstract class Scene {
+public abstract class Scene : View {
 
     // To switch scene, a scene may "request" a switch to another scene
     public Scene RequestedScene { get; private set;  }
+
+    public Scene(Camera camera) : base(camera) { }
+    public Scene() : base(null) { }
 
     protected void RequestSceneSwitch(Scene scene) {
         if( RequestedScene != null )
@@ -13,13 +18,4 @@ public abstract class Scene {
         RequestedScene = scene;
     }
 
-    // First method which is run, once the scene has been "switched" in
-    public virtual void Initialize(Renderer renderer) { }
-
-    // Is run once the scene is "switched out"
-    public virtual void Terminate() { }
-
-    public abstract void Update(double timeDelta);
-
-    public abstract void Draw(Renderer renderer);
 }

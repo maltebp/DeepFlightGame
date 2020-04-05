@@ -1,5 +1,8 @@
 ﻿
+using Deepflight.Globals;
+using DeepFlight.gui;
 using DeepFlight.rendering;
+using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -7,13 +10,13 @@ using System;
 class MainMenuScene : Scene {
 
     private Camera ui = new Camera();
-    //private DrawableTexture background = new DrawableTexture(Textures.SQUARE, 500, 500);
+    private DrawableTexture background = new DrawableTexture(Textures.SQUARE, 500, 500);
     private DrawableTexture title = new DrawableTexture(Textures.TITLE);
 
-    private int[] resolutions = { 1280, 720, 1600, 900, 1920, 1080 };
-    private int resolution = 2;
+    private TextInput usernameInput; 
 
-    public override void Initialize(Renderer renderer) { 
+    protected override void OnInitialize() {
+
         DrawableTexture ship = new Ship();
         Console.WriteLine(ship);
 
@@ -21,26 +24,40 @@ class MainMenuScene : Scene {
         title.Height = (int) (ScreenManager.BaseHeight / 6);
         title.Width = title.Height * (Textures.TITLE.Width/Textures.TITLE.Height);
         title.X = 0;
-        title.Y = -ScreenManager.BaseHeight/5;
+        title.Y = -ScreenManager.BaseHeight/3;
+
+        background = new DrawableTexture(Textures.SQUARE);
+        background.Col = Globals.COLOR_PRIMARY;
+        background.Height = (int) ScreenManager.BaseHeight;
+        background.Width = (int) ScreenManager.BaseWidth;
+
+        usernameInput = new TextInput(ui, Fonts.ARIAL, 24, Color.White, 0, -ScreenManager.BaseHeight / 5, ScreenManager.BaseWidth/8, ScreenManager.BaseHeight/30);
+
+        AddChild(usernameInput);
+
+        usernameInput.Focused = true;
 
         Console.WriteLine(title);
     }
 
-    public override void Draw(Renderer renderer) {
 
+    //public void OnKeyEvent(KeyEventArgs args) {
+    //    if (args.Handled) return;
+
+    //    if( args.Action == KeyAction.PRESSED) {
+    //        if (usernameInput.KeyInput(args.Key)) {
+    //            args.Handled = true;
+    //            return;
+    //        }
+    //    }
+    //}
+
+
+    private int resolutionIndex = 0;
+    protected override void OnDraw(Renderer renderer) {
+
+        renderer.Draw(ui, background);
         renderer.Draw(ui, title);
 
-        if (Keys.R.IsPressed()) {
-            //resolution++;
-            //if (resolution >= resolutions.Length/2) resolution = 0;
-            //renderer.SetResolution(resolutions[resolution * 2], resolutions[resolution * 2 + 1]);
-        }
-
-       // renderer.Draw(ui, new DrawableTexture(Textures.CIRCLE, 10, 10));
-
-    }
-
-    public override void Update(double timeDelta) {
-        
     }
 }
