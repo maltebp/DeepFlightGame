@@ -80,7 +80,7 @@ public class Renderer {
     static bool first = true;
 
     // TEXT
-    public void Draw(Camera camera, DrawableText drawable) {
+    public void Draw(Camera camera, TextView drawable) {
         InitializeDraw();
 
         // Transform the drawables dimensions and coordinates to camera space

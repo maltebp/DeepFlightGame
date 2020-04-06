@@ -15,7 +15,7 @@ public static class Fonts {
     public static readonly Font ARIAL = new Font("Arial");
     public static readonly Font PIXELLARI = new Font("Pixellari");
     
-    public static readonly Font DEFAULT = ROBOTO_BOLD_ITALIC;
+    public static readonly Font DEFAULT = PIXELLARI;
 
     // Loads all created Font objects, using the given content
     public static void Load(ContentManager content) {

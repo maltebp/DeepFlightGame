@@ -1,5 +1,6 @@
 ﻿using DeepFlight.gui;
 using DeepFlight.rendering;
+using DeepFlight.src.gui;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -11,8 +12,11 @@ class MainMenuScene : Scene {
     private DrawableTexture background = new DrawableTexture(Textures.SQUARE, 500, 500);
     private DrawableTexture title = new DrawableTexture(Textures.TITLE);
 
+    private LoadingView loader;
 
-    private TextInput[] inputs = new TextInput[2];
+    private TextView errorText;
+
+    private TextInput input_Username, input_Password;
 
 
     private int currentInput = 0;
@@ -38,29 +42,25 @@ class MainMenuScene : Scene {
         background.Width = (int) ScreenController.BaseWidth;
         background.VOrigin = VerticalOrigin.TOP;
 
-        inputs[0] = new TextInput(ui, "Username", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.45, (float)width*0.30f);
-        inputs[0].MaxLength = 20;
+        input_Username = new TextInput(ui, "Username", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.45, (float)width*0.30f);
+        input_Username.MaxLength = 20;
+        input_Username.Focused = true;
+        AddChild(input_Username);
 
-        inputs[1] = new TextInput(ui, "Password", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.65, (float) width*0.30f);
-        inputs[1].PasswordInput = true;
-        inputs[1].MaxLength = 20;
+        input_Password = new TextInput(ui, "Password", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.65, (float) width*0.30f);
+        input_Password.PasswordInput = true;
+        input_Password.MaxLength = 20;
+        AddChild(input_Password);
 
-        AddChild(inputs[0]);
-        AddChild(inputs[1]);
+        // Create loading component
+        loader = new LoadingView(ui, 0, height / 2);
+        loader.Hidden = true;
+        AddChild(loader);
 
+        errorText = new TextView(ui, "", Fonts.DEFAULT, 24, Color.White, 0, height * 0.80);
+        errorText.Hidden = true;
+        AddChild(errorText);
 
-
-        //text_Username = new DrawableText("Username", Fonts.PIXELLARI, 20, Color.White,
-        //    inputs[0].X - inputs[0].Width / 2, inputs[0].Y + height*0.03);
-        //text_Username.VOrigin = VerticalOrigin.TOP;
-        //text_Username.HOrigin = HorizontalOrigin.LEFT;
-
-        //text_Password = new DrawableText("Password", Fonts.PIXELLARI, 20, Color.White,
-        //    inputs[1].X - inputs[1].Width / 2, inputs[1].Y + height * 0.03);
-        //text_Password.VOrigin = VerticalOrigin.TOP;
-        //text_Password.HOrigin = HorizontalOrigin.LEFT;
-
-        inputs[0].Focused = true;
     }
 
 
@@ -68,12 +68,23 @@ class MainMenuScene : Scene {
         
         // "Scroll" through input fields
         if( e.Action == KeyAction.PRESSED) {
-            if (e.Key == Keys.Up) {
-                AdjustFocus(-1);
+            Console.WriteLine("Input!");
+            if (e.Key == Keys.Up || e.Key == Keys.Down || e.Key == Keys.Tab) {
+                SwitchInputFocus();
                 return true;
             }
-            if (e.Key == Keys.Down || e.Key == Keys.Tab) {
-                AdjustFocus(1);
+            if (e.Key == Keys.Enter) {
+                if( input_Username.Text.Length == 0) {
+                    SetInputFocus(input_Username);
+                    ShowError("Enter a username!");
+                }
+                else if( input_Password.Text.Length == 0) {
+                    SetInputFocus(input_Password);
+                    ShowError("Enter a password!");
+                }
+                else {
+                    Load();
+                }
                 return true;
             }
         }
@@ -81,20 +92,31 @@ class MainMenuScene : Scene {
         return false;
     }
 
-    private void AdjustFocus(int i) {
-        foreach(var input in inputs) {
-            input.Focused = false;
-        }
-        currentInput = MathExtension.Mod(currentInput+1, inputs.Length);
-        inputs[currentInput].Focused = true;
+    private void SetInputFocus(TextInput inputToFocus) {
+        input_Username.Focused = inputToFocus == input_Username;
+        input_Password.Focused = inputToFocus == input_Password;
+    }
+
+    private void SwitchInputFocus() {
+        input_Username.Focused = !input_Username.Focused;
+        input_Password.Focused = !input_Password.Focused;
+    }
+
+    private void ShowError(string error) {
+        errorText.Text = "Error: " + error;
+        errorText.Hidden = false;
+    }
+    
+    private void Load() {
+        errorText.Hidden = true;
+        input_Username.Hidden = true;
+        input_Password.Hidden = true;
+        loader.Hidden = false;
     }
 
 
-    private int resolutionIndex = 0;
     protected override void OnDraw(Renderer renderer) {
-
         renderer.Draw(ui, background);
         renderer.Draw(ui, title);
-
     }
 }

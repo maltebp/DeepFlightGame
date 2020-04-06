@@ -13,10 +13,6 @@ namespace DeepFlight {
         public View Parent { get; protected set; }
         private LinkedList<View> children = new LinkedList<View>();
 
-        public View(Camera camera) {
-            Camera = camera;
-        }
-
         private bool focused = false;
         public bool Focused {
             get => focused;
@@ -35,12 +31,41 @@ namespace DeepFlight {
                 focused = value;
             }
         }
-
         protected virtual void OnFocus() { }
         protected virtual void OnUnfocus() { }
-        
 
-        
+
+        /// <summary>
+        /// Hiding the view prevents it (and its children), from
+        /// being drawn, updated and handle input events.
+        /// </summary>
+        private bool hidden = false;
+        public bool Hidden {
+            get => hidden;
+            set {
+                if (value == false && hidden == true) {
+                    if (Parent != null && Parent.Hidden)
+                        Parent.Hidden = false;
+                }
+                if (value == true && hidden == false) {
+                    foreach (var child in children) {
+                        child.Hidden = true;
+                    }
+                }
+                hidden = value;
+            }
+        }
+
+
+        public View(Camera camera) {
+            Camera = camera;
+        }
+
+
+        public void AddChildren(params View[] children) {
+            foreach (var child in children) AddChild(child);
+        }
+
         public void AddChild(View child) {
             if (children.Contains(child) )
                 throw new ArgumentException("View is already child of this parent.");
@@ -50,6 +75,8 @@ namespace DeepFlight {
 
             children.AddLast(child);
             child.Parent = this;
+            if (child.Focused) Focused = true;
+            if (Hidden) child.Hidden = true;
         }
 
         public void RemoveChild(View child) {
@@ -81,23 +108,23 @@ namespace DeepFlight {
 
 
         public void Draw(Renderer renderer) {
-            OnDraw(renderer);
-            foreach (var child in children)
-                child.Draw(renderer);
+            if (!Hidden) {
+                OnDraw(renderer);
+            }
         }
         protected virtual void OnDraw(Renderer renderer) { }
 
 
         public void Update(double deltaTime) {
-            OnUpdate(deltaTime);
-            foreach (var child in children)
-                child.Update(deltaTime);
+            if (!Hidden) {
+                OnUpdate(deltaTime);
+            }
         }
         protected virtual void OnUpdate(double deltaTime) { }
         
 
         public void KeyInput(KeyEventArgs e) {
-            if (!Focused || e.Handled) return;
+            if (!Focused || Hidden || e.Handled) return;
 
             // Focused children should handle the event first
             foreach(var child in children) {
@@ -105,21 +132,22 @@ namespace DeepFlight {
             }
 
             // Check if child handled the event
-            if (!Focused || e.Handled) return;
+            if (!Focused || Hidden || e.Handled) return;
             e.Handled = OnKeyInput(e);
         }
         protected virtual bool OnKeyInput(KeyEventArgs e) { return false; }
 
-
+        
         public void CharInput(CharEventArgs e) {
-            if (!Focused || e.Handled) return;
+            if (!Focused || Hidden || e.Handled) return;
+
 
             // Focused children should handle the event first
-            foreach(var child in children) {
+            foreach (var child in children) {
                 child.CharInput(e);
             }
 
-            if (!Focused || e.Handled) return;
+            if (!Focused || Hidden || e.Handled) return;
             e.Handled = OnCharInput(e);
         }
         protected virtual bool OnCharInput(CharEventArgs e) { return false;  }

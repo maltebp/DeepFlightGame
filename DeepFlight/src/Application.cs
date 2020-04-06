@@ -84,6 +84,8 @@ public class ApplicationController : Game {
             currentScene.Terminate(this);
 
         currentScene = scene;
+        currentScene.Focused = true;
+        currentScene.Hidden = false;
         currentScene.Initialize(this);
     }
 

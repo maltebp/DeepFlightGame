@@ -22,12 +22,11 @@ namespace DeepFlight.gui {
             get => throw new Exception("Height is not implemented in TextInput");
         }
         
-        public DrawableText Label { get; }
+        public TextView Label { get; }
 
-        private DrawableText inputText;
+        private TextView inputText;
         private DrawableTexture cursor;
         private DrawableTexture line;
-
 
         private double blinkDuration = 0.75;
         private double blinkCooldown;
@@ -42,8 +41,9 @@ namespace DeepFlight.gui {
             Width = (int) width;
 
             // Input Text field
-            inputText = new DrawableText("", font, fontSize, color, x, y);
+            inputText = new TextView(Camera, "", font, fontSize, color, x, y);
             inputText.VOrigin = VerticalOrigin.BOTTOM;
+            AddChild(inputText);
 
             // Cursor
             cursor = new DrawableTexture(Textures.SQUARE, color, DEFAULT_CURSOR_WIDTH, inputText.Height*0.75f, x, inputText.GetCenterY()-8 );
@@ -51,9 +51,10 @@ namespace DeepFlight.gui {
 
             line = new DrawableTexture(Textures.SQUARE, color, width, LINE_THICKNESS, x, y-LINE_MARGIN);
 
-            Label = new DrawableText(label, font, fontSize * 0.6, color, x-width/2, y + LINE_MARGIN*2 + LINE_THICKNESS);
+            Label = new TextView(Camera, label, font, fontSize * 0.6, color, x- width / 2, y + LINE_MARGIN * 2 + LINE_THICKNESS);
             Label.VOrigin = VerticalOrigin.TOP;
             Label.HOrigin = HorizontalOrigin.LEFT;
+            AddChild(Label);
                                             
             blinkCooldown = blinkDuration;
         }

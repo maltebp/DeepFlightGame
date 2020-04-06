@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 
 // The absolute base class for game objects.
 // Defines an object position, dimensions and scale.
-public class Entity {
+public class Entity : INotifyPropertyChanged {
 
     public double X { get; set; } = 0;
     public double Y { get; set; } = 0;
@@ -22,6 +23,8 @@ public class Entity {
     ///  WARNING: Probably shouldn't this too much (not fully integrated)
     /// </summary>
     public float scale = 1.0f;
+
+    public event PropertyChangedEventHandler PropertyChanged;
 
     public HorizontalOrigin HOrigin { get; set; } = HorizontalOrigin.CENTER;
     public VerticalOrigin VOrigin { get; set; } = VerticalOrigin.CENTER;

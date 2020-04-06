@@ -1,8 +1,9 @@
 ﻿
+using DeepFlight;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-public class DrawableText : Movable {
+public class TextView : View {
 
     private Font font;
     public Font Font {
@@ -26,7 +27,7 @@ public class DrawableText : Movable {
     }
 
 
-    public DrawableText(string text, Font font, double size, Color col, double x, double y) : base(0,0) {
+    public TextView(Camera camera, string text, Font font, double size, Color col, double x, double y) : base(camera) {
         this.text = text;
         this.font = font;
         this.size = size;
@@ -34,12 +35,6 @@ public class DrawableText : Movable {
         Y = y;
         Col = col;
         UpdateSize();
-    }
-
-    public DrawableText(DrawableText original) : base(original) {
-        text = original.Text;
-        font = original.Font;
-        Col = original.Col;
     }
 
     private void UpdateSize() { 
@@ -55,9 +50,17 @@ public class DrawableText : Movable {
         Height = Font.MeasureString("|LAJ*", size).Y;
     }
 
+
+    protected override void OnDraw(Renderer renderer) {
+        renderer.Draw(Camera, this);
+    }
+
+
+
+
     public override string ToString() {
         return string.Format(
-            "DrawableText( " +
+            "TextView( " +
             "text={0}, " +
             "font={1}, " +
             "size={2}, " +
