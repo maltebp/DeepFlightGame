@@ -10,13 +10,19 @@ using System.Linq;
 namespace DeepFlight.gui {
     public class TextInput : View {
 
-        private static readonly int DEFAULT_LINE_THICKNESS = 3;
-        private static readonly int DEFAULT_CURSOR_WIDTH = 2;
+        private static readonly int LINE_THICKNESS = 3;
+        private static readonly int LINE_MARGIN = 3;
+        private static readonly int DEFAULT_CURSOR_WIDTH = 3;
 
         public string   Text { get; set; } = "";
         public string   Dictionairy { get; set; } = CharLists.DEFAULT;
         public int      MaxLength { get; set; } = -1;
         public bool     PasswordInput { get; set; }
+        public override float Height {
+            get => throw new Exception("Height is not implemented in TextInput");
+        }
+        
+        public DrawableText Label { get; }
 
         private DrawableText inputText;
         private DrawableTexture cursor;
@@ -30,32 +36,27 @@ namespace DeepFlight.gui {
 
         private int cursorPosition = 0;
 
-        public TextInput(Camera camera, Font font, int fontSize, Color color, double x, double y, double width, double height) : base(camera) {
+        public TextInput(Camera camera, string label, Font font, int fontSize, Color color, double x, double y, float width) : base(camera) {
             X = x;
             Y = y;
             Width = (int) width;
-            Height = (int) height;
-
-            var bottomY = GetCenterY() + height / 2;
 
             // Input Text field
-            inputText = new DrawableText("", font, fontSize, color, x, bottomY + height*0.1 );
+            inputText = new DrawableText("", font, fontSize, color, x, y);
             inputText.VOrigin = VerticalOrigin.BOTTOM;
 
             // Cursor
-            cursor = new DrawableTexture(Textures.SQUARE, color, DEFAULT_CURSOR_WIDTH, (int) (height*1), x, y );
+            cursor = new DrawableTexture(Textures.SQUARE, color, DEFAULT_CURSOR_WIDTH, inputText.Height*0.75f, x, inputText.GetCenterY()-8 );
             cursor.HOrigin = HorizontalOrigin.LEFT;
-            cursor.VOrigin = VerticalOrigin.BOTTOM;
 
-            line = new DrawableTexture(Textures.SQUARE, color, (int)width, DEFAULT_LINE_THICKNESS, x, bottomY);
-            line.VOrigin = VerticalOrigin.BOTTOM;
+            line = new DrawableTexture(Textures.SQUARE, color, width, LINE_THICKNESS, x, y-LINE_MARGIN);
 
-           
+            Label = new DrawableText(label, font, fontSize * 0.6, color, x-width/2, y + LINE_MARGIN*2 + LINE_THICKNESS);
+            Label.VOrigin = VerticalOrigin.TOP;
+            Label.HOrigin = HorizontalOrigin.LEFT;
+                                            
             blinkCooldown = blinkDuration;
         }
-
-
-
 
         protected override void OnFocus() {
             duringBlink = false;
@@ -107,9 +108,10 @@ namespace DeepFlight.gui {
             cursor.X = inputText.GetCenterX() + inputText.Width / 2+ 1;
         }
 
-        protected override void OnDraw(Renderer renderer) {
 
+        protected override void OnDraw(Renderer renderer) {
             renderer.Draw(Camera, line);
+            renderer.Draw(Camera, Label);
 
             if (Text.Length > 0) {
                 renderer.Draw(Camera, inputText);
@@ -117,8 +119,7 @@ namespace DeepFlight.gui {
 
             if( Focused && !duringBlink) {
                 renderer.Draw(Camera, cursor);
-            }
-            
+            }  
         }
     }
 }

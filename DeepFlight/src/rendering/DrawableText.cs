@@ -42,9 +42,17 @@ public class DrawableText : Movable {
         Col = original.Col;
     }
 
-    private void UpdateSize() {
-        Width = Font.MeasureString(Text, size).X;
-        Height = Font.MeasureString(Text, size).Y;
+    private void UpdateSize() { 
+
+        if( Text != null && Text.Length > 0){
+            Width = Font.MeasureString(Text, size).X;
+        }
+        else {
+            Width = 0;
+        }
+
+        // Height should always be the same (regardless of which characters)
+        Height = Font.MeasureString("|LAJ*", size).Y;
     }
 
     public override string ToString() {

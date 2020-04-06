@@ -14,7 +14,7 @@ public abstract class Movable : Collidable {
 
     public Movable() : base(0,0) { }
 
-    public Movable(int width, int height) : base(width, height) { }
+    public Movable(float width, float height) : base(width, height) { }
 
 
     /// <summary>

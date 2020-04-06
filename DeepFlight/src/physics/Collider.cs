@@ -9,7 +9,7 @@ public abstract class Collidable : Entity {
 
     private LinkedList<Collider> colliders = new LinkedList<Collider>();
 
-    protected Collidable(int width, int height) : base(width, height) { }
+    protected Collidable(float width, float height) : base(width, height) { }
 
     /// <summary>
     /// Deep copy constructor.

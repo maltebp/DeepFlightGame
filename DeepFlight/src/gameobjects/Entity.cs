@@ -9,8 +9,8 @@ public class Entity {
     public double X { get; set; } = 0;
     public double Y { get; set; } = 0;
 
-    public float Width { get; set; } = 1f;
-    public float Height { get; set; } = 1f;
+    public virtual float Width { get; set; } = 1f;
+    public virtual float Height { get; set; } = 1f;
 
     private float rotation = 0f;
     public float Rotation {

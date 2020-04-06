@@ -1,5 +1,4 @@
-﻿
-using DeepFlight.gui;
+﻿using DeepFlight.gui;
 using DeepFlight.rendering;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
@@ -15,7 +14,6 @@ class MainMenuScene : Scene {
 
     private TextInput[] inputs = new TextInput[2];
 
-    private DrawableText text_Username, text_Password;
 
     private int currentInput = 0;
 
@@ -40,29 +38,29 @@ class MainMenuScene : Scene {
         background.Width = (int) ScreenController.BaseWidth;
         background.VOrigin = VerticalOrigin.TOP;
 
-        inputs[0] = new TextInput(ui, Fonts.PIXELLARI, 36, Color.White, 0, height * 0.40, width*0.25, ScreenController.BaseHeight/30);
-        inputs[1] = new TextInput(ui, Fonts.PIXELLARI, 36, Color.White, 0, height * 0.65, width*0.25, ScreenController.BaseHeight / 30);
+        inputs[0] = new TextInput(ui, "Username", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.45, (float)width*0.30f);
+        inputs[0].MaxLength = 20;
+
+        inputs[1] = new TextInput(ui, "Password", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.65, (float) width*0.30f);
         inputs[1].PasswordInput = true;
-        inputs[0].Text = "hello there world!";
+        inputs[1].MaxLength = 20;
+
         AddChild(inputs[0]);
         AddChild(inputs[1]);
 
-        text_Username = new DrawableText("Username", Fonts.PIXELLARI, 24, Color.White,
-            inputs[0].X - inputs[0].Width / 2, inputs[0].Y + inputs[0].Height / 2);
-        text_Username.VOrigin = VerticalOrigin.TOP;
-        text_Username.HOrigin = HorizontalOrigin.LEFT;
+
+
+        //text_Username = new DrawableText("Username", Fonts.PIXELLARI, 20, Color.White,
+        //    inputs[0].X - inputs[0].Width / 2, inputs[0].Y + height*0.03);
+        //text_Username.VOrigin = VerticalOrigin.TOP;
+        //text_Username.HOrigin = HorizontalOrigin.LEFT;
+
+        //text_Password = new DrawableText("Password", Fonts.PIXELLARI, 20, Color.White,
+        //    inputs[1].X - inputs[1].Width / 2, inputs[1].Y + height * 0.03);
+        //text_Password.VOrigin = VerticalOrigin.TOP;
+        //text_Password.HOrigin = HorizontalOrigin.LEFT;
 
         inputs[0].Focused = true;
-
-        Console.WriteLine(title);
-
-        Console.WriteLine("\n\nFont scale test:");
-        var width24 = Fonts.ROBOTO_BOLD.GetFont(24).MeasureString("Hello there world!").X;
-        var width48 = Fonts.ROBOTO_BOLD.GetFont(48).MeasureString("Hello there world!").X;
-
-        Console.WriteLine("Width 24: " + width24);
-        Console.WriteLine("Width 48: " + width48);
-        Console.WriteLine("Width scale: " + (width48/width24));
     }
 
 
@@ -97,7 +95,6 @@ class MainMenuScene : Scene {
 
         renderer.Draw(ui, background);
         renderer.Draw(ui, title);
-        //renderer.Draw(ui, text_Username);
 
     }
 }
