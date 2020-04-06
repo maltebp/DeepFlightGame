@@ -4,6 +4,7 @@ using DeepFlight.utility;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Linq;
 
 namespace DeepFlight.gui {
@@ -12,9 +13,10 @@ namespace DeepFlight.gui {
         private static readonly int DEFAULT_LINE_THICKNESS = 3;
         private static readonly int DEFAULT_CURSOR_WIDTH = 2;
 
-        public string   Input { get; set; } = "";
-        public string   Dictionairy { get; set; } = Dictionary.DEFAULT;
+        public string   Text { get; set; } = "";
+        public string   Dictionairy { get; set; } = CharLists.DEFAULT;
         public int      MaxLength { get; set; } = -1;
+        public bool     PasswordInput { get; set; }
 
         private DrawableText inputText;
         private DrawableTexture cursor;
@@ -24,6 +26,7 @@ namespace DeepFlight.gui {
         private double blinkDuration = 0.75;
         private double blinkCooldown;
         private bool duringBlink = false;
+
 
         private int cursorPosition = 0;
 
@@ -60,10 +63,9 @@ namespace DeepFlight.gui {
         /// <param name="key"></param>
         /// <returns></returns>
         protected override bool OnKeyInput(KeyEventArgs e) {
-            System.Console.WriteLine("TextInput Key: " + e);
             if (e.Action == KeyAction.PRESSED && e.Key == Keys.Back) {
-                if (Input.Length > 0) {
-                    Input = Input.Substring(0, Input.Length - 1);
+                if (Text.Length > 0) {
+                    Text = Text.Substring(0, Text.Length - 1);
                 }
                 return true;
             }
@@ -73,10 +75,9 @@ namespace DeepFlight.gui {
 
 
         protected override bool OnCharInput(CharEventArgs e) {
-            System.Console.WriteLine("TextInput Char: " + e);
             if (Dictionairy.Contains(e.Character)) {
-                if( MaxLength < 0 || Input.Length < MaxLength) {
-                    Input += e.Character;
+                if( MaxLength < 0 || Text.Length < MaxLength) {
+                    Text += e.Character;
                 }
                 return true;
             }
@@ -89,7 +90,10 @@ namespace DeepFlight.gui {
                 duringBlink = !duringBlink;
                 blinkCooldown = blinkDuration;
             }
-            inputText.Text = Input;
+            if (PasswordInput)
+                inputText.Text = new string('*', Text.Length);
+            else
+                inputText.Text = Text;
             cursor.X = inputText.X + inputText.Width / 2 + 1;
         }
 
@@ -97,7 +101,7 @@ namespace DeepFlight.gui {
 
             renderer.Draw(Camera, line);
 
-            if (Input.Length > 0) {
+            if (Text.Length > 0) {
                 renderer.Draw(Camera, inputText);
             }
 

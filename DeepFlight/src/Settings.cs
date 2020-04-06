@@ -1,6 +1,7 @@
 ﻿
 
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 class Settings {
@@ -19,6 +20,8 @@ class Settings {
     private static readonly float ZOOM_MAX = 30f;
     private static readonly float ZOOM_MIN = 0.5f;
     private static readonly float ZOOM_FACTOR = 0.001f; // How "fast" to zoom
+
+    public static readonly Color COLOR_PRIMARY = new Color(212, 69, 24);
 
 
 }

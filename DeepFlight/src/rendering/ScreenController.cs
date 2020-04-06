@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DeepFlight.rendering {
-    public static class ScreenManager {
+    public static class ScreenController {
         private static readonly double  BASE_HEIGHT = 720;
         private static readonly bool    FULLSCREEN  = false;
 
@@ -30,7 +30,7 @@ namespace DeepFlight.rendering {
         private static bool initialized = false;
 
         public static void Initialize(GraphicsDeviceManager graphics) {
-            ScreenManager.graphics = graphics;
+            ScreenController.graphics = graphics;
             double screenWidth = graphics.GraphicsDevice.DisplayMode.Width;
             double screenHeight = graphics.GraphicsDevice.DisplayMode.Height;
 

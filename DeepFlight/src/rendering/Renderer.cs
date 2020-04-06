@@ -51,7 +51,7 @@ public class Renderer {
         transformed.Height *= transformed.scale;
 
         // Scale to screen resolution
-        var screenScale = ScreenManager.ScreenScale;
+        var screenScale = ScreenController.ScreenScale;
         transformed.X *= screenScale;
         transformed.Y *= screenScale;
         transformed.Width *= (float) screenScale;
@@ -75,7 +75,9 @@ public class Renderer {
     }
 
 
+    static bool first = true;
 
+    // TEXT
     public void Draw(Camera camera, DrawableText drawable) {
         InitializeDraw();
 
@@ -89,40 +91,44 @@ public class Renderer {
         transformed.VOrigin = drawable.VOrigin;
 
         // Scale to screen resolution
-        var screenScale = ScreenManager.ScreenScale;
+        var screenScale = ScreenController.ScreenScale;
         transformed.X *= screenScale;
         transformed.Y *= screenScale;
 
         // Set draw origin to center of screen
-        transformed.X += graphics.PreferredBackBufferWidth / 2;
-        transformed.Y += graphics.PreferredBackBufferHeight / 2;
+        transformed.X += graphics.PreferredBackBufferWidth / 2.0;
+        transformed.Y += graphics.PreferredBackBufferHeight / 2.0;
 
         // Find best SpriteFont for size
         // Since the text has been scaled, best Font size might have
         // changed, so we check and see if a better SpriteFont exists 
-        float fontScale = transformed.scale * (float)screenScale;
-        float scaledSize = drawable.Size * fontScale;
-        int bestSize = 0;
-        float bestDiff = 100000;
-        foreach( var entry in drawable.Font.GetFontMap()) {
-            var fontSize = entry.Key;
-            var sizeDiff = Math.Abs(scaledSize - fontSize);
-            if ( sizeDiff < bestDiff) {
-                bestDiff = sizeDiff;
-                bestSize = fontSize;
-            }
+        double fontScale = transformed.scale * screenScale;
+        double scaledSize = drawable.Size * fontScale;
+        FontData bestFont = drawable.Font.GetBestFont(scaledSize);
+
+        double expectedWidth = drawable.Width * fontScale;
+        double widthScalingError = bestFont.Sprite.MeasureString(drawable.Text).X / expectedWidth;
+        double correctedSize = bestFont.Size * widthScalingError;
+
+        double finalScale = scaledSize / correctedSize;
+        transformed.Size = correctedSize;
+
+        if (first) {
+            Console.WriteLine("\n\nDrawing Text!");
+            Console.WriteLine("Best Size: " + bestFont.Size);
+            Console.WriteLine("Final scale: " + finalScale);
+            Console.WriteLine("Base: " + drawable);
+            Console.WriteLine("Transformed: " + transformed);
         }
-        float finalScale = scaledSize / bestSize;
-        transformed.Size = bestSize;
 
         // Draw the text 
         spriteBatch.DrawString(
-            drawable.Font.GetFont(bestSize),
+            bestFont.Sprite,
             drawable.Text,
 
             // Apparently, the origin affects the drawing position as well (unlike with textures),
             // so we have to adjust this transformed position with the same amount as the origin.
-            new Vector2((int) transformed.GetCenterX(), (int) transformed.GetCenterY() ),
+            new Vector2( (float) transformed.GetCenterX(), (float) transformed.GetCenterY() ),
 
             drawable.Col,
             transformed.Rotation,
@@ -132,11 +138,13 @@ public class Renderer {
             new Vector2(transformed.Width / 2, transformed.Height / 2),
 
             // This ensure that text remains same size, regardless of screen resolution
-            finalScale,
+            (float) finalScale,
             SpriteEffects.None,
 
             0f // Layer depth Not sure what this means
         );
+
+        first = false;
     }
 
 

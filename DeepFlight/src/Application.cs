@@ -40,7 +40,7 @@ public class ApplicationController : Game {
         KeyboardController.KeyEvent += OnKeyInput;
         KeyboardController.CharEvent += OnCharInput;
 
-        ScreenManager.Initialize(graphics);
+        ScreenController.Initialize(graphics);
 
 
         renderer = new Renderer(graphics);
@@ -63,26 +63,6 @@ public class ApplicationController : Game {
         base.Update(gameTime);
     }
 
-    //public void OnKeyEvent(KeyEventArgs eventArgs) {
-    //    if (eventArgs.Handled) return;
-
-    //    if (eventArgs.Action == KeyAction.PRESSED) {
-    //        var key = eventArgs.Key;
-    //        if (key == Keys.Escape) {
-    //            Exit();
-    //            eventArgs.Handled = true;
-    //        }
-    //        if (key == Keys.F1) {
-    //            Resolution[] resList = ScreenManager.availableResolutions;
-    //            resolutionIndex = ++resolutionIndex % resList.Length;
-    //            ScreenManager.SetResolution(resList[resolutionIndex]);
-    //            eventArgs.Handled = true;
-    //        }
-    //    }
-
-       
-    //}
-
 
     protected override void Draw(GameTime gameTime) {
         DrawEvent(renderer);
@@ -92,12 +72,10 @@ public class ApplicationController : Game {
 
 
     private void OnKeyInput(KeyEventArgs e) {
-        System.Console.WriteLine("KeyEvent: " + e);
         currentScene.KeyInput(e);
     }
 
     private void OnCharInput(CharEventArgs e) {
-        System.Console.WriteLine("CharEvent: " + e);
         currentScene.CharInput(e);
     }
 

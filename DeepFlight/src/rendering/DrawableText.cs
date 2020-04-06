@@ -19,14 +19,14 @@ public class DrawableText : Movable {
     public Color Col { get; set; } = Color.White;
 
     // Font size
-    private float size;
-    public float Size {
+    private double size;
+    public double Size {
         get => size;
         set { size = value < 0 ? 0 : value; UpdateSize(); }
     }
 
 
-    public DrawableText(string text, Font font, float size, Color col, double x, double y) : base(0,0) {
+    public DrawableText(string text, Font font, double size, Color col, double x, double y) : base(0,0) {
         this.text = text;
         this.font = font;
         this.size = size;
@@ -43,7 +43,24 @@ public class DrawableText : Movable {
     }
 
     private void UpdateSize() {
-        Width = (int) Font.MeasureString(Text, size).X;
-        Height = (int) Font.MeasureString(Text, size).Y;
+        Width = Font.MeasureString(Text, size).X;
+        Height = Font.MeasureString(Text, size).Y;
+    }
+
+    public override string ToString() {
+        return string.Format(
+            "DrawableText( " +
+            "text={0}, " +
+            "font={1}, " +
+            "size={2}, " +
+            "x={3}, " +
+            "y={4}, " +
+            "width={5}, " +
+            "height={6}, " +
+            "rotation={7}, " +
+            "h.origin={8}, " +
+            "v.origin={9} )",
+            Text, Font.Name, Size, X, Y, Width, Height, Rotation, HOrigin.GetName(), VOrigin.GetName()
+           );
     }
 }
