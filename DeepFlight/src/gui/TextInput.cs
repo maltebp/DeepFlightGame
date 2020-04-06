@@ -36,10 +36,20 @@ namespace DeepFlight.gui {
             Width = (int) width;
             Height = (int) height;
 
-            inputText = new DrawableText("", font, fontSize, color, x, y );
-            cursor = new DrawableTexture(Textures.SQUARE, color, DEFAULT_CURSOR_WIDTH, (int) height, x, y );
+            var bottomY = GetCenterY() + height / 2;
+
+            // Input Text field
+            inputText = new DrawableText("", font, fontSize, color, x, bottomY + height*0.1 );
+            inputText.VOrigin = VerticalOrigin.BOTTOM;
+
+            // Cursor
+            cursor = new DrawableTexture(Textures.SQUARE, color, DEFAULT_CURSOR_WIDTH, (int) (height*1), x, y );
             cursor.HOrigin = HorizontalOrigin.LEFT;
-            line = new DrawableTexture(Textures.SQUARE, color, (int)width, DEFAULT_LINE_THICKNESS, x, y+height*0.95);
+            cursor.VOrigin = VerticalOrigin.BOTTOM;
+
+            line = new DrawableTexture(Textures.SQUARE, color, (int)width, DEFAULT_LINE_THICKNESS, x, bottomY);
+            line.VOrigin = VerticalOrigin.BOTTOM;
+
            
             blinkCooldown = blinkDuration;
         }
@@ -94,7 +104,7 @@ namespace DeepFlight.gui {
                 inputText.Text = new string('*', Text.Length);
             else
                 inputText.Text = Text;
-            cursor.X = inputText.X + inputText.Width / 2 + 1;
+            cursor.X = inputText.GetCenterX() + inputText.Width / 2+ 1;
         }
 
         protected override void OnDraw(Renderer renderer) {

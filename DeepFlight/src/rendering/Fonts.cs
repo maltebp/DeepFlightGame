@@ -13,7 +13,8 @@ public static class Fonts {
     public static readonly Font ROBOTO_BOLD_ITALIC = new Font("Roboto", true, true);
     public static readonly Font ROBOTO_BOLD = new Font("Roboto", true, false);
     public static readonly Font ARIAL = new Font("Arial");
-
+    public static readonly Font PIXELLARI = new Font("Pixellari");
+    
     public static readonly Font DEFAULT = ROBOTO_BOLD_ITALIC;
 
     // Loads all created Font objects, using the given content
@@ -139,13 +140,12 @@ public class Font {
     /// Finds the best actual Font for the given size, in
     /// terms of the closest size.
     /// </summary>
-    public FontData GetBestFont(double size) {
+    public FontData GetBestFont(double targetSize) {
         int bestSize = 0;
         double bestDiff = 100000;
         bool first = true;
-        foreach (var font in fontMap) {
-            var fontSize = font.Key;
-            var sizeDiff = Math.Abs(size - fontSize);
+        foreach (var fontSize in fontMap.Keys) {
+            var sizeDiff = Math.Abs(targetSize - fontSize);
             if (first || sizeDiff < bestDiff) {
                 first = false;
                 bestDiff = sizeDiff;

@@ -37,6 +37,8 @@ public class Entity {
         Width = entity.Width;
         Height = entity.Height;
         Rotation = entity.Rotation;
+        HOrigin = entity.HOrigin;
+        VOrigin = entity.VOrigin;
     }
 
     public Entity(float width, float height) {
