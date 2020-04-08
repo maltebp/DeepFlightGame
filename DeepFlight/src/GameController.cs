@@ -43,7 +43,7 @@
 //        // Ship must be created after loading textures
 //        ship = new Ship();
 
-    
+   
 
 //        if (LOAD_TRACK && File.Exists("testtrack.dft") ){
 //            Console.WriteLine("Loading Track!");

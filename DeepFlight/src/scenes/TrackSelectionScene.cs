@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using DeepFlight.src.gui;
+using DeepFlight.generation;
+using System.Threading.Tasks;
 
 namespace DeepFlight.src.scenes {
     class TrackSelectionScene : Scene {
@@ -15,6 +17,8 @@ namespace DeepFlight.src.scenes {
         private SimpleMenuView menu;
         private LoadingTextView loader;
         private TextView title;
+
+        Track[] loadedTracks = null;
 
         protected override void OnInitialize() {
 
@@ -45,6 +49,7 @@ namespace DeepFlight.src.scenes {
             AddChild(loader);
 
             LoadTracks();
+            Console.WriteLine("Started track loading!");
         }
 
 
@@ -60,42 +65,74 @@ namespace DeepFlight.src.scenes {
 
 
 
-        // TODO: Remove this once authentication has been implemented
-        private bool loading = false;
-        private double loadTimer = 1.5;
+        //// TODO: Remove this once authentication has been implemented
+
+
+        //private bool loading = false;
+        //private double loadTimer = 1.5;
+        //protected override void OnUpdate(double deltaTime) {
+        //    if (loading) {
+        //        loadTimer -= deltaTime;
+        //        if (loadTimer < 0) {
+        //            loading = false;
+
+        //            TracksLoaded(tracks);
+        //        }
+        //    }
+        //}
+
+        private async void LoadTracks() {
+            menu.Hidden = true;
+            loader.Hidden = false;
+
+            Task<Track[]> loadTracksTask = TrackLoader.LoadTracks();
+            Track[] tracks = await loadTracksTask;
+            Console.WriteLine("Tracks loaded: ");
+
+            foreach(var track in tracks) {
+                Console.WriteLine("\t" + track);
+            }
+
+            loadedTracks = tracks;
+
+
+
+
+
+            //        if (LOAD_TRACK && File.Exists("testtrack.dft") ){
+            //            Console.WriteLine("Loading Track!");
+            //            byte[] trackData = File.ReadAllBytes("testtrack.dft");
+            //            track = TrackSerializer.Deserialize(trackData);
+            //        } else {
+            //            Console.WriteLine("Generating track!");
+            //            // Generate track (textures must be loaded before generating)
+            //            var seed = TRACK_SEED;
+            //            if (RANDOM_TRACK) {
+            //                Random rand = new Random();
+            //                seed = rand.Next(0, 999999);
+            //            }
+            //            track = Generator.GenerateTrack(seed);
+            //            if (SAVE_TRACK) {
+            //                File.WriteAllBytes("testtrack.dft", TrackSerializer.Serialize(track));
+            //            }
+            //        }
+        }
+
         protected override void OnUpdate(double deltaTime) {
-            if (loading) {
-                loadTimer -= deltaTime;
-                if (loadTimer < 0) {
-                    loading = false;
-                    Track[] tracks = new Track[4];
-                    for(int i = 0; i < 4; i++) {
-                        tracks[i] = new Track();
-                        tracks[i].Name = "Track " + i;
-                    }
-                    TracksLoaded(tracks);
-                }
+            if( loadedTracks != null) {
+                TracksLoaded(loadedTracks);
+                loadedTracks = null;
             }
         }
 
-        private void LoadTracks() {
-            menu.Hidden = true;
-            loader.Hidden = false;
-            loading = true;
-
-        }
-
         private void TracksLoaded(params Track[] tracks) {
-
             foreach (var track in tracks) {
                 menu.AddOption(track.Name, () => TrackSelected(track));
             }
 
             menu.Hidden = false;
-            menu.Focused = true;
+            menu.Focused = true;    
             loader.Hidden = true;
-
-            menu.Test();
         }
 
         private void TrackSelected(Track track) {
