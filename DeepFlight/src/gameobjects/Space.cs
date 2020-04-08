@@ -1,8 +1,10 @@
 ﻿
 
-class Space : DrawableTexture {
+using Microsoft.Xna.Framework;
 
-    public Space(double x, double y) : base(Textures.SQUARE, 1, 1) {
+class Space : TextureView {
+
+    public Space(double x, double y) : base(null, Textures.SQUARE, Color.White, 0,0, 1, 1) {
         X = x;
         Y = y;
         AddCollider(new RectCollider(this));

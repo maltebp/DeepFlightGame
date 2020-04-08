@@ -36,7 +36,7 @@ public class Renderer {
     }
 
 
-    public void Draw(Camera camera, DrawableTexture drawable) {
+    public void Draw(Camera camera, TextureView drawable) {
         InitializeDraw();
 
         // Transform the drawables dimensions and coordinates to camera space

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 
@@ -21,13 +22,13 @@ public class Track {
         int chunkX = ToChunkCoordinate(x);
         int chunkY = ToChunkCoordinate(y);
         Chunk chunk = GetChunk(chunkX, chunkY);
-        if( chunk == null) {
+        if (chunk == null) {
             chunk = new Chunk(chunkX, chunkY);
             chunks.AddLast(chunk);
         }
-        
-        bool newBlock = chunk.SetBlock(block, x, y );
-        if( newBlock)
+
+        bool newBlock = chunk.SetBlock(block, x, y);
+        if (newBlock)
             BlockCount++;
 
         // Update min-max coordinates
@@ -51,8 +52,8 @@ public class Track {
         int minChunkX = ToChunkCoordinate(minX);
         int minChunkY = ToChunkCoordinate(minY);
 
-        foreach( Chunk chunk in chunks) {
-            if( chunk.X >= minChunkX && chunk.Y >= minChunkY && chunk.Y <= maxChunkY && chunk.X <= maxChunkX) {
+        foreach (Chunk chunk in chunks) {
+            if (chunk.X >= minChunkX && chunk.Y >= minChunkY && chunk.Y <= maxChunkY && chunk.X <= maxChunkX) {
                 chunk.ForEachBlock(callback);
             }
         }
@@ -76,7 +77,7 @@ public class Track {
     }
 
     public static int ToChunkCoordinate(int coordinate) {
-        return coordinate < 0 ? (coordinate / (Chunk.SIZE*Cell.SIZE)) - 1 : (coordinate / (Chunk.SIZE*Cell.SIZE));
+        return coordinate < 0 ? (coordinate / (Chunk.SIZE * Cell.SIZE)) - 1 : (coordinate / (Chunk.SIZE * Cell.SIZE));
     }
 
 }
@@ -101,18 +102,18 @@ public class Chunk {
         int cellY = ToCellIndexInChunk(y);
         if (cells[cellY, cellX] == null)
             cells[cellY, cellX] = new Cell(Cell.ToCellIndex(x), Cell.ToCellIndex(y));
-        return cells[cellY,cellX].SetBlock(block, x, y);
+        return cells[cellY, cellX].SetBlock(block, x, y);
     }
 
     public Block GetBlock(int x, int y) {
         int cellX = ToCellIndexInChunk(x);
         int cellY = ToCellIndexInChunk(y);
         if (cells[cellY, cellX] == null) return null;
-        return cells[cellY, cellX].GetBlock(x,y);
+        return cells[cellY, cellX].GetBlock(x, y);
     }
 
     public void ForEachBlock(BlockCallback callback) {
-        foreach( Cell cell in cells) {
+        foreach (Cell cell in cells) {
             if (cell != null)
                 cell.ForEachBlock(callback);
         }
@@ -125,10 +126,10 @@ public class Chunk {
     }
 
     public static int ToCellIndexInChunk(int coordinate) {
-        return (Math.Abs(coordinate)%(SIZE*Cell.SIZE)) / Cell.SIZE;
+        return (Math.Abs(coordinate) % (SIZE * Cell.SIZE)) / Cell.SIZE;
     }
 
-    
+
 }
 
 
@@ -172,10 +173,10 @@ public class Cell {
         int directionX = indexX < 0 ? -1 : 1;
         int directionY = indexY < 0 ? -1 : 1;
 
-        for (int y=0; y < blocks.GetLength(0); y++) {
-            for( int x=0; x < blocks.GetLength(1); x++) {
-                if( blocks[y,x] != null ) {
-                    callback(blocks[y,x], cellOffsetX + x*directionX, cellOffsetY + y*directionY);
+        for (int y = 0; y < blocks.GetLength(0); y++) {
+            for (int x = 0; x < blocks.GetLength(1); x++) {
+                if (blocks[y, x] != null) {
+                    callback(blocks[y, x], cellOffsetX + x * directionX, cellOffsetY + y * directionY);
                 }
             }
         }
@@ -186,16 +187,17 @@ public class Cell {
     }
 
     public static int ToCellIndex(int coordinate) {
-        return coordinate < 0 ? coordinate / SIZE - 1 : coordinate / SIZE; 
+        return coordinate < 0 ? coordinate / SIZE - 1 : coordinate / SIZE;
     }
 
 }
 
 
-public class Block : DrawableTexture {
+public class Block : TextureView {
     public BlockType Type { get; set; }
 
-    public Block(int x, int y, BlockType type) : base(Textures.SQUARE, 1, 1){
+    // TODO: Fix the base constructor call here
+    public Block(int x, int y, BlockType type) : base(null, Textures.SQUARE, Color.White, 0,0, 1, 1) {
         X = x;
         Y = y;
         AddCollider(new RectCollider(this));

@@ -47,7 +47,7 @@ public class ApplicationController : Game {
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
         Fonts.Load(Content);
 
-        SwitchScene(new MainMenuScene());
+        SwitchScene(new LoginScene());
         base.LoadContent();
     }
 

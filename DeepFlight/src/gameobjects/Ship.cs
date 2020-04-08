@@ -2,9 +2,10 @@
 
 using Microsoft.Xna.Framework;
 
-class Ship : DrawableTexture {
+class Ship : TextureView {
 
-    public Ship() : base(Textures.SHIP, 2, 4) {
+    // TODO: Fix the base constructor call
+    public Ship() : base(null, Textures.SHIP, Color.White, 0,0, 2, 4) {
         Resistance = 0.98f;
         Col = Color.Red;
         MaxVelocity = 5f;

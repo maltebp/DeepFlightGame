@@ -25,8 +25,8 @@ namespace DeepFlight.gui {
         public TextView Label { get; }
 
         private TextView inputText;
-        private DrawableTexture cursor;
-        private DrawableTexture line;
+        private TextureView cursor;
+        private TextureView line;
 
         private double blinkDuration = 0.75;
         private double blinkCooldown;
@@ -46,10 +46,10 @@ namespace DeepFlight.gui {
             AddChild(inputText);
 
             // Cursor
-            cursor = new DrawableTexture(Textures.SQUARE, color, DEFAULT_CURSOR_WIDTH, inputText.Height*0.75f, x, inputText.GetCenterY()-8 );
+            cursor = new TextureView(Camera, Textures.SQUARE, color, x, inputText.GetCenterY() - 8, DEFAULT_CURSOR_WIDTH, inputText.Height*0.75f );
             cursor.HOrigin = HorizontalOrigin.LEFT;
 
-            line = new DrawableTexture(Textures.SQUARE, color, width, LINE_THICKNESS, x, y-LINE_MARGIN);
+            line = new TextureView(Camera, Textures.SQUARE, color, x, y - LINE_MARGIN, width, LINE_THICKNESS);
 
             Label = new TextView(Camera, label, font, fontSize * 0.6, color, x- width / 2, y + LINE_MARGIN * 2 + LINE_THICKNESS);
             Label.VOrigin = VerticalOrigin.TOP;

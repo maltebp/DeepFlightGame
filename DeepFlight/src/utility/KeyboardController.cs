@@ -75,6 +75,7 @@ namespace DeepFlight.utility.KeyboardController {
         public Keys Key { get; }
         public KeyAction Action { get; }
         public bool Handled { get; set; } = false;
+        public object KeyAction { get; internal set; }
 
         public KeyEventArgs(Keys key, KeyAction action) {
             Key = key;
