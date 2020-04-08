@@ -36,11 +36,12 @@ public class Renderer {
     }
 
 
+    Entity transformed = new Entity();
     public void Draw(Camera camera, TextureView drawable) {
         InitializeDraw();
 
         // Transform the drawables dimensions and coordinates to camera space
-        Entity transformed = new Entity(drawable);
+        transformed.Inherit(drawable);
         camera.Transform(
             transformed,
             true
@@ -68,7 +69,7 @@ public class Renderer {
                drawable.Texture,
                // NOTE: Using rectangle to define drawing position (drawing bounds),
                // it will draw from the center of the bounds.
-               new Rectangle((int)transformed.GetCenterX(), (int)transformed.GetCenterY(), (int)transformed.Width, (int)transformed.Height),
+               new Rectangle((int)transformed.GetCenterX(), (int)transformed.GetCenterY(), (int)transformed.Width+1, (int)transformed.Height+1),
                null,
                drawable.Col,
                transformed.Rotation,

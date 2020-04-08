@@ -7,6 +7,7 @@ using System;
 using DeepFlight.src.gui;
 using DeepFlight.generation;
 using System.Threading.Tasks;
+using DeepFlight.scenes;
 
 namespace DeepFlight.src.scenes {
     class TrackSelectionScene : Scene {
@@ -63,24 +64,6 @@ namespace DeepFlight.src.scenes {
             return false;
         }
 
-
-
-        //// TODO: Remove this once authentication has been implemented
-
-
-        //private bool loading = false;
-        //private double loadTimer = 1.5;
-        //protected override void OnUpdate(double deltaTime) {
-        //    if (loading) {
-        //        loadTimer -= deltaTime;
-        //        if (loadTimer < 0) {
-        //            loading = false;
-
-        //            TracksLoaded(tracks);
-        //        }
-        //    }
-        //}
-
         private async void LoadTracks() {
             menu.Hidden = true;
             loader.Hidden = false;
@@ -94,28 +77,6 @@ namespace DeepFlight.src.scenes {
             }
 
             loadedTracks = tracks;
-
-
-
-
-
-            //        if (LOAD_TRACK && File.Exists("testtrack.dft") ){
-            //            Console.WriteLine("Loading Track!");
-            //            byte[] trackData = File.ReadAllBytes("testtrack.dft");
-            //            track = TrackSerializer.Deserialize(trackData);
-            //        } else {
-            //            Console.WriteLine("Generating track!");
-            //            // Generate track (textures must be loaded before generating)
-            //            var seed = TRACK_SEED;
-            //            if (RANDOM_TRACK) {
-            //                Random rand = new Random();
-            //                seed = rand.Next(0, 999999);
-            //            }
-            //            track = Generator.GenerateTrack(seed);
-            //            if (SAVE_TRACK) {
-            //                File.WriteAllBytes("testtrack.dft", TrackSerializer.Serialize(track));
-            //            }
-            //        }
         }
 
         protected override void OnUpdate(double deltaTime) {
@@ -135,9 +96,13 @@ namespace DeepFlight.src.scenes {
             loader.Hidden = true;
         }
 
+
         private void TrackSelected(Track track) {
             Console.WriteLine("Track Selected: " + track);
+            RequestSceneSwitch(new GameScene(track));
         }
+
+
 
         
     }

@@ -12,5 +12,8 @@ class Ship : TextureView {
         AddCollider(new TriangleCollider(this));
     }
 
+    protected override void OnUpdate(double deltaTime) {
+        Mover.Move(this);
+    }
 
 }

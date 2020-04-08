@@ -212,9 +212,7 @@ public class Block : TextureView {
     public BlockType Type { get; set; }
 
     // TODO: Fix the base constructor call here
-    public Block(int x, int y, BlockType type) : base(null, Textures.SQUARE, Color.White, 0,0, 1, 1) {
-        X = x;
-        Y = y;
+    public Block(int x, int y, BlockType type) : base(null, Textures.SQUARE, Color.White, x, y, 1, 1) {
         AddCollider(new RectCollider(this));
         this.Type = type;
     }

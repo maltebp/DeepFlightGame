@@ -1,10 +1,10 @@
 ﻿
 using System;
 
-class Mover {
+public static class Mover {
 
 
-    public void Move(Movable movable) {
+    public static void Move(Movable movable) {
 
         movable.VelocityX += movable.AccelerationX;
         movable.VelocityY += movable.AccelerationY;

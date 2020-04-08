@@ -9,4 +9,7 @@ class Space : TextureView {
         Y = y;
         AddCollider(new RectCollider(this));
     }
+
+
+    
 }

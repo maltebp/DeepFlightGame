@@ -33,13 +33,7 @@ public class Entity  {
     /// Create an entity as a copy of another
     /// </summary>
     public Entity(Entity entity) {
-        X = entity.X;
-        Y = entity.Y;
-        Width = entity.Width;
-        Height = entity.Height;
-        Rotation = entity.Rotation;
-        HOrigin = entity.HOrigin;
-        VOrigin = entity.VOrigin;
+        Inherit(entity);
     }
 
     public Entity(float width, float height) {
@@ -61,6 +55,17 @@ public class Entity  {
         if (VOrigin == VerticalOrigin.BOTTOM)
             return Y - Height / 2f;
         return Y;
+    }
+
+    public void Inherit(Entity entity) {
+        X = entity.X;
+        Y = entity.Y;
+        Width = entity.Width;
+        Height = entity.Height;
+        Rotation = entity.Rotation;
+        HOrigin = entity.HOrigin;
+        VOrigin = entity.VOrigin;
+        scale = entity.scale;
     }
 
     public override string ToString() {
