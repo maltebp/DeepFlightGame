@@ -13,6 +13,9 @@ namespace DeepFlight {
         public View Parent { get; protected set; }
         public LinkedList<View> Children { get; } = new LinkedList<View>();
 
+        public bool Initialized {get; private set;}
+
+
         private bool focused = false;
         public bool Focused {
             get => focused;
@@ -44,15 +47,18 @@ namespace DeepFlight {
             get => hidden;
             set {
                 if (value == false && hidden == true) {
+                    hidden = false;
                     if (Parent != null && Parent.Hidden)
                         Parent.Hidden = false;
+                    foreach (var child in Children)
+                        child.Hidden = false;
                 }
                 if (value == true && hidden == false) {
+                    hidden = true;
                     foreach (var child in Children) {
                         child.Hidden = true;
                     }
                 }
-                hidden = value;
             }
         }
 
@@ -77,6 +83,8 @@ namespace DeepFlight {
             child.Parent = this;
             if (child.Focused) Focused = true;
             if (Hidden) child.Hidden = true;
+            if(Initialized) child.Initialize();
+
             OnChildAdded();
         }
         protected virtual void OnChildAdded() { }
@@ -89,22 +97,23 @@ namespace DeepFlight {
             child.Parent = null;
         }
 
-        public void Initialize(ApplicationController application) {
-            application.DrawEvent += Draw;
-            application.UpdateEvent += Update;
+        public void Initialize() {
+            ApplicationController.DrawEvent += Draw;
+            ApplicationController.UpdateEvent += Update;
             OnInitialize();
             foreach (var child in Children)
-                child.Initialize(application);
+                child.Initialize();
+            Initialized = true;
         }
         protected virtual void OnInitialize() { }
 
 
-        public void Terminate(ApplicationController application) {
-            application.DrawEvent -= Draw;
-            application.UpdateEvent -= Update;
+        public void Terminate() {
+            ApplicationController.DrawEvent -= Draw;
+            ApplicationController.UpdateEvent -= Update;
             OnTerminate();
             foreach (var child in Children)
-                child.Terminate(application);
+                child.Terminate();
         }
         protected virtual void OnTerminate() { }
 

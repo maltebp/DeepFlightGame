@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
+
 class LoginScene : Scene {
 
     private Camera ui = new Camera();
     private TextureView background;
     private TextureView title;
     private TextView errorText;
-    private LoadingView loader;
+    private LoadingTextView loader;
     private TextInput input_Username, input_Password;
 
     protected override void OnInitialize() {
@@ -50,7 +51,8 @@ class LoginScene : Scene {
         AddChild(input_Password);
 
         // Create loading component
-        loader = new LoadingView(ui, 0, height / 2);
+        loader = new LoadingTextView(ui, Fonts.DEFAULT, 30, Color.White, 0, height / 2);
+        loader.Text = "Authenticating";
         loader.Hidden = true;
         AddChild(loader);
 
@@ -65,6 +67,10 @@ class LoginScene : Scene {
         
         // "Scroll" through input fields
         if( e.Action == KeyAction.PRESSED) {
+            if( e.Key == Keys.Escape) {
+                RequestExit();
+                return true;
+            }
             if (e.Key == Keys.Up || e.Key == Keys.Down || e.Key == Keys.Tab) {
                 SwitchInputFocus();
                 return true;

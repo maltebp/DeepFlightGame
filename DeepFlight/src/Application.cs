@@ -3,6 +3,7 @@ using DeepFlight.rendering;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 
 // Central controller class of the application
@@ -17,10 +18,10 @@ public class ApplicationController : Game {
     private int resolutionIndex = 0;
 
     public delegate void DrawEventHandler(Renderer renderer);
-    public event DrawEventHandler DrawEvent;
+    public static event DrawEventHandler DrawEvent;
 
     public delegate void UpdateEventHandler(double deltaTime);
-    public event UpdateEventHandler UpdateEvent;
+    public static event UpdateEventHandler UpdateEvent;
 
     public ApplicationController() {
         graphics = new GraphicsDeviceManager(this);
@@ -55,6 +56,9 @@ public class ApplicationController : Game {
     protected override void Update(GameTime gameTime) {
         KeyboardController.UpdateState();
 
+        if (currentScene.RequestedExit)
+            Exit();
+
         // Check for scene switch
         if (currentScene.RequestedScene != null)
             SwitchScene(currentScene.RequestedScene);
@@ -81,12 +85,14 @@ public class ApplicationController : Game {
 
     private void SwitchScene(Scene scene) {
         if (currentScene != null)
-            currentScene.Terminate(this);
+            currentScene.Terminate();
 
         currentScene = scene;
         currentScene.Focused = true;
         currentScene.Hidden = false;
-        currentScene.Initialize(this);
+
+        Console.WriteLine("\nSwitching scene: '{0}'", scene.GetType().Name);
+        currentScene.Initialize();
     }
 
 }

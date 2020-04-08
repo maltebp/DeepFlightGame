@@ -1,6 +1,8 @@
 ﻿using DeepFlight.rendering;
 using DeepFlight.src.gui;
+using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,6 @@ namespace DeepFlight.src.scenes {
         private Camera ui = new Camera();
         private TextureView background;
         private SimpleMenuView menu;
-        private TextView tempText;
 
         protected override void OnInitialize() {
 
@@ -33,16 +34,31 @@ namespace DeepFlight.src.scenes {
             background.VOrigin = VerticalOrigin.TOP;
             AddChild(background);
 
-            menu = new SimpleMenuView(ui, Fonts.DEFAULT, 24, Color.White, 25);
-            menu.AddOption("Option 1", () => Console.WriteLine("Option 1 selected!"));
-            menu.AddOption("Option 2", () => Console.WriteLine("Option 2 selected!"));
-            menu.AddOption("Option 3", () => Console.WriteLine("Option 3 selected!"));
-            menu.AddOption("Option 4", () => Console.WriteLine("Option 4 selected!"));
+            menu = new SimpleMenuView(ui, Fonts.DEFAULT, 34, Color.White, 35);
+            menu.Y = height * 0.20;
+
+            menu.AddOption("Play Track", () => RequestSceneSwitch(new TrackSelectionScene()));
+            menu.AddOption("Ratings", () => Console.WriteLine("Ratings not implemented"));
+            menu.AddOption("Settings", () => Console.WriteLine("Settings!"));
+            menu.AddOption("Logout", () => Logout() );
             AddChild(menu);
 
             menu.Focused = true;
+        }
 
-            
+        protected override bool OnKeyInput(KeyEventArgs e) {
+            if( e.Action == KeyAction.PRESSED) {
+                if( e.Key == Keys.Escape) {
+                    Logout();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        private void Logout() {
+            RequestSceneSwitch(new LoginScene());
         }
 
     }

@@ -44,9 +44,7 @@
     <Compile Include="src\GameController.cs" />
     <Compile Include="src\generation\TrackGeneratorcs.cs" />
     <Compile Include="src\generation\TrackSerializer.cs" />
-    <Compile Include="src\gui\LoadingBox.cs" />
-    <Compile Include="src\gui\LoadingView.cs" />
-    <Compile Include="src\gui\LoadingSpinner.cs" />
+    <Compile Include="src\gui\LoadingTextView.cs" />
     <Compile Include="src\gui\MenuView.cs" />
     <Compile Include="src\gui\SimpleMenuView.cs" />
     <Compile Include="src\gui\TextView.cs" />
@@ -61,6 +59,7 @@
     <Compile Include="src\rendering\ScreenController.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
     <Compile Include="src\scenes\LoginScene.cs" />
+    <Compile Include="src\scenes\TrackSelectionScene.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />
     <Compile Include="src\Settings.cs" />

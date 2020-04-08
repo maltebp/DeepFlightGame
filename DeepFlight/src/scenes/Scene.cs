@@ -8,6 +8,7 @@ public abstract class Scene : View {
 
     // To switch scene, a scene may "request" a switch to another scene
     public Scene RequestedScene { get; private set;  }
+    public bool RequestedExit { get; private set; } = false;
 
     public Scene(Camera camera) : base(camera) { }
     public Scene() : base(null) { }
@@ -16,6 +17,10 @@ public abstract class Scene : View {
         if( RequestedScene != null )
             throw new Exception("A new scene is already requested");
         RequestedScene = scene;
+    }
+
+    protected void RequestExit() {
+        RequestedExit = true;
     }
 
 }

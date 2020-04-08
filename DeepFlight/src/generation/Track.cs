@@ -8,6 +8,10 @@ public delegate void BlockCallback(Block type, int x, int y);
 
 public class Track {
 
+    public long     ID { get; set; }
+    public string   Name { get; set; }
+    public long     Seed { get; set;  }
+
     private LinkedList<Chunk> chunks = new LinkedList<Chunk>();
 
     public int BlockCount { get; private set; }
@@ -78,6 +82,17 @@ public class Track {
 
     public static int ToChunkCoordinate(int coordinate) {
         return coordinate < 0 ? (coordinate / (Chunk.SIZE * Cell.SIZE)) - 1 : (coordinate / (Chunk.SIZE * Cell.SIZE));
+    }
+
+
+    public override string ToString() {
+        return
+            "Track( " +
+                "name=" + Name + ", "+    
+                "id=" + ID + ", "+    
+                "seed=" + Seed +     
+            " )"
+        ;
     }
 
 }

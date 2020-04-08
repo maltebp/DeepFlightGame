@@ -42,8 +42,17 @@ namespace DeepFlight.src.gui {
             var y = 0.0;
             foreach (var child in Children) {
                 child.X = X;
-                child.Y = y;
+                child.Y = Y+y;
                 y += child.Height + optionSpacing;
+            }
+        }
+
+        // TODO: Remove this
+        public void Test() {
+            Console.WriteLine("Menu:  " + Hidden);
+            foreach(var child in Children) {
+                Console.WriteLine("Child: " + child.Hidden);
+
             }
         }
 
@@ -63,6 +72,7 @@ namespace DeepFlight.src.gui {
 
             public SimpleMenuOption(SimpleMenuView menu, string label, OptionCallback callback)
                 : base(menu.Camera, label, menu.font, menu.fontSize, menu.color, 0, 0) {
+                Console.WriteLine("Creating new SimpleMenuOption: " + label);
                 this.callback = callback;
                 rightMarker = new SelectionMarker(this);
                 leftMarker = new SelectionMarker(this);
