@@ -77,7 +77,7 @@ namespace DeepFlight {
                 throw new ArgumentException("View is already child of this parent.");
 
             if (child.Parent != null)
-                throw new ArgumentException("View is already a child of a parent");
+                child.Parent.RemoveChild(child);
 
             Children.AddLast(child);
             child.Parent = this;

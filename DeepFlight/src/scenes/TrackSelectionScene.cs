@@ -9,7 +9,7 @@ using DeepFlight.generation;
 using System.Threading.Tasks;
 using DeepFlight.scenes;
 
-namespace DeepFlight.src.scenes {
+namespace DeepFlight.scenes {
     class TrackSelectionScene : Scene {
 
 

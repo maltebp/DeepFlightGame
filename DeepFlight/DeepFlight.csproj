@@ -42,9 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\GameController.cs" />
-    <Compile Include="src\generation\TrackGeneratorcs.cs" />
-    <Compile Include="src\generation\TrackLoader.cs" />
-    <Compile Include="src\generation\TrackSerializer.cs" />
+    <Compile Include="src\scenes\TrackCompleteScene.cs" />
+    <Compile Include="src\track\Checkpoint.cs" />
+    <Compile Include="src\track\TrackLoader.cs" />
+    <Compile Include="src\track\TrackSerializer.cs" />
     <Compile Include="src\gui\LoadingTextView.cs" />
     <Compile Include="src\gui\MenuView.cs" />
     <Compile Include="src\gui\SimpleMenuView.cs" />
@@ -60,7 +61,6 @@
     <Compile Include="src\rendering\ScreenController.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
     <Compile Include="src\scenes\LoginScene.cs" />
-    <Compile Include="src\scenes\StopWatch.cs" />
     <Compile Include="src\scenes\TrackSelectionScene.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />
@@ -68,7 +68,7 @@
     <Compile Include="src\utility\CharLists.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
     <Compile Include="src\Application.cs" />
-    <Compile Include="src\generation\Generator.cs" />
+    <Compile Include="src\track\Generator.cs" />
     <Compile Include="src\utility\InputController.cs" />
     <Compile Include="src\utility\KeyboardController.cs" />
     <Compile Include="src\utility\MathExtension.cs" />
@@ -80,7 +80,7 @@
     <Compile Include="src\gameobjects\Ship.cs" />
     <Compile Include="src\gameobjects\Space.cs" />
     <Compile Include="src\rendering\Textures.cs" />
-    <Compile Include="src\generation\Track.cs" />
+    <Compile Include="src\track\Track.cs" />
     <Compile Include="src\utility\Point.cs" />
     <Compile Include="src\View.cs" />
     <Compile Include="test\TrackTest.cs" />

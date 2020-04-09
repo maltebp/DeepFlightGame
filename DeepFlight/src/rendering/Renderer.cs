@@ -9,7 +9,6 @@ using System;
 // Responsible for rendering stuff (sort of a Camera controller)
 public class Renderer {
 
-    private static readonly Color CLEAR_COLOR = Color.Green;
     private SpriteBatch spriteBatch;
     private bool drawing = false;
     private GraphicsDeviceManager graphics;
@@ -30,14 +29,23 @@ public class Renderer {
             if (spriteBatch == null)
                 throw new NullReferenceException("Sprite batch is null");
             drawing = true;
-            graphics.GraphicsDevice.Clear(CLEAR_COLOR);
-            spriteBatch.Begin();
+            graphics.GraphicsDevice.Clear(Settings.CLEAR_COLOR);
+
+            spriteBatch.Begin(
+                samplerState: SamplerState.PointClamp // Turn of anti-alias
+            );
         }
     }
 
 
     Entity transformed = new Entity();
     public void Draw(Camera camera, TextureView drawable) {
+        if (drawable == null)
+            throw new ArgumentNullException("TextureView is null");
+
+        if (camera == null)
+            throw new ArgumentNullException(string.Format("Camera is null when drawing {0}", drawable.GetType().Name));
+
         InitializeDraw();
 
         // Transform the drawables dimensions and coordinates to camera space
@@ -82,6 +90,12 @@ public class Renderer {
 
     // TEXT
     public void Draw(Camera camera, TextView drawable) {
+        if (drawable == null)
+            throw new ArgumentNullException("TextView is null");
+
+        if (camera == null)
+            throw new ArgumentNullException(string.Format("Camera is null when drawing {0}", drawable.GetType().Name));
+
         InitializeDraw();
 
         // Transform the drawables dimensions and coordinates to camera space

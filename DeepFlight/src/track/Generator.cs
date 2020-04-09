@@ -1,8 +1,11 @@
 ﻿
 
+using DeepFlight.track;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 static class Generator {
     
@@ -16,6 +19,15 @@ static class Generator {
 
         Track track = new Track();
         LinkedList<TrackNode> nodes = GenerateNodes(rand);
+
+        // Generate checkpoints
+        int checkpointIndex = 0;
+        track.Checkpoints = new Checkpoint[nodes.Count];
+        for (int i = 0; i < nodes.Count; i++) {
+            var n = nodes.ElementAt(i);
+            track.Checkpoints[checkpointIndex] = new Checkpoint(checkpointIndex, new Color(Color.Red, 0.5f), n.X, n.Y);
+            checkpointIndex++;
+        }
 
         int minX=10000000, minY=1000000, maxX=-100000, maxY =-100000;
         TrackNode node = nodes.First.Value;
@@ -100,7 +112,7 @@ static class Generator {
         double directionAccel = 0;
         double speed = 15;
 
-        for (int i = 1; i < 500; i++) {
+        for (int i = 1; i < 50; i++) {
             previous = nodes.Last.Value;
 
             direction += directionAccel;

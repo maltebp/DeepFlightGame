@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DeepFlight.rendering {
+
     public static class ScreenController {
         private static readonly double  BASE_HEIGHT = 720;
         private static readonly bool    FULLSCREEN  = false;

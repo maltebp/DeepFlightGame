@@ -4,6 +4,7 @@ using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
+using DeepFlight.scenes;
 
 
 // Central controller class of the application

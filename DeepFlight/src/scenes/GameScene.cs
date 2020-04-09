@@ -2,7 +2,7 @@
 
 
 using DeepFlight.rendering;
-using DeepFlight.src.scenes;
+using DeepFlight.track;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -68,7 +68,17 @@ namespace DeepFlight.scenes {
             countdownTextBox.Hidden = true;
             AddChildren(countdownTextBox, countdownText);
 
-
+            // Add checkpoints drawables
+            var checkpoints = track.Checkpoints;
+            if (checkpoints == null)
+                throw new ArgumentNullException("Track checkpoint list is null!");
+            if (checkpoints.Length == 0)
+                throw new ArgumentException("Track has no checkpoints!");
+            foreach(var checkpoint in track.Checkpoints) {
+                checkpoint.Reached = false;
+                checkpoint.Camera = gameCamera;
+                AddChild(checkpoint);
+            }
 
             Restart();
         }
@@ -83,6 +93,11 @@ namespace DeepFlight.scenes {
             ship.VelocityY = 0;
             stopWatch.Reset();
             shipPaused = true;
+
+            // Reset checkpoints
+            foreach( var checkpoint in track.Checkpoints) {
+                checkpoint.Reached = false;
+            }
 
             // Countdown
             await Task.Delay(startCountdown_TickRate);
@@ -100,6 +115,10 @@ namespace DeepFlight.scenes {
             await Task.Delay(startCountdown_TickRate);
             countdownText.Hidden = true;
             countdownTextBox.Hidden = true;
+        }
+
+        private void TrackFinished() {
+            RequestSceneSwitch(new TrackCompleteScene(track, stopWatch.Elapsed));
         }
         
         
@@ -164,15 +183,35 @@ namespace DeepFlight.scenes {
         }
 
         protected override void OnUpdate(double deltaTime) {
-            //if (shipCollision) {
-            //    ship.X = 0;
-            //    ship.Y = 0;
-            //    ship.ResetMovement();
-            //}
-            //else {
-            //    mover.Move(ship);
 
-            //}
+            // Check ship collision
+            var shipCollision = false;
+            track.ForBlocksInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, (block, x, y) => {
+                if (block.Type == BlockType.BORDER)
+                    if (block.CollidesWith(ship))
+                        shipCollision = true;
+            });
+
+            // Check checkpoint collision
+            var allCheckpointsReached = true;
+            foreach(var checkpoint in track.Checkpoints) {
+                if (checkpoint.Reached) continue;
+
+                if (checkpoint.CollidesWith(ship))
+                    checkpoint.Reached = true;
+                else
+                    allCheckpointsReached = false;
+            }
+
+            if( allCheckpointsReached) {
+                TrackFinished();
+                return;
+            }
+
+            if (shipCollision) {
+                Restart();
+                return;
+            }
 
             Mover.Move(ship);
             gameCamera.X = ship.X;
@@ -182,31 +221,17 @@ namespace DeepFlight.scenes {
         }
 
 
+        
+
 
 
         protected override void OnDraw(Renderer renderer) {
 
             track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
-                //Space space = new Space(0, 0);
-
-                if (block == null)
-                    Console.WriteLine("Block is null!");
-
-                //block.Col = Color.White; //block.Type == BlockType.SPACE ? Color.White : Color.Orange;
-
                 renderer.Draw(gameCamera, block);
             });
 
             renderer.Draw(gameCamera, ship);
-
-            //if (shipCollision)
-            //    ship.Col = Color.Green;
-            //else
-            //    ship.Col = Color.Red;
-                
-            //foreach (CollisionPoint point in CollisionPoint.GetCollisionPoints(ship)) {
-            //    renderer.Draw(camera, point);
-            //}
         }
 
 

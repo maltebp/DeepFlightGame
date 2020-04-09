@@ -10,6 +10,7 @@ static class Textures {
     public static Texture2D SQUARE { get; private set; }
     public static Texture2D CIRCLE { get; private set; }
     public static Texture2D TITLE { get; private set; }
+    public static Texture2D PIXEL_CIRCLE_9 { get; private set; }
 
 
     // Load the textures
@@ -29,5 +30,7 @@ static class Textures {
 
         // CIRCLE
         CIRCLE = content.Load<Texture2D>("Content/CircleTexture");
+        
+        PIXEL_CIRCLE_9 = content.Load<Texture2D>("Content/Shapes/PixelCircle9");
     }
 }

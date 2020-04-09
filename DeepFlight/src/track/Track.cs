@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DeepFlight.track;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +12,10 @@ public class Track {
     public long     ID { get; set; }
     public string   Name { get; set; }
     public long     Seed { get; set;  }
+    public Color    Color { get; set; }
+    public double   Length { get; set; }
+
+    public Checkpoint[] Checkpoints { get; set; } = new Checkpoint[0];
 
     private LinkedList<Chunk> chunks = new LinkedList<Chunk>();
 
@@ -94,6 +99,8 @@ public class Track {
             " )"
         ;
     }
+
+    
 
 }
 
@@ -211,7 +218,6 @@ public class Cell {
 public class Block : TextureView {
     public BlockType Type { get; set; }
 
-    // TODO: Fix the base constructor call here
     public Block(int x, int y, BlockType type) : base(null, Textures.SQUARE, Color.White, x, y, 1, 1) {
         AddCollider(new RectCollider(this));
         this.Type = type;

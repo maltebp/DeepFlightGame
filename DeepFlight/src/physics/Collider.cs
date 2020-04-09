@@ -88,12 +88,17 @@ public abstract class Collider {
 
 // Collider which detects collision within a radius.
 // Radius is determined by either Entity width or height, depending on which is largest.
-public class CircleCollidable : Collider {
+public class CircleCollider : Collider {
 
-    public CircleCollidable(Entity entity) : base(entity) { }
+    public float Scale { get; set; }
+
+    public CircleCollider(Entity entity) : base(entity) { }
+    public CircleCollider(Entity entity, float scale) : base(entity) {
+        Scale = scale;
+    }
 
     public override Point[] GetCollisionPoints() {
-        var radius = (entity.Width > entity.Height ? entity.Width : entity.Height) / 2;
+        var radius = (entity.Width > entity.Height ? entity.Width : entity.Height) / 2 * Scale;
 
         int numberOfPoints = (int)radius * 12;
        
@@ -104,14 +109,15 @@ public class CircleCollidable : Collider {
         var angle = 0.0;
         var angleStep = (2 * Math.PI) / numberOfPoints;
         for(int i=0; i<numberOfPoints; i++) {
-            points[i] = new Point(centerX + Math.Cos(angle) * radius, centerY + Math.Cos(angle) * radius); 
+            points[i] = new Point(centerX + Math.Cos(angle) * radius, centerY + Math.Cos(angle) * radius);
+            angle += angleStep;
         }
 
         return points;
     }
 
     protected override bool CollidesWithPoints( params Point[] points) {
-        var radius = (entity.Width > entity.Height ? entity.Width : entity.Height) / 2;
+        var radius = (entity.Width > entity.Height ? entity.Width : entity.Height) / 2 * Scale;
         var centerX = entity.GetCenterX();
         var centerY = entity.GetCenterY();
         foreach( Point point in points) {
