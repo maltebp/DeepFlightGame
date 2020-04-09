@@ -60,6 +60,7 @@
     <Compile Include="src\rendering\ScreenController.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
     <Compile Include="src\scenes\LoginScene.cs" />
+    <Compile Include="src\scenes\StopWatch.cs" />
     <Compile Include="src\scenes\TrackSelectionScene.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />
