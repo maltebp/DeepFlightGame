@@ -12,8 +12,17 @@ public class Track {
     public long     ID { get; set; }
     public string   Name { get; set; }
     public long     Seed { get; set;  }
-    public Color    Color { get; set; }
-    public double   Length { get; set; }
+    public int      Length { get; set; }
+    public uint      BlockDataSize { get; set; }
+    public byte[]   BlockData { get; set; }
+
+    public int      StartX { get; set; }
+    public int      StartY { get; set; }
+    public double StartRotation { get; set; }
+
+    public bool BlockDataProcessed { get; set; }
+
+    public Planet Planet { get; set; }
 
     public Checkpoint[] Checkpoints { get; set; } = new Checkpoint[0];
 
@@ -95,7 +104,13 @@ public class Track {
             "Track( " +
                 "name=" + Name + ", "+    
                 "id=" + ID + ", "+    
-                "seed=" + Seed +     
+                "seed=" + Seed +  ", " +
+                "planet=" + Planet.Name + " (id=" + Planet.ID + "), " +
+                "length=" + Length + ", " +
+                "startPos=(" + StartX + "," + StartY + "), " +
+                "startRot=" + string.Format("{0:N2}", StartRotation) + ", " +
+                "size=" + string.Format("{0:N3}",BlockDataSize/1000000.0) + "mb, " +
+                "processed=" + BlockDataProcessed +
             " )"
         ;
     }

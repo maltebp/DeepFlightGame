@@ -16,7 +16,7 @@ namespace DeepFlight.track {
 
         public int Index { get; }
         
-        private static readonly float ROTATION_SPEED = 0.1f;
+        private static readonly float ROTATION_SPEED = 0.2f;
 
         public Checkpoint(int index, Color color, double x, double y) : base(null, Textures.PIXEL_CIRCLE_9) {
             X = x;

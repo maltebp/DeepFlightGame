@@ -25,11 +25,15 @@ namespace DeepFlight.scenes {
         private Track track;
         private Ship ship;
 
+        private TextureView background;
+
         private TextView timeText;
         private TextureView timeTextBox;
         private TextView countdownText;
         private TextureView countdownTextBox;
         private Stopwatch stopWatch = new Stopwatch();
+
+
 
         private int startCountdown_TickRate = 1000; // ms 
 
@@ -52,6 +56,13 @@ namespace DeepFlight.scenes {
             uiCamera.Y = height / 2;
             uiCamera.X = width / 2;
 
+            // Create background
+            background = new TextureView(gameCamera, Textures.SQUARE);
+            background.Col = track.Planet.Color;
+            background.Height = height;
+            background.Width = width;
+            background.VOrigin = VerticalOrigin.TOP;
+            background.HOrigin = HorizontalOrigin.LEFT;
             ship = new Ship();
 
             timeText = new TextView(uiCamera, "0:00:00", Fonts.DEFAULT, 30, Color.White, width*0.01, height);
@@ -74,9 +85,11 @@ namespace DeepFlight.scenes {
                 throw new ArgumentNullException("Track checkpoint list is null!");
             if (checkpoints.Length == 0)
                 throw new ArgumentException("Track has no checkpoints!");
-            foreach(var checkpoint in track.Checkpoints) {
+
+            foreach (var checkpoint in track.Checkpoints) {
                 checkpoint.Reached = false;
                 checkpoint.Camera = gameCamera;
+                checkpoint.Col = new Color(track.Planet.Color*0.5f, 0.5f);
                 AddChild(checkpoint);
             }
 
@@ -85,8 +98,11 @@ namespace DeepFlight.scenes {
 
 
         private async void Restart() {
-            ship.X = 0;
-            ship.Y = 0;
+            ship.X = track.StartX;
+            ship.Y = track.StartY;
+            ship.Rotation = (float) track.StartRotation;//(float)((2*Math.PI)-track.StartRotation);
+            Console.WriteLine("Starting rotation: " +track.StartRotation);
+            
             ship.AccelerationX = 0;
             ship.AccelerationY = 0;
             ship.VelocityX = 0;
@@ -135,6 +151,11 @@ namespace DeepFlight.scenes {
                     Restart();
                     return true;
                 }
+
+                // TODO: Remove this
+                if( e.Key == Keys.T) {
+                    Console.WriteLine("Rotation: " + ship.Rotation);
+                }
             }
 
             if( e.Action == KeyAction.HELD ) {
@@ -150,9 +171,9 @@ namespace DeepFlight.scenes {
                     }
 
                     if (e.Key == Keys.Space) {
-                        double rotation = ship.Rotation + Math.PI * 1.5;
-                        ship.AccelerationY = (float)(Math.Sin(rotation) * 0.05);
-                        ship.AccelerationX = (float)(Math.Cos(rotation) * 0.05);
+                        //double rotation = ship.Rotation + Math.PI * 1.5;
+                        ship.AccelerationY = (float)(Math.Sin(ship.Rotation) * 0.05);
+                        ship.AccelerationX = (float)(Math.Cos(ship.Rotation) * 0.05);
                         return true;
                     }
                 }
@@ -194,7 +215,7 @@ namespace DeepFlight.scenes {
 
             // Check checkpoint collision
             var allCheckpointsReached = true;
-            foreach(var checkpoint in track.Checkpoints) {
+            foreach (var checkpoint in track.Checkpoints) {
                 if (checkpoint.Reached) continue;
 
                 if (checkpoint.CollidesWith(ship))
@@ -203,7 +224,7 @@ namespace DeepFlight.scenes {
                     allCheckpointsReached = false;
             }
 
-            if( allCheckpointsReached) {
+            if (allCheckpointsReached) {
                 TrackFinished();
                 return;
             }
@@ -226,6 +247,8 @@ namespace DeepFlight.scenes {
 
 
         protected override void OnDraw(Renderer renderer) {
+
+            renderer.Draw(uiCamera, background);
 
             track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
                 renderer.Draw(gameCamera, block);

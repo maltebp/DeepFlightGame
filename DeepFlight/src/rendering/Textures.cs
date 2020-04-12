@@ -17,7 +17,7 @@ static class Textures {
     public static void LoadTextures(GraphicsDevice graphics, ContentManager content) {
         
         // SHIP
-        SHIP = content.Load<Texture2D>("Content/Ship");
+        SHIP = content.Load<Texture2D>("Content/Images/Ship");
 
         TITLE = content.Load<Texture2D>("Content/Images/GameTitle");
 

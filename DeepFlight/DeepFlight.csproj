@@ -44,8 +44,9 @@
     <Compile Include="src\GameController.cs" />
     <Compile Include="src\scenes\TrackCompleteScene.cs" />
     <Compile Include="src\track\Checkpoint.cs" />
+    <Compile Include="src\track\Planet.cs" />
     <Compile Include="src\track\TrackLoader.cs" />
-    <Compile Include="src\track\TrackSerializer.cs" />
+    <Compile Include="src\track\TrackDeserializer.cs" />
     <Compile Include="src\gui\LoadingTextView.cs" />
     <Compile Include="src\gui\MenuView.cs" />
     <Compile Include="src\gui\SimpleMenuView.cs" />

@@ -68,15 +68,12 @@ namespace DeepFlight.scenes {
             menu.Hidden = true;
             loader.Hidden = false;
 
-            Task<Track[]> loadTracksTask = TrackLoader.LoadTracks();
-            Track[] tracks = await loadTracksTask;
-            Console.WriteLine("Tracks loaded: ");
+            var generateTrackTask = TrackLoader.GenerateLocalTrack();
+            var track = await generateTrackTask;
 
-            foreach(var track in tracks) {
-                Console.WriteLine("\t" + track);
-            }
+            Console.WriteLine("Track generated: " + track);
 
-            loadedTracks = tracks;
+            loadedTracks = new Track[]{ track };
         }
 
         protected override void OnUpdate(double deltaTime) {
@@ -88,7 +85,7 @@ namespace DeepFlight.scenes {
 
         private void TracksLoaded(params Track[] tracks) {
             foreach (var track in tracks) {
-                menu.AddOption(track.Name, () => TrackSelected(track));
+                menu.AddOption(track.Planet.Name + ": " + track.Name, () => TrackSelected(track));
             }
 
             menu.Hidden = false;
@@ -99,6 +96,7 @@ namespace DeepFlight.scenes {
 
         private void TrackSelected(Track track) {
             Console.WriteLine("Track Selected: " + track);
+            track.DeserializeBlockData();
             RequestSceneSwitch(new GameScene(track));
         }
 
