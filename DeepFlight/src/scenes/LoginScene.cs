@@ -1,6 +1,7 @@
 ﻿using DeepFlight.gui;
 using DeepFlight.rendering;
 using DeepFlight.src.gui;
+using DeepFlight.src.gui.debugoverlay;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -11,11 +12,13 @@ namespace DeepFlight.scenes {
     class LoginScene : Scene {
 
         private Camera ui = new Camera();
-        private TextureView background;
+        //private Camera backgroundCam = new Camera();
+        //private TextureView background;
         private TextureView title;
         private TextView errorText;
         private LoadingTextView loader;
         private TextInput input_Username, input_Password;
+        private DebugOverlay debugOverlay;
 
         protected override void OnInitialize() {
 
@@ -25,13 +28,9 @@ namespace DeepFlight.scenes {
 
             // Adjust camera y=0 is top of screen
             ui.Y = height / 2;
+            //backgroundCam.Layer = 0.6f;
 
-            background = new TextureView(ui, Textures.SQUARE);
-            background.Col = Settings.COLOR_PRIMARY;
-            background.Width = (int)ScreenController.BaseWidth;
-            background.Height = (int)height;
-            background.VOrigin = VerticalOrigin.TOP;
-            AddChild(background);
+            BackgroundColor = Settings.COLOR_PRIMARY;
 
             title = new TextureView(ui, Textures.TITLE);
             title.Height = (int)(height / 6);
@@ -59,6 +58,8 @@ namespace DeepFlight.scenes {
             errorText = new TextView(ui, "", Fonts.DEFAULT, 24, Color.White, 0, height * 0.80);
             errorText.Hidden = true;
             AddChild(errorText);
+
+           
 
         }
 

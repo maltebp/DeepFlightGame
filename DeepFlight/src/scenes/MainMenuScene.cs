@@ -26,13 +26,7 @@ namespace DeepFlight.scenes {
             // Adjust camera y=0 is top of screen
             ui.Y = height / 2;
 
-            // Create background
-            background = new TextureView(ui, Textures.SQUARE);
-            background.Col = Settings.COLOR_PRIMARY;
-            background.Height = height;
-            background.Width = width;
-            background.VOrigin = VerticalOrigin.TOP;
-            AddChild(background);
+            BackgroundColor = Settings.COLOR_PRIMARY;
 
             menu = new SimpleMenuView(ui, Fonts.DEFAULT, 34, Color.White, 35);
             menu.Y = height * 0.20;

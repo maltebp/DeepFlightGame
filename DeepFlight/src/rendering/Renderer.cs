@@ -32,6 +32,7 @@ public class Renderer {
             graphics.GraphicsDevice.Clear(Settings.CLEAR_COLOR);
 
             spriteBatch.Begin(
+                sortMode: SpriteSortMode.BackToFront,
                 samplerState: SamplerState.PointClamp // Turn of anti-alias
             );
         }
@@ -82,7 +83,7 @@ public class Renderer {
                drawable.Col,
                transformed.Rotation,
                new Vector2(drawable.Texture.Width / 2, drawable.Texture.Height / 2),
-               SpriteEffects.None, 0f);
+               SpriteEffects.None, camera.Layer+drawable.DepthOffset);
     }
 
 
@@ -166,7 +167,7 @@ public class Renderer {
             (float) scalingError,
             SpriteEffects.None,
 
-            0f // Layer depth Not sure what this means
+            camera.Layer+drawable.DepthOffset // Layer depth Not sure what this means
         );
 
         // TODO: Remove this

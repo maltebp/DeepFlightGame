@@ -25,8 +25,6 @@ namespace DeepFlight.scenes {
         private Track track;
         private Ship ship;
 
-        private TextureView background;
-
         private TextView timeText;
         private TextureView timeTextBox;
         private TextView countdownText;
@@ -57,13 +55,10 @@ namespace DeepFlight.scenes {
             uiCamera.X = width / 2;
 
             // Create background
-            background = new TextureView(gameCamera, Textures.SQUARE);
-            background.Col = track.Planet.Color;
-            background.Height = height;
-            background.Width = width;
-            background.VOrigin = VerticalOrigin.TOP;
-            background.HOrigin = HorizontalOrigin.LEFT;
-            ship = new Ship();
+            BackgroundColor = Settings.COLOR_PRIMARY;
+
+            ship = new Ship(gameCamera);
+            AddChild(ship);
 
             timeText = new TextView(uiCamera, "0:00:00", Fonts.DEFAULT, 30, Color.White, width*0.01, height);
             timeText.HOrigin = HorizontalOrigin.LEFT;
@@ -71,13 +66,15 @@ namespace DeepFlight.scenes {
             timeTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0,0,0,150), 0, height, timeText.Width*1.2f, timeText.Height*1.2f);
             timeTextBox.HOrigin = HorizontalOrigin.LEFT;
             timeTextBox.VOrigin = VerticalOrigin.BOTTOM;
-            AddChildren(timeTextBox, timeText);
+            AddChildren(timeTextBox);
+            timeTextBox.AddChild(timeText);
 
             countdownText = new TextView(uiCamera, "3...", Fonts.DEFAULT, 40, Color.White, width / 2, height / 4);
             countdownText.Hidden = true;
             countdownTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0, 0, 0, 150), countdownText.X, countdownText.Y, countdownText.Width * 1.2f, countdownText.Height * 1.2f);
             countdownTextBox.Hidden = true;
-            AddChildren(countdownTextBox, countdownText);
+            AddChildren(countdownTextBox);
+            countdownTextBox.AddChild(countdownText);
 
             // Add checkpoints drawables
             var checkpoints = track.Checkpoints;
@@ -158,6 +155,7 @@ namespace DeepFlight.scenes {
                 }
             }
 
+
             if( e.Action == KeyAction.HELD ) {
                 if (!shipPaused) {
 
@@ -172,8 +170,8 @@ namespace DeepFlight.scenes {
 
                     if (e.Key == Keys.Space) {
                         //double rotation = ship.Rotation + Math.PI * 1.5;
-                        ship.AccelerationY = (float)(Math.Sin(ship.Rotation) * 0.05);
-                        ship.AccelerationX = (float)(Math.Cos(ship.Rotation) * 0.05);
+                        ship.AccelerationY = (float)(Math.Sin(ship.Rotation) * 0.06);
+                        ship.AccelerationX = (float)(Math.Cos(ship.Rotation) * 0.06);
                         return true;
                     }
                 }
@@ -248,13 +246,10 @@ namespace DeepFlight.scenes {
 
         protected override void OnDraw(Renderer renderer) {
 
-            renderer.Draw(uiCamera, background);
-
             track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
                 renderer.Draw(gameCamera, block);
             });
 
-            renderer.Draw(gameCamera, ship);
         }
 
 

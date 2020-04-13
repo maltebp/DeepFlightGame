@@ -38,12 +38,7 @@ namespace DeepFlight.scenes {
             uiCamera.Y = height / 2;
 
             // Create background
-            background = new TextureView(uiCamera, Textures.SQUARE);
-            background.Col = Settings.COLOR_PRIMARY;
-            background.Height = height;
-            background.Width = width;
-            background.VOrigin = VerticalOrigin.TOP;
-            AddChild(background);
+            BackgroundColor = Settings.COLOR_PRIMARY;
 
             text_TrackComplete = new TextView(uiCamera, "Track Complete!", Fonts.PIXELLARI, 40, Color.White, 0, height*0.15);
             AddChild(text_TrackComplete);

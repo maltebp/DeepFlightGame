@@ -7,6 +7,7 @@ public class Camera {
 
     public double X { get; set; } = 0;
     public double Y { get; set; } = 0;
+    public float Layer { get; set; } = 0.5f;
 
     private float rotation = 0f; // Radians
     public float Rotation {
@@ -20,6 +21,13 @@ public class Camera {
     public float Zoom {
         get => zoom;
         set => zoom = value <= 0 ? 0.001f : value;
+    }
+
+    public Camera(double x = 0, double y = 0, float zoom = 1f, float layer = 0.5f ) {
+        X = x;
+        Y = y;
+        Zoom = zoom;
+        Layer = layer;
     }
 
     /// <summary>

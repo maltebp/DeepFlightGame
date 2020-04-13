@@ -12,7 +12,6 @@ using DeepFlight.scenes;
 namespace DeepFlight.scenes {
     class TrackSelectionScene : Scene {
 
-
         private Camera ui = new Camera();
         private TextureView background;
         private SimpleMenuView menu;
@@ -30,13 +29,7 @@ namespace DeepFlight.scenes {
             // Adjust camera y=0 is top of screen
             ui.Y = height / 2;
 
-            // Create background
-            background = new TextureView(ui, Textures.SQUARE);
-            background.Col = Settings.COLOR_PRIMARY;
-            background.Height = height;
-            background.Width = width;
-            background.VOrigin = VerticalOrigin.TOP;
-            AddChild(background);
+            BackgroundColor = Settings.COLOR_PRIMARY;
 
             title = new TextView(ui, "Tracks", Fonts.DEFAULT, 42, Color.White, 0, height * 0.20);
             AddChild(title);

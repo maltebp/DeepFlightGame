@@ -1,4 +1,6 @@
-﻿using DeepFlight.utility.KeyboardController;
+﻿using DeepFlight.rendering;
+using DeepFlight.utility.KeyboardController;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,26 @@ namespace DeepFlight {
         public View Parent { get; protected set; }
         public LinkedList<View> Children { get; } = new LinkedList<View>();
 
-        public bool Initialized {get; private set;}
+
+        private TextureView background;
+        public Color BackgroundColor {
+            get {
+                if (background == null) return Color.Transparent;
+                return background.Col;
+            }
+            set {
+                if (background == null)
+                    background = new TextureView(
+                        new Camera(layer: 1f), Textures.SQUARE);
+                background.Col = value;
+            }
+        }
+
+
+        public bool Initialized { get; private set; }
+
+        private float depthOffset = 0f;
+        public float DepthOffset { get=>depthOffset; set => depthOffset = value; }
 
 
         private bool focused = false;
@@ -62,9 +83,9 @@ namespace DeepFlight {
             }
         }
 
-
-        public View(Camera camera) {
+        public View(Camera camera = null) {
             Camera = camera;
+
         }
 
 
@@ -81,6 +102,7 @@ namespace DeepFlight {
 
             Children.AddLast(child);
             child.Parent = this;
+            child.DepthOffset = DepthOffset -0.01f;
             if (child.Focused) Focused = true;
             if (Hidden) child.Hidden = true;
             if(Initialized) child.Initialize();
@@ -120,6 +142,15 @@ namespace DeepFlight {
 
         public void Draw(Renderer renderer) {
             if (!Hidden) {
+
+                // Render the background
+                if (Camera != null && background != null) {
+                    background.X = GetCenterX();
+                    background.Y = GetCenterY();
+                    background.Width = Width;
+                    background.Height = Height;
+                    renderer.Draw(Camera, background);
+                }
                 OnDraw(renderer);
             }
         }

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using DeepFlight.scenes;
+using DeepFlight.src.gui.debugoverlay;
 
 
 // Central controller class of the application
@@ -14,6 +15,7 @@ public class ApplicationController : Game {
     private Renderer renderer;
     private GraphicsDeviceManager graphics;
     private Scene currentScene = null;
+    private DebugOverlay debugOverlay = null;
 
     // To keep track of which screen resolution we are at
     private int resolutionIndex = 0;
@@ -49,7 +51,14 @@ public class ApplicationController : Game {
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
         Fonts.Load(Content);
 
+        debugOverlay = new DebugOverlay();
+        debugOverlay.Info.AddInfoLine("Scene", "No information yet", (infoLine) => infoLine.Info = currentScene.GetType().Name);
+        debugOverlay.Info.AddInfoLine("FPS", "No information yet", (infoLine) => infoLine.Info = "Still nothing");
+        debugOverlay.Info.AddInfoLine("Ship.X", "No information yet", (infoLine) => infoLine.Info = "Still nothing");
+        debugOverlay.Initialize();
+
         SwitchScene(new LoginScene());
+
         base.LoadContent();
     }
 
@@ -65,6 +74,7 @@ public class ApplicationController : Game {
             SwitchScene(currentScene.RequestedScene);
 
         UpdateEvent(gameTime.ElapsedGameTime.TotalSeconds);
+        debugOverlay.Update(gameTime.ElapsedGameTime.TotalSeconds);
         base.Update(gameTime);
     }
 
