@@ -129,6 +129,7 @@ namespace DeepFlight.generation {
         }
 
 
+
         /// <summary>
         /// Loads 1 Track from the LOCAL_TRACK_FOLDER, which should exist after generating
         /// a Track.
@@ -136,15 +137,27 @@ namespace DeepFlight.generation {
         private static Track LoadGeneratedTrack(string folderPath) {
             string[] trackFiles = Directory.GetFiles(folderPath, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
 
-            if( trackFiles.Length == 0) {
+            if (trackFiles.Length == 0) {
                 Console.WriteLine("Error: No track files found in local track folder after generating new track");
                 return null;
             }
 
-            if( trackFiles.Length > 1 )
+            if (trackFiles.Length > 1)
                 Console.WriteLine("WARNING: '{0}' track files in local track folder after generating new track!", trackFiles.Length);
 
-            return LoadTrackFile(folderPath + trackFiles[0]);
+            return LoadTrackFile(folderPath + trackFiles[0]);            
+        }
+
+
+        /// <summary>
+        /// Runs the 'LoadTrackFile(..)' method as an asynchronous task
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static Task<Track> LoadTrackFileAsync(string filePath) {
+            return Task.Run(() => {
+                return LoadTrackFile(filePath);
+            });
         }
 
 

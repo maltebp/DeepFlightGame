@@ -7,13 +7,38 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DeepFlight.src.gui.debugoverlay {
+
+    /// <summary>
+    /// Container class for the entire Debug view, which allows for
+    /// expanding the view without having to changet the functionality of
+    /// displaying it.
+    /// 
+    /// </summary>
     public class DebugOverlay : View {
 
-        private TextInput inputField;
+        // Class is a Singleton, and the instance may be fetched
+        // using this
+        private static DebugOverlay instance;
+        public static DebugOverlay Instance {
+            get{
+                if (instance == null)
+                    instance = new DebugOverlay();
+                return instance;
+            } 
+        }
 
-        public DebugInfoView Info { get; }
+        // Property allowing for ease of access of the InfoView
+        // on the singleton instance.
+        private DebugInfoView info;
+        public static DebugInfoView Info { 
+            get {
+                return Instance.info;
+            }
+        }
 
-        public DebugOverlay() : base(null) {
+        private DebugOverlay() : base(null) {
+            if (!ScreenController.Initialized)
+                throw new InvalidOperationException("ScreenController must be initialized before getting the DebugOverlay instance");
 
             // Create private Camera with center in top right corner
             Camera = new Camera( 
@@ -22,10 +47,9 @@ namespace DeepFlight.src.gui.debugoverlay {
                 layer: 0.1f);
 
             // Info View
-            Info = new DebugInfoView(Camera);
-            Info.Height = 250;
-            Info.Width = 300;
-            AddChild(Info);
+            info = new DebugInfoView(Camera);
+            AddChild(info);
         }
+        
     }
 }

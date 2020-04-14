@@ -16,22 +16,22 @@ namespace DeepFlight.track {
 
         public int Index { get; }
         
-        private static readonly float ROTATION_SPEED = 0.2f;
 
-        public Checkpoint(int index, Color color, double x, double y) : base(null, Textures.PIXEL_CIRCLE_9) {
+        public Checkpoint(int index, Color color, double x, double y) : base(null, Textures.PIXEL_CIRCLE_16) {
             X = x;
             Y = y;
             Index = index;
             Col = color;
             Width = Settings.GAME_CHECKPOINT_SIZE;
             Height = Settings.GAME_CHECKPOINT_SIZE;
+            RotationVelocity = 0.4f;
 
             // Add a slightly scaled down collider
-            AddCollider(new CircleCollider(this, 0.9f));
+            AddCollider(new CircleCollider(this, 1.1f));
         }
 
         protected override void OnUpdate(double deltaTime) {
-            Rotation += (float) (deltaTime * ROTATION_SPEED);
+            Mover.Move(this, deltaTime);
         }
 
     }

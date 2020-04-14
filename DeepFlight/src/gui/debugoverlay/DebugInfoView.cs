@@ -1,9 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using static DeepFlight.src.gui.debugoverlay.InfoLine;
+using static DeepFlight.src.gui.debugoverlay.DebugInfoLine;
 
 
 namespace DeepFlight.src.gui.debugoverlay {
+
+    /// <summary>
+    /// View which displays a series of InfoLines on a semi-transparent background.
+    ///
+    /// The InfoLines are lines of user defined information, and can be added
+    /// or removed dynamically.
+    /// </summary>
     public class DebugInfoView : View {
 
         private int fontSize = 14;
@@ -23,10 +30,7 @@ namespace DeepFlight.src.gui.debugoverlay {
         public override double X { get => base.X; set { base.X = value; UpdateLayout(); } }
         public override double Y { get => base.Y; set { base.Y = value; UpdateLayout(); } }
 
-        public override float  Width { get => base.Width; set { base.Width = value; UpdateLayout(); } }
-        public override float  Height { get => base.Height; set { base.Height = value; UpdateLayout(); } }
-
-        private LinkedList<InfoLine> infoLines = new LinkedList<InfoLine>();
+        private LinkedList<DebugInfoLine> infoLines = new LinkedList<DebugInfoLine>();
 
 
         public DebugInfoView(Camera camera) : base(camera) {
@@ -35,11 +39,22 @@ namespace DeepFlight.src.gui.debugoverlay {
             BackgroundColor = new Color(Color.Black, 100);
         }
 
-        public InfoLine AddInfoLine(string tag, string initialInfo, OnInfoLineUpdate updateCallback) {
+        /// <summary>
+        /// Add a new InfoLine to the InfoView, which is displayed in the manner:
+        /// 
+        ///     [TAG]: [INFORMATION]
+        /// 
+        /// The line needs to be manually removed again using the RemoveInfoLine(..) method
+        /// </summary>
+        /// <param name="tag">A description of the information, displayed in the line</param>
+        /// <param name="initialInfo">The initial information, before an update has been called</param>
+        /// <param name="updateCallback">The delegate which updates the information of the line. This is called frequently.</param>
+        /// <returns></returns>
+        public DebugInfoLine AddInfoLine(string tag, string initialInfo, OnInfoLineUpdate updateCallback) {
             TextView textView = new TextView(Camera, "", font, fontSize, Color.White, 0, 0);
             textView.VOrigin = VerticalOrigin.TOP;
             textView.HOrigin = HorizontalOrigin.LEFT;
-            InfoLine infoLine = new InfoLine(textView, tag, initialInfo, updateCallback);
+            DebugInfoLine infoLine = new DebugInfoLine(textView, tag, initialInfo, updateCallback);
             infoLines.AddLast(infoLine);
             AddChild(infoLine.TextView);
             UpdateLayout();
@@ -47,13 +62,15 @@ namespace DeepFlight.src.gui.debugoverlay {
         }
 
 
-        public void RemoveInfoLine(InfoLine lineToRemove) {
+        public void RemoveInfoLine(DebugInfoLine lineToRemove) {
             RemoveChild(lineToRemove.TextView);
+            lineToRemove.TextView.Terminate();
             infoLines.Remove(lineToRemove);
         }
 
         protected override void OnUpdate(double deltaTime) {
             foreach (var infoLine in infoLines) infoLine.UpdateInfo();
+            UpdateLayout();
         }
    
 
@@ -63,7 +80,6 @@ namespace DeepFlight.src.gui.debugoverlay {
         /// the DebugInfoView.
         /// </summary>
         private void UpdateLayout() {
-
 
             // Update each info line
             double contentX = X + Padding;
@@ -78,12 +94,16 @@ namespace DeepFlight.src.gui.debugoverlay {
                 textView.Y = contentY;
                 contentY += textView.Height + lineSpacing;
                 if (textView.Width > maxWidth) maxWidth = textView.Width;
-            }          
+            }
+
+            // Update size to InfoLines
+            Width =(float) (maxWidth + padding * 2);
+            Height = (float) (contentY - Y + padding * 2);
         }
     }
 
 
-    public class InfoLine {
+    public class DebugInfoLine {
         public string Tag { get; set; }
         public string Info { get; set; }
 
@@ -91,7 +111,7 @@ namespace DeepFlight.src.gui.debugoverlay {
 
         private OnInfoLineUpdate updateCallback;
 
-        public InfoLine(TextView textView, string tag, string initialInfo, OnInfoLineUpdate updateCallback) {
+        public DebugInfoLine(TextView textView, string tag, string initialInfo, OnInfoLineUpdate updateCallback) {
             this.updateCallback = updateCallback;
             Tag = tag;
             Info = initialInfo;
@@ -104,6 +124,6 @@ namespace DeepFlight.src.gui.debugoverlay {
             TextView.Text = Tag + ": " + Info;
         }
 
-        public delegate void OnInfoLineUpdate(InfoLine currentInfo);
+        public delegate void OnInfoLineUpdate(DebugInfoLine currentInfo);
     }
 }

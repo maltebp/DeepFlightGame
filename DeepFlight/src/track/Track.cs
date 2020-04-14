@@ -20,7 +20,7 @@ public class Track {
     public int      StartY { get; set; }
     public double StartRotation { get; set; }
 
-    public bool BlockDataProcessed { get; set; }
+    public bool BlockDataDeserialized { get; set; }
 
     public Planet Planet { get; set; }
 
@@ -110,7 +110,7 @@ public class Track {
                 "startPos=(" + StartX + "," + StartY + "), " +
                 "startRot=" + string.Format("{0:N2}", StartRotation) + ", " +
                 "size=" + string.Format("{0:N3}",BlockDataSize/1000000.0) + "mb, " +
-                "processed=" + BlockDataProcessed +
+                "processed=" + BlockDataDeserialized +
             " )"
         ;
     }

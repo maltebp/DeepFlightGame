@@ -15,7 +15,8 @@ public class ApplicationController : Game {
     private Renderer renderer;
     private GraphicsDeviceManager graphics;
     private Scene currentScene = null;
-    private DebugOverlay debugOverlay = null;
+
+    private FPSCounter fpsCounter = new FPSCounter();
 
     // To keep track of which screen resolution we are at
     private int resolutionIndex = 0;
@@ -51,11 +52,16 @@ public class ApplicationController : Game {
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
         Fonts.Load(Content);
 
-        debugOverlay = new DebugOverlay();
-        debugOverlay.Info.AddInfoLine("Scene", "No information yet", (infoLine) => infoLine.Info = currentScene.GetType().Name);
-        debugOverlay.Info.AddInfoLine("FPS", "No information yet", (infoLine) => infoLine.Info = "Still nothing");
-        debugOverlay.Info.AddInfoLine("Ship.X", "No information yet", (infoLine) => infoLine.Info = "Still nothing");
-        debugOverlay.Initialize();
+        
+                
+        // We can't add it as a Chilld view, so
+        // we just initialize it manually
+        DebugOverlay.Instance.Initialize();
+        DebugOverlay.Instance.Hidden = true;
+
+        // Some global debug info
+        DebugOverlay.Info.AddInfoLine("Scene", "No information yet", (infoLine) => infoLine.Info = currentScene.GetType().Name);
+        DebugOverlay.Info.AddInfoLine("FPS", "No information yet", (infoLine) => infoLine.Info = string.Format("{0:N1}", fpsCounter.GetFPS()));
 
         SwitchScene(new LoginScene());
 
@@ -74,12 +80,16 @@ public class ApplicationController : Game {
             SwitchScene(currentScene.RequestedScene);
 
         UpdateEvent(gameTime.ElapsedGameTime.TotalSeconds);
-        debugOverlay.Update(gameTime.ElapsedGameTime.TotalSeconds);
+        
+        // Since DebugOverlay is not a Child view, we have to update it manually
+        DebugOverlay.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
         base.Update(gameTime);
     }
 
 
     protected override void Draw(GameTime gameTime) {
+        fpsCounter.Update(gameTime);
         DrawEvent(renderer);
         renderer.Flush();      
         base.Draw(gameTime);
@@ -87,6 +97,14 @@ public class ApplicationController : Game {
 
 
     private void OnKeyInput(KeyEventArgs e) {
+        if( e.Action == KeyAction.PRESSED) {
+            if( e.Key == Keys.F1) {
+                DebugOverlay.Instance.Hidden = !DebugOverlay.Instance.Hidden;
+                return; // Consume event
+            }
+        }
+
+        // Forward key event to scene
         currentScene.KeyInput(e);
     }
 

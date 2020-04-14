@@ -31,7 +31,8 @@ namespace DeepFlight.scenes {
             menu = new SimpleMenuView(ui, Fonts.DEFAULT, 34, Color.White, 35);
             menu.Y = height * 0.20;
 
-            menu.AddOption("Play Track", () => RequestSceneSwitch(scene: new TrackSelectionScene()));
+            menu.AddOption("Play Track", () => RequestSceneSwitch(new TrackSelectionScene()));
+            menu.AddOption("Play Test Track", () => RequestSceneSwitch(new LoadTestTrackScene()));
             menu.AddOption("Ratings", () => Console.WriteLine("Ratings not implemented"));
             menu.AddOption("Settings", () => Console.WriteLine("Settings!"));
             menu.AddOption("Logout", () => Logout() );

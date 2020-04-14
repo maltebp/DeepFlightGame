@@ -2,6 +2,7 @@
 
 
 using DeepFlight.rendering;
+using DeepFlight.src.gui.debugoverlay;
 using DeepFlight.track;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
@@ -31,11 +32,18 @@ namespace DeepFlight.scenes {
         private TextureView countdownTextBox;
         private Stopwatch stopWatch = new Stopwatch();
 
-
-
         private int startCountdown_TickRate = 1000; // ms 
 
         private bool shipPaused = false;
+
+        private bool collisionEnabled = true;
+
+        private DebugInfoLine 
+            infoLine_ShipPos,
+            infoLine_ShipVel,
+            infoLine_ShipRes,
+            infoLine_ShipAcc,
+            infoLine_CollisionEnabled;
         
 
         public GameScene(Track track) {
@@ -46,6 +54,8 @@ namespace DeepFlight.scenes {
 
 
         protected override void OnInitialize() {
+            if (!track.BlockDataDeserialized)
+                throw new InvalidOperationException("Track's block data has not been deserialized.");
 
             // Height of UI screen
             float height = (float) ScreenController.BaseHeight;
@@ -55,7 +65,7 @@ namespace DeepFlight.scenes {
             uiCamera.X = width / 2;
 
             // Create background
-            BackgroundColor = Settings.COLOR_PRIMARY;
+            BackgroundColor = track.Planet.Color;
 
             ship = new Ship(gameCamera);
             AddChild(ship);
@@ -90,7 +100,37 @@ namespace DeepFlight.scenes {
                 AddChild(checkpoint);
             }
 
+            // Setup DebugOverlay
+            infoLine_ShipPos = DebugOverlay.Info.AddInfoLine("Ship pos", "?", (infoLine) => {
+                infoLine.Info = string.Format("({0:N1},{1:N1})", ship.X, ship.Y);
+            });
+
+            infoLine_ShipVel = DebugOverlay.Info.AddInfoLine("Ship vel (V)", "?", (infoLine) => {
+                infoLine.Info = string.Format("{0:N2}", Math.Abs(ship.VelocityX)+Math.Abs(ship.VelocityY) );
+            });
+
+            infoLine_ShipAcc = DebugOverlay.Info.AddInfoLine("Ship acc (A)", "?", (infoLine) => {
+                infoLine.Info = string.Format("{0:N0}", Settings.SHIP_ACCELERATION);
+            });
+
+            infoLine_ShipRes = DebugOverlay.Info.AddInfoLine("Ship res (E)", "?", (infoLine) => {
+                infoLine.Info = string.Format("{0:N2}", ship.Resistance);
+            });
+
+            infoLine_CollisionEnabled = DebugOverlay.Info.AddInfoLine("Coll. On (C)", "?", (infoLine) => {
+                infoLine.Info = collisionEnabled.ToString();
+            });
+
+
             Restart();
+        }
+
+        protected override void OnTerminate() {
+            DebugOverlay.Info.RemoveInfoLine(infoLine_ShipPos);
+            DebugOverlay.Info.RemoveInfoLine(infoLine_ShipAcc);
+            DebugOverlay.Info.RemoveInfoLine(infoLine_ShipVel);
+            DebugOverlay.Info.RemoveInfoLine(infoLine_ShipRes);
+            DebugOverlay.Info.RemoveInfoLine(infoLine_CollisionEnabled);
         }
 
 
@@ -150,8 +190,19 @@ namespace DeepFlight.scenes {
                 }
 
                 // TODO: Remove this
-                if( e.Key == Keys.T) {
-                    Console.WriteLine("Rotation: " + ship.Rotation);
+                if( e.Key == Keys.C) {
+                    collisionEnabled = !collisionEnabled;
+                    return true;
+                }
+
+                if (e.Key == Keys.A) {
+                    Settings.SHIP_ACCELERATION = (float) ((Settings.SHIP_ACCELERATION+30f) % 400f);
+                    return true;
+                }
+
+                if (e.Key == Keys.E) {
+                    ship.Resistance = (ship.Resistance+0.20f) % 4f;
+                    return true;
                 }
             }
 
@@ -160,18 +211,18 @@ namespace DeepFlight.scenes {
                 if (!shipPaused) {
 
                     if (e.Key == Keys.Left) {
-                        ship.Rotation -= 0.05f;
+                        ship.RotationVelocity = -Settings.SHIP_ROTATION_VELOCITY;
                         return true;
                     }
                     if (e.Key == Keys.Right) {
-                        ship.Rotation += 0.05f;
+                        ship.RotationVelocity = Settings.SHIP_ROTATION_VELOCITY;
                         return true;
                     }
 
                     if (e.Key == Keys.Space) {
                         //double rotation = ship.Rotation + Math.PI * 1.5;
-                        ship.AccelerationY = (float)(Math.Sin(ship.Rotation) * 0.06);
-                        ship.AccelerationX = (float)(Math.Cos(ship.Rotation) * 0.06);
+                        ship.AccelerationY = (float)(Math.Sin(ship.Rotation) * Settings.SHIP_ACCELERATION);
+                        ship.AccelerationX = (float)(Math.Cos(ship.Rotation) * Settings.SHIP_ACCELERATION);
                         return true;
                     }
                 }
@@ -183,6 +234,10 @@ namespace DeepFlight.scenes {
                     ship.AccelerationX = 0;
                     ship.AccelerationY = 0;
                     return true;
+                }
+
+                if( e.Key == Keys.Left || e.Key == Keys.Right) {
+                    ship.RotationVelocity = 0;
                 }
             }
 
@@ -205,11 +260,14 @@ namespace DeepFlight.scenes {
 
             // Check ship collision
             var shipCollision = false;
-            track.ForBlocksInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, (block, x, y) => {
-                if (block.Type == BlockType.BORDER)
-                    if (block.CollidesWith(ship))
-                        shipCollision = true;
-            });
+            if (collisionEnabled) {
+                track.ForBlocksInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, (block, x, y) => {
+                    if (block.Type == BlockType.BORDER)
+                        if (block.CollidesWith(ship))
+                            shipCollision = true;
+                });
+            }
+            
 
             // Check checkpoint collision
             var allCheckpointsReached = true;
@@ -232,9 +290,7 @@ namespace DeepFlight.scenes {
                 return;
             }
 
-            Mover.Move(ship);
-            gameCamera.X = ship.X;
-            gameCamera.Y = ship.Y;
+            
 
             UpdateTimeText();
         }
@@ -245,6 +301,8 @@ namespace DeepFlight.scenes {
 
 
         protected override void OnDraw(Renderer renderer) {
+            gameCamera.X = ship.X;
+            gameCamera.Y = ship.Y;
 
             track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
                 renderer.Draw(gameCamera, block);

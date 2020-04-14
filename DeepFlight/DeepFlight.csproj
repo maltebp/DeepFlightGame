@@ -41,11 +41,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="src\gui\debugoverlay\DebugConsoleVIew.cs" />
     <Compile Include="src\gui\debugoverlay\DebugInfoView.cs" />
     <Compile Include="src\gui\debugoverlay\DebugOverlay.cs" />
     <Compile Include="src\scenes\GlobalTracksScene.cs" />
     <Compile Include="src\scenes\TrackCompleteScene.cs" />
+    <Compile Include="src\scenes\LoadTestTrackScene.cs" />
     <Compile Include="src\track\Checkpoint.cs" />
     <Compile Include="src\track\Planet.cs" />
     <Compile Include="src\track\TrackLoader.cs" />

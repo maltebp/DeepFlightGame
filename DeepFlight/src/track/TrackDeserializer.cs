@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 
 // Serialize into and deserialize a Track object into a byte array
@@ -85,13 +86,19 @@ public static class TrackDeserializer {
                 }
 
                 track.BlockData = blockData;
-                track.BlockDataProcessed = false;
+                track.BlockDataDeserialized = false;
             }
         }
 
         return track;
     }
 
+
+    public static Task DeserializeBlockDataAsync(this Track track) {
+        return Task.Run(()=> {
+            track.DeserializeBlockData();
+        });
+    } 
 
     /// <summary>
     /// Deserializes the loaded Block data, preparing the Track to
@@ -101,7 +108,7 @@ public static class TrackDeserializer {
         if (track.BlockData == null)
             throw new ArgumentNullException("Block data is null for Track ('{0}')", track.Name);
 
-        if (track.BlockDataProcessed) {
+        if (track.BlockDataDeserialized) {
             Console.WriteLine("WARNING: Block data of Track ('{0}') has already been processed!", track.Name);
             return;
         }
@@ -137,7 +144,7 @@ public static class TrackDeserializer {
                 track.Checkpoints = checkpoints.ToArray();
             }
         }
-
+        track.BlockDataDeserialized = true;
         stopwatch.Stop();
         Console.WriteLine("Deserialization of Block data for Track '{0}' took {1:N3} seconds", track.Name, stopwatch.Elapsed.TotalSeconds);
     }

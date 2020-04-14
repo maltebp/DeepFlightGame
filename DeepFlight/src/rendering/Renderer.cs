@@ -167,6 +167,7 @@ public class Renderer {
             (float) scalingError,
             SpriteEffects.None,
 
+
             camera.Layer+drawable.DepthOffset // Layer depth Not sure what this means
         );
 

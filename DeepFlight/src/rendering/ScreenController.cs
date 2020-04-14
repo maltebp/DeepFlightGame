@@ -20,7 +20,7 @@ namespace DeepFlight.rendering {
         public static Resolution[] allResolutions = {
             new Resolution(1920, 1080, 16, 9),
             new Resolution(1366, 768, 16, 9),
-            new Resolution(1080, 720, 16, 9),
+            new Resolution(1280, 720, 16, 9),
             new Resolution(1440, 900, 16, 10) // Mac
         };
 
@@ -29,6 +29,7 @@ namespace DeepFlight.rendering {
         private static GraphicsDeviceManager graphics;
 
         private static bool initialized = false;
+        public static bool Initialized { get => initialized;  }
 
         public static void Initialize(GraphicsDeviceManager graphics) {
             ScreenController.graphics = graphics;

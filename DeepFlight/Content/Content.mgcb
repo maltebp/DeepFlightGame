@@ -241,6 +241,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/Ship.png
 
+#begin Shapes/PixelCircle_16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Shapes/PixelCircle_16.png
+
 #begin Shapes/PixelCircle9.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -252,4 +264,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Shapes/PixelCircle9.png
+
+#begin Shapes/PixelCircle9.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Shapes/PixelCircle9.png
+
+#begin Shapes/Triangle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Shapes/Triangle.png
 

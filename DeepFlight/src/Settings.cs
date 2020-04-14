@@ -3,6 +3,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 class Settings {
 
@@ -21,10 +22,16 @@ class Settings {
     private static readonly float ZOOM_MIN = 0.5f;
     private static readonly float ZOOM_FACTOR = 0.001f; // How "fast" to zoom
 
-    public static readonly float GAME_CHECKPOINT_SIZE = 20f;
+    public static float SHIP_RESISTANCE = 0.90f;
+    public static float SHIP_ACCELERATION = 150f;
+    public static float SHIP_ROTATION_VELOCITY = (float) Math.PI;    
+
+
+    public static readonly float GAME_CHECKPOINT_SIZE = 30f;
 
     public static readonly Color CLEAR_COLOR = Color.Green;
 
-    public static readonly Color COLOR_PRIMARY = new Color(212, 69, 24);
+
+    public static readonly Color COLOR_PRIMARY = new Color(15, 19, 27);
 
 }

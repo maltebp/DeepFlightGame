@@ -11,6 +11,7 @@ public abstract class Movable : Collidable {
     public float AccelerationY { get; set; } = 0f;
     public float Resistance { get; set; } = 1f; // 1 = no resistance
     public float MaxVelocity { get; set; } = 0f;
+    public float RotationVelocity = 0f;
 
     public Movable() : base(0,0) { }
 
