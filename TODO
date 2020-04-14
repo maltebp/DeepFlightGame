@@ -1,76 +1,35 @@
 
 
-Must have:    
-    ✔ Zoom with mouse (for testing)
-
-    Map Generation:
-        ✔ Map generation framework
-        ✔ Base randomization on master seed
-        ✔ Read map from byte file
-
-    Renderer:
-        ✔ Drawable Scaling
-        ☐ Adjust drawable size to double rather than int
-
-    Collision:
-        ✔ Collision system
-        ✔ Rect Collider
-        ✔ Circle collider
-        ✔ Ship / wall collision
-
-    Control:
-        ☐ Create Game frame work (according to classdiagram)
-
-    UI:
-
-        ☐ Text rendering
-
-        Debug View:
-            ☐ Debug View system
-            ☐ Create Debug Overlay camera
-            ☐ FPS
-            ☐ Posision
-            ☐ Acceleration
-            ☐ Velocity
-            ☐ Camera zoom
-
     Scenes:
-        ☐ Game Scene
-        ☐ Intro menu
+        ☐ Login
+        ☐ Online Track Selection (+ loading)
+        ☐ Offline Track Selection
+        ☐ Ranking
+        ☐ Main Menu
 
-        Make a system, which makes it possible to display a series of custom debug values.
-        
-    Gameplay:
-        ☐ Turbo
-        Hold turbo key to go faster
+    ☐ Create Box
+    White box which you can put some content in
 
-        ☐ Check points
-        Create check points which you have to pass through in order to finish
+    ☐ Border Box
+    Box with just a border
+ 
+    ☐ Drop shadow for textures and fonts
 
-Bonus:
-    ☐ Speed zoom effect
-    The faster the ship goes, the more it should zoom out
+    ☐ Pop up window
 
-    ☐ Smoothen map generation
-    Map generation is a bit jagged, and remains the same size through the entire track.
-    Consider "acceleration" of tunnel width.
-    
-    ☐ Parallax effect on "space"
-    ☐ Change color throughout map
+    ☐ Setup Build
+        ☐ Linux
+        ☐ Windows
+        ☐ Mac
 
-    ☐ Particle effects
-        ☐ Ship "fire" effect  
-        
-    ☐ Implement polygon collisions with "ray casting"
-    See: https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
+    Game Rendering:
+    Optimize rendering of game
+        ☐ Change data structure
+        ☐ Use matrix transformation
+        ☐ Gather blocks to larger blocks
 
 
-
-
-Track Data File:
-
-
-    x, y, type
-
-
-    
+Other:
+    ☐ Parallax effect on track background
+    ☐ Particle system
+    ☐ Add Sound (and music)
