@@ -92,6 +92,7 @@
     <Compile Include="src\track\Round.cs" />
     <Compile Include="src\track\Track.cs" />
     <Compile Include="src\track\TrackDeserializer.cs" />
+    <Compile Include="src\track\TrackGenerator.cs" />
     <Compile Include="src\track\TrackLoader.cs" />
     <Compile Include="src\user\UserController.cs" />
     <Compile Include="src\utility\CharLists.cs" />
@@ -350,9 +351,15 @@
     <None Include="Content\obj\Windows\Shapes\PixelCircle_16.mgcontent" />
     <None Include="Content\obj\Windows\Shapes\PixelCircle_64.mgcontent" />
     <None Include="Content\obj\Windows\Shapes\Triangle.mgcontent" />
-    <None Include="offlinetracks\Aerth_NTYC361.dft" />
-    <None Include="offlinetracks\Smar_IAUI636.dft" />
-    <None Include="offlinetracks\Turnsa_NSIY505.dft" />
+    <None Include="offlinetracks\aerth.dftbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="offlinetracks\smar.dftbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="offlinetracks\turnsa.dftbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
@@ -365,7 +372,9 @@
     <Content Include="Content\Shapes\PixelCircle_16.png" />
     <Content Include="Content\Shapes\PixelCircle_64.png" />
     <Content Include="Content\Shapes\Triangle.png" />
-    <Content Include="TrackGenerator.exe" />
+    <Content Include="TrackGenerator.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

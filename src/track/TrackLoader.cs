@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeepFlight.track;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -16,7 +17,7 @@ namespace DeepFlight.generation {
         // Save track as a file after generating it
         private static readonly bool SAVE_TRACK = true;
 
-        private static readonly string FILE_EXTENSION = ".dft";
+        private static readonly string FILE_EXTENSION = ".dftbd";
 
         private static readonly bool RANDOM_GENERATION = true;
         private static readonly int GENERATION_SEED = 1234;
@@ -99,7 +100,7 @@ namespace DeepFlight.generation {
             var executionDir = GetExecutionDirectory();
             var trackFolderPath = GetExecutionDirectory() + LOCAL_TRACK_FOLDER + "\\";
             var generatorPath = GetExecutionDirectory() + GENERATOR_FILE_NAME;
-
+                
             var tcs = new TaskCompletionSource<Track>();
 
             // Setup the generation Process
@@ -107,14 +108,22 @@ namespace DeepFlight.generation {
             process.StartInfo.FileName = generatorPath;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
-            process.StartInfo.Arguments = trackFolderPath;
+            process.StartInfo.Arguments = string.Format("{0} {1} {2} {3} {4} {5} {6} {7}",
+                trackFolderPath, "randomtrack",  DateTime.Now.Millisecond,
+                10, 10, 10, 10, 10
+            );
             process.EnableRaisingEvents = true;
             process.Exited += (sender, args) => {
                 if( process.ExitCode != 0) {
                     tcs.TrySetResult(null);
                 }
                 else {
-                    tcs.TrySetResult(LoadGeneratedTrack(trackFolderPath));
+                    var generatedTrack = LoadGeneratedTrack(trackFolderPath);
+                    generatedTrack.ID = 0;
+                    generatedTrack.Name = "Unknown Cave";
+                    generatedTrack.Seed = DateTime.Now.Millisecond;
+                    generatedTrack.Planet = new Planet(1, "Unknown Planet", new int[] { 40, 40, 80 });
+                    tcs.TrySetResult(generatedTrack);
                 }
             };
 
@@ -161,17 +170,34 @@ namespace DeepFlight.generation {
                 Console.WriteLine("Loading offline tracks...");
                 var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "\\";
                 string[] trackFiles = Directory.GetFiles(offlineTracksFolder, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
-                
-                var tracks = new LinkedList<Track>();
-                foreach (var trackFile in trackFiles) {
-                    var track = LoadTrackFile(offlineTracksFolder + trackFile);
-                    if( track != null )
-                        tracks.AddLast(track);
-                }
 
+                Track track;
+                var tracks = new LinkedList<Track>();
+
+                track = LoadTrackFile(offlineTracksFolder + "aerth" + FILE_EXTENSION);
+                track.ID = 0;
+                track.Name = "AGRC-313";
+                track.Seed = 0;
+                track.Planet = new Planet(1, "Aerth", new int[] { 49, 102, 44 });
+                tracks.AddLast(track);
+
+                track = LoadTrackFile(offlineTracksFolder + "smar" + FILE_EXTENSION);
+                track.ID = 0;
+                track.Name = "IAUI-636";
+                track.Seed = 0;
+                track.Planet = new Planet(1, "Smar", new int[] { 150, 30, 9 });
+                tracks.AddLast(track);
+
+                track = LoadTrackFile(offlineTracksFolder + "turnsa" + FILE_EXTENSION);
+                track.ID = 0;
+                track.Name = "NSIY-432";
+                track.Seed = 0;
+                track.Planet = new Planet(1, "Turnsa", new int[] { 120, 120, 90 });
+                tracks.AddLast(track);
+                
                 Console.WriteLine("Loaded offline tracks: ");
-                foreach(var track in tracks) {
-                    Console.WriteLine("\t" + track);
+                foreach(var offlineTrack in tracks) {
+                    Console.WriteLine("\t" + offlineTrack);
                 }
 
                 return tracks.ToArray();
@@ -207,7 +233,10 @@ namespace DeepFlight.generation {
                 Console.WriteLine(e);
                 return null;
             }
-            var track = TrackDeserializer.DeserializeMetaData(trackData);
+
+            var track = new Track();
+            track.BlockData = trackData;
+
             return track;
         }
 

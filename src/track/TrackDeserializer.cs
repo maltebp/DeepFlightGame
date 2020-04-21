@@ -118,6 +118,11 @@ public static class TrackDeserializer {
         using (MemoryStream stream = new MemoryStream(track.BlockData)) {
             using (BinaryReader reader = new BinaryReader(stream)) {
 
+                // Deserialize starting pos and direction
+                track.StartX = reader.ReadInt32();
+                track.StartY = reader.ReadInt32();
+                track.StartRotation = reader.ReadDouble();
+
                 // Deserialize Blocks
                 while (true) {
                     int blockX = reader.ReadInt32();
