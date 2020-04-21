@@ -1,29 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeepFlight", "DeepFlight\DeepFlight.csproj", "{48DF6F5D-F431-410E-A2BD-A0A292006DF9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeepFlight", "DeepFlight.csproj", "{B5DA9545-D68E-4174-ABDF-0FBB74DB058C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{48DF6F5D-F431-410E-A2BD-A0A292006DF9}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{48DF6F5D-F431-410E-A2BD-A0A292006DF9}.Debug|x86.ActiveCfg = Debug|x86
-		{48DF6F5D-F431-410E-A2BD-A0A292006DF9}.Debug|x86.Build.0 = Debug|x86
-		{48DF6F5D-F431-410E-A2BD-A0A292006DF9}.Release|Any CPU.ActiveCfg = Release|x86
-		{48DF6F5D-F431-410E-A2BD-A0A292006DF9}.Release|x86.ActiveCfg = Release|x86
-		{48DF6F5D-F431-410E-A2BD-A0A292006DF9}.Release|x86.Build.0 = Release|x86
+		{B5DA9545-D68E-4174-ABDF-0FBB74DB058C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5DA9545-D68E-4174-ABDF-0FBB74DB058C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5DA9545-D68E-4174-ABDF-0FBB74DB058C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5DA9545-D68E-4174-ABDF-0FBB74DB058C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B9E7404A-0544-42FB-B67A-61DCDD708D78}
+		SolutionGuid = {A8005B65-0FC9-4CA0-8DB6-871441145063}
 	EndGlobalSection
 EndGlobal

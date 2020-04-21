@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Arial/Arial_12.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Arial/Arial_24.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Arial/Arial_36.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Arial/Arial_48.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Arial/Arial_72.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Arial/Arial_96.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Pixellari/Pixellari_12.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Pixellari/Pixellari_24.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Pixellari/Pixellari_36.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Pixellari/Pixellari_48.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Pixellari/Pixellari_60.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Pixellari/Pixellari_84.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_12.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_24.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_36.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_48.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_60.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_84.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_Italic_12.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_Italic_24.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_Italic_36.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_Italic_48.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_Italic_60.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Fonts/Roboto/Roboto_Bold_Italic_84.spritefont</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Images/GameTitle.png</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Images/Planet_64.png</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Images/Ship.png</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Shapes/CircleTexture.png</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Shapes/PixelCircle_16.png</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Shapes/PixelCircle_64.png</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Shapes/PixelCircle9.png</File>
+    <File>C:/Users/malte/VisualStudioProjects/DeepFlight/Content/Shapes/Triangle.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
