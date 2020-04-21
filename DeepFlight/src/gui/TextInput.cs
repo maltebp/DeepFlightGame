@@ -33,8 +33,6 @@ namespace DeepFlight.gui {
         private bool duringBlink = false;
 
 
-        private int cursorPosition = 0;
-
         public TextInput(Camera camera, string label, Font font, int fontSize, Color color, double x, double y, float width) : base(camera) {
             X = x;
             Y = y;
@@ -49,8 +47,10 @@ namespace DeepFlight.gui {
             cursor = new TextureView(Camera, Textures.SQUARE, color, x, inputText.GetCenterY() - 8, DEFAULT_CURSOR_WIDTH, inputText.Height*0.75f );
             cursor.HOrigin = HorizontalOrigin.LEFT;
 
+            // Fancy line below input
             line = new TextureView(Camera, Textures.SQUARE, color, x, y - LINE_MARGIN, width, LINE_THICKNESS);
 
+            // Input Label displaying what to input
             Label = new TextView(Camera, label, font, fontSize * 0.6, color, x- width / 2, y + LINE_MARGIN * 2 + LINE_THICKNESS);
             Label.VOrigin = VerticalOrigin.TOP;
             Label.HOrigin = HorizontalOrigin.LEFT;

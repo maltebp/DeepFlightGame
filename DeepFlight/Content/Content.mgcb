@@ -13,30 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin CircleTexture.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:CircleTexture.png
-
-#begin CircleTexture2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:CircleTexture2.png
-
 #begin Fonts/Arial/Arial_12.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -205,18 +181,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Roboto/Roboto_Bold_Italic_84.spritefont
 
-#begin Glow.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Glow.png;GlowTexture.png
-
 #begin Images/GameTitle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -228,6 +192,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/GameTitle.png
+
+#begin Images/Planet_64.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Planet_64.png
 
 #begin Images/Ship.png
 /importer:TextureImporter
@@ -241,6 +217,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/Ship.png
 
+#begin Shapes/CircleTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Shapes/CircleTexture.png
+
 #begin Shapes/PixelCircle_16.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -253,7 +241,7 @@
 /processorParam:TextureFormat=Color
 /build:Shapes/PixelCircle_16.png
 
-#begin Shapes/PixelCircle9.png
+#begin Shapes/PixelCircle_64.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -263,7 +251,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Shapes/PixelCircle9.png
+/build:Shapes/PixelCircle_64.png
 
 #begin Shapes/PixelCircle9.png
 /importer:TextureImporter

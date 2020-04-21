@@ -1,11 +1,14 @@
 
 
     Scenes:
-        ☐ Login
+        ✔ Login
+        ✔ Offline Track Selection
+        ✔ Main Menu
         ☐ Online Track Selection (+ loading)
-        ☐ Offline Track Selection
         ☐ Ranking
-        ☐ Main Menu
+
+    ☐ User controller
+    Should handle information about user that is logged in
 
     ☐ Create Box
     White box which you can put some content in
@@ -16,6 +19,19 @@
     ☐ Drop shadow for textures and fonts
 
     ☐ Pop up window
+
+    ✔ Increase generation priority
+
+    ☐ Implement SecureString for login password
+
+    ☐ Implement time tracking for offline trackks
+
+    ☐ Kill generation process
+    When generation of a track is cancelled preemptively, the generator process is not killed
+
+    ☐ Make sure GameScene (or Track at least) is garbage collected
+    
+    ☐ Stop inputs while minimized
 
     ☐ Setup Build
         ☐ Linux
@@ -28,8 +44,8 @@
         ☐ Use matrix transformation
         ☐ Gather blocks to larger blocks
 
-
 Other:
     ☐ Parallax effect on track background
     ☐ Particle system
     ☐ Add Sound (and music)
+    ☐ Animation system

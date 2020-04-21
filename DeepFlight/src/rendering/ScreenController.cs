@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 
 namespace DeepFlight.rendering {
 
+    /// <summary>
+    /// Handles information of the screen, including logical base dimensions, and
+    /// resolutions.
+    /// </summary>
     public static class ScreenController {
         private static readonly double  BASE_HEIGHT = 720;
         private static readonly bool    FULLSCREEN  = false;
 
+        // Logical width/height of the screen (used as a base
+        // for scaling different resolutions)
         public static double BaseWidth { get; private set; }
         public static double BaseHeight { get; private set; } = BASE_HEIGHT;
+
         public static double ScreenScale { get; private set; }
         public static Resolution Resolution { get; private set; }
         public static Resolution ScreenSize { get; private set; }
 
+        // Supported resolutions in th esystem
         public static Resolution[] allResolutions = {
             new Resolution(1920, 1080, 16, 9),
             new Resolution(1366, 768, 16, 9),

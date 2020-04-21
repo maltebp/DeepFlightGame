@@ -7,21 +7,18 @@ using System.Collections.Generic;
 using System.Linq;
 using DeepFlight.utility;
 
-// Holds and initialize the loading, of the variious fonts in the game
-public static class Fonts {
+//// Holds and initialize the loading, of the variious fonts in the game
+//public static class Font {
 
-    public static readonly Font ROBOTO_BOLD_ITALIC = new Font("Roboto", true, true);
-    public static readonly Font ROBOTO_BOLD = new Font("Roboto", true, false);
-    public static readonly Font ARIAL = new Font("Arial");
-    public static readonly Font PIXELLARI = new Font("Pixellari");
+//    p
     
-    public static readonly Font DEFAULT = PIXELLARI;
+   
 
-    // Loads all created Font objects, using the given content
-    public static void Load(ContentManager content) {
-        Font.LoadAll(content);
-    }
-}
+//    // Loads all created Font objects, using the given content
+//    public static void Load(ContentManager content) {
+//        Font.LoadAll(content);
+//    }
+//}
 
 /// <summary>
 /// Defines a Font in a series of different sizes
@@ -43,6 +40,15 @@ public class Font {
     private double scaling = 0;
 
     private static LinkedList<Font> allFonts = new LinkedList<Font>();
+
+
+    public static readonly Font ROBOTO_BOLD_ITALIC = new Font("Roboto", true, true);
+    public static readonly Font ROBOTO_BOLD = new Font("Roboto", true, false);
+    public static readonly Font ARIAL = new Font("Arial");
+    public static readonly Font PIXELLARI = new Font("Pixellari");
+
+    public static readonly Font DEFAULT = PIXELLARI;
+
 
     /// <summary>
     /// Create a new Font with the given Name. Font doesn't get loaded
@@ -75,7 +81,9 @@ public class Font {
     /// the given Content.
     /// </summary>
     public static void LoadAll(ContentManager content) {
+        Console.WriteLine("Loading fonts");
         foreach( Font font in allFonts) {
+            Console.WriteLine("Loading Font: {0}", font.Name);
             font.Load(content);
         }
     }
@@ -141,6 +149,9 @@ public class Font {
     /// terms of the closest size.
     /// </summary>
     public FontData GetBestFont(double targetSize) {
+        if (fontMap.Count == 0)
+            throw new InvalidOperationException( string.Format("Font {0}'s font map is empty", Name) );
+
         int bestSize = 0;
         double bestDiff = 100000;
         bool first = true;
@@ -152,6 +163,10 @@ public class Font {
                 bestSize = fontSize;
             }
         }
+
+        if (!fontMap.ContainsKey(bestSize))
+            throw new NullReferenceException("Font map does not contain size " + bestSize);
+
         return new FontData( fontMap[bestSize], bestSize );
     }
 
@@ -163,6 +178,11 @@ public class Font {
         var bestFont = GetBestFont(size);
         return bestFont.Sprite.MeasureString(text) * (float) (size / bestFont.Size);        
     }
+
+
+    //    public static void Load(ContentManager content) {
+    //        Font.LoadAll(content);
+    //    }
 
 }
 

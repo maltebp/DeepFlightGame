@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,17 @@ namespace DeepFlight.track {
         public string Name { get; set; }
         public Color Color { get; set; }
 
+        public Planet() { }
+
+
+        /* Custom JSON constructor because color
+           is in the "color" : [1,2,3] format*/
+        [JsonConstructor]
+        public Planet(long id, string name, int[] color) {
+            ID = id;
+            Name = name;
+            Color = new Color(color[0], color[1], color[2]);
+        }
 
         public override string ToString() {
             return

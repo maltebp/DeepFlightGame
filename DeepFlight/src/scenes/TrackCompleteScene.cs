@@ -40,23 +40,23 @@ namespace DeepFlight.scenes {
             // Create background
             BackgroundColor = Settings.COLOR_PRIMARY;
 
-            text_TrackComplete = new TextView(uiCamera, "Track Complete!", Fonts.PIXELLARI, 40, Color.White, 0, height*0.15);
+            text_TrackComplete = new TextView(uiCamera, "Track Complete!", Font.PIXELLARI, 40, Color.White, 0, height*0.15);
             AddChild(text_TrackComplete);
 
-            text_TimeText = new TextView(uiCamera, "Your time:", Fonts.PIXELLARI, 24, Color.White, 0, height*0.30 );
+            text_TimeText = new TextView(uiCamera, "Your time:", Font.PIXELLARI, 24, Color.White, 0, height*0.30 );
             AddChild(text_TimeText);
 
             var timeString = "";
             timeString += time.Minutes.ToString("0:");
             timeString += time.Seconds.ToString("00:");
             timeString += (time.Milliseconds / 10).ToString("00");
-            text_TimeValue = new TextView(uiCamera, timeString, Fonts.PIXELLARI, 60, Color.White, 0, height*0.40);
+            text_TimeValue = new TextView(uiCamera, timeString, Font.PIXELLARI, 60, Color.White, 0, height*0.40);
             AddChild(text_TimeValue);
 
-            menu = new SimpleMenuView(uiCamera, Fonts.DEFAULT, 30, Color.White, 35);
+            menu = new SimpleMenuView(uiCamera, Font.DEFAULT, 30, Color.White, 35);
             menu.Y = height * 0.6;
-            menu.AddOption("Play Again", () => RequestSceneSwitch(new GameScene(track)));
-            menu.AddOption("Back to main menu", () => RequestSceneSwitch(new MainMenuScene()));
+            menu.AddSimpleOption("Play Again", () => RequestSceneSwitch(new GameScene(track)));
+            menu.AddSimpleOption("Back to main menu", () => RequestSceneSwitch(new MainMenuScene()));
             AddChild(menu);
 
             menu.Focused = true;

@@ -70,7 +70,7 @@ namespace DeepFlight.scenes {
             ship = new Ship(gameCamera);
             AddChild(ship);
 
-            timeText = new TextView(uiCamera, "0:00:00", Fonts.DEFAULT, 30, Color.White, width*0.01, height);
+            timeText = new TextView(uiCamera, "0:00:00", Font.DEFAULT, 30, Color.White, width*0.01, height);
             timeText.HOrigin = HorizontalOrigin.LEFT;
             timeText.VOrigin = VerticalOrigin.BOTTOM;
             timeTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0,0,0,150), 0, height, timeText.Width*1.2f, timeText.Height*1.2f);
@@ -79,7 +79,7 @@ namespace DeepFlight.scenes {
             AddChildren(timeTextBox);
             timeTextBox.AddChild(timeText);
 
-            countdownText = new TextView(uiCamera, "3...", Fonts.DEFAULT, 40, Color.White, width / 2, height / 4);
+            countdownText = new TextView(uiCamera, "3...", Font.DEFAULT, 40, Color.White, width / 2, height / 4);
             countdownText.Hidden = true;
             countdownTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0, 0, 0, 150), countdownText.X, countdownText.Y, countdownText.Width * 1.2f, countdownText.Height * 1.2f);
             countdownTextBox.Hidden = true;
@@ -96,7 +96,7 @@ namespace DeepFlight.scenes {
             foreach (var checkpoint in track.Checkpoints) {
                 checkpoint.Reached = false;
                 checkpoint.Camera = gameCamera;
-                checkpoint.Col = new Color(track.Planet.Color*0.5f, 0.5f);
+                checkpoint.Color = new Color(track.Planet.Color*0.5f, 0.5f);
                 AddChild(checkpoint);
             }
 

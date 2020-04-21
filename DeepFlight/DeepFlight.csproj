@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,8 @@
     <AssemblyName>DeepFlight</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -41,27 +42,42 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="src\gui\debugoverlay\DebugInfoView.cs" />
     <Compile Include="src\gui\debugoverlay\DebugOverlay.cs" />
+    <Compile Include="src\gui\planetbox\PlanetBoxView.cs" />
+    <Compile Include="src\gui\planetbox\TextPlanetBoxView.cs" />
+    <Compile Include="src\gui\planetbox\TrackInfoView.cs" />
+    <Compile Include="src\network\GameAPIConnector.cs" />
+    <Compile Include="src\network\RestClint.cs" />
+    <Compile Include="src\RestTest.cs" />
     <Compile Include="src\scenes\GlobalTracksScene.cs" />
+    <Compile Include="src\scenes\OnlineTracksScene.cs" />
+    <Compile Include="src\scenes\OfflineTracksScene.cs" />
+    <Compile Include="src\scenes\RankingsScene.cs" />
     <Compile Include="src\scenes\TrackCompleteScene.cs" />
     <Compile Include="src\scenes\LoadTestTrackScene.cs" />
+    <Compile Include="src\scenes\TrackLoadingScene.cs" />
     <Compile Include="src\track\Checkpoint.cs" />
     <Compile Include="src\track\Planet.cs" />
+    <Compile Include="src\track\Round.cs" />
     <Compile Include="src\track\TrackLoader.cs" />
     <Compile Include="src\track\TrackDeserializer.cs" />
     <Compile Include="src\gui\LoadingTextView.cs" />
     <Compile Include="src\gui\MenuView.cs" />
     <Compile Include="src\gui\SimpleMenuView.cs" />
-    <Compile Include="src\gui\TextView.cs" />
     <Compile Include="src\gui\TextInput.cs" />
-    <Compile Include="src\network\IUserAPIConnector.cs" />
+    <Compile Include="src\network\UserAPIConnector.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\rendering\Camera.cs" />
     <Compile Include="src\gameobjects\Entity.cs" />
-    <Compile Include="src\rendering\TextView.cs" />
-    <Compile Include="src\rendering\TextureView.cs" />
-    <Compile Include="src\rendering\Fonts.cs" />
+    <Compile Include="src\gui\TextView.cs" />
+    <Compile Include="src\gui\TextureView.cs" />
+    <Compile Include="src\rendering\Font.cs" />
     <Compile Include="src\rendering\ScreenController.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
     <Compile Include="src\scenes\LoginScene.cs" />
@@ -69,6 +85,7 @@
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\Scene.cs" />
     <Compile Include="src\Settings.cs" />
+    <Compile Include="src\user\UserController.cs" />
     <Compile Include="src\utility\CharLists.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
     <Compile Include="src\Application.cs" />
@@ -99,20 +116,44 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
+    <Reference Include="RestSharp, Version=106.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.10.1\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\CircleTexture.png" />
     <Content Include="Icon.ico" />
+    <Content Include="TrackGenerator.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+    <None Include="offlinetracks\Aerth_NTYC361.dft">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <None Include="offlinetracks\Smar_IAUI636.dft">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="offlinetracks\Turnsa_NSIY505.dft">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -122,4 +163,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" />
+  </Target>
 </Project>

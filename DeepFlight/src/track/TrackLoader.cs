@@ -123,6 +123,8 @@ namespace DeepFlight.generation {
             process.OutputDataReceived += (s, e) => Console.WriteLine("TrackGenerator:\t" + e.Data);
             
             process.Start();
+            process.PriorityBoostEnabled = true;
+            process.PriorityClass = ProcessPriorityClass.High;
             process.BeginOutputReadLine();
 
             return tcs.Task;
@@ -150,6 +152,35 @@ namespace DeepFlight.generation {
 
 
         /// <summary>
+        /// Load all the pregenerated Tracks which are shipped with the game,
+        /// and can be played offline.
+        /// </summary>
+        /// <returns></returns>
+        public static Task<Track[]> LoadOfflineTracks() {
+            return Task.Run(() => {
+                Console.WriteLine("Loading offline tracks...");
+                var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "\\";
+                string[] trackFiles = Directory.GetFiles(offlineTracksFolder, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
+                
+                var tracks = new LinkedList<Track>();
+                foreach (var trackFile in trackFiles) {
+                    var track = LoadTrackFile(offlineTracksFolder + trackFile);
+                    if( track != null )
+                        tracks.AddLast(track);
+                }
+
+                Console.WriteLine("Loaded offline tracks: ");
+                foreach(var track in tracks) {
+                    Console.WriteLine("\t" + track);
+                }
+
+                return tracks.ToArray();
+            });
+        }
+
+
+
+        /// <summary>
         /// Runs the 'LoadTrackFile(..)' method as an asynchronous task
         /// </summary>
         /// <param name="filePath"></param>
@@ -167,7 +198,15 @@ namespace DeepFlight.generation {
         /// </summary>
         /// <param name="filePath"> The full path to the Track file</param>
         public static Track LoadTrackFile(string filePath) {
-            var trackData = File.ReadAllBytes(filePath);
+            byte[] trackData;
+            try {
+                trackData = File.ReadAllBytes(filePath);
+            }
+            catch (Exception e) {
+                Console.WriteLine("ERROR: Got exception during LoadTrackFile using path {0}", filePath);
+                Console.WriteLine(e);
+                return null;
+            }
             var track = TrackDeserializer.DeserializeMetaData(trackData);
             return track;
         }
@@ -208,10 +247,6 @@ namespace DeepFlight.generation {
         private static string GetExecutionDirectory() {
             // Fetching the permanent assembly execution path (for this assembly that is)
             string executionPath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-
-            // Adjust to directory, not executable file
-            Uri baseAddress = new Uri(executionPath);
-
             return new Uri(new Uri(executionPath), ".").LocalPath;
         }
 

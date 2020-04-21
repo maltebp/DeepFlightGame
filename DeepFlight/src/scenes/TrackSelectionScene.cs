@@ -31,14 +31,14 @@ namespace DeepFlight.scenes {
 
             BackgroundColor = Settings.COLOR_PRIMARY;
 
-            title = new TextView(ui, "Tracks", Fonts.DEFAULT, 42, Color.White, 0, height * 0.20);
+            title = new TextView(ui, "Tracks", Font.DEFAULT, 42, Color.White, 0, height * 0.20);
             AddChild(title);
 
-            menu = new SimpleMenuView(ui, Fonts.DEFAULT, 30, Color.White, 35);
+            menu = new SimpleMenuView(ui, Font.DEFAULT, 30, Color.White, 35);
             menu.Y = height * 0.35;
             AddChild(menu);
 
-            loader = new LoadingTextView(ui, Fonts.DEFAULT, 24, Color.White, 0, height / 2);
+            loader = new LoadingTextView(ui, y: height / 2);
             loader.Text = "Loading tracks";
             AddChild(loader);
 
@@ -78,7 +78,7 @@ namespace DeepFlight.scenes {
 
         private void TracksLoaded(params Track[] tracks) {
             foreach (var track in tracks) {
-                menu.AddOption(track.Planet.Name + ": " + track.Name, () => TrackSelected(track));
+                menu.AddSimpleOption(track.Planet.Name + ": " + track.Name, () => TrackSelected(track));
             }
 
             menu.Hidden = false;

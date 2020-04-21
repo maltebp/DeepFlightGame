@@ -2,6 +2,7 @@
 using DeepFlight.rendering;
 using DeepFlight.src.gui;
 using DeepFlight.src.gui.debugoverlay;
+using DeepFlight.src.user;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -12,13 +13,12 @@ namespace DeepFlight.scenes {
     class LoginScene : Scene {
 
         private Camera ui = new Camera();
-        //private Camera backgroundCam = new Camera();
-        //private TextureView background;
         private TextureView title;
         private TextView errorText;
         private LoadingTextView loader;
-        private TextInput input_Username, input_Password;
-        private DebugOverlay debugOverlay;
+        private TextInput textinput_Username, textinput_Password;
+        private SimpleMenuOption menuoption_LoginAsGuest;
+        private MenuView menu;
 
         protected override void OnInitialize() {
 
@@ -28,7 +28,6 @@ namespace DeepFlight.scenes {
 
             // Adjust camera y=0 is top of screen
             ui.Y = height / 2;
-            //backgroundCam.Layer = 0.6f;
 
             BackgroundColor = Settings.COLOR_PRIMARY;
 
@@ -36,74 +35,69 @@ namespace DeepFlight.scenes {
             title.Height = (int)(height / 6);
             title.Width = title.Height * (Textures.TITLE.Width / Textures.TITLE.Height);
             title.X = 0;
-            title.Y = height * 0.15;
+            title.Y = height * 0.20;
             AddChild(title);
 
-            input_Username = new TextInput(ui, "Username", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.45, (float)width * 0.30f);
-            input_Username.MaxLength = 20;
-            input_Username.Focused = true;
-            AddChild(input_Username);
+            textinput_Username = new TextInput(ui, "Username", Font.PIXELLARI, 36, Color.White, 0, height * 0.45, (float)width * 0.30f);
+            textinput_Username.MaxLength = 20;
+            textinput_Username.Focused = true;
+            AddChild(textinput_Username);
 
-            input_Password = new TextInput(ui, "Password", Fonts.PIXELLARI, 36, Color.White, 0, height * 0.65, (float)width * 0.30f);
-            input_Password.PasswordInput = true;
-            input_Password.MaxLength = 20;
-            AddChild(input_Password);
+            textinput_Password = new TextInput(ui, "Password", Font.PIXELLARI, 36, Color.White, 0, height * 0.65, (float)width * 0.30f);
+            textinput_Password.PasswordInput = true;
+            textinput_Password.MaxLength = 20;
+            AddChild(textinput_Password);
+
+            menuoption_LoginAsGuest = new SimpleMenuOption(ui, "Play as guest", Font.PIXELLARI, 24, Color.White);
+            menuoption_LoginAsGuest.Y = height * 0.85;
 
             // Create loading component
-            loader = new LoadingTextView(ui, Fonts.DEFAULT, 30, Color.White, 0, height / 2);
+            loader = new LoadingTextView(ui, y: height / 2);
             loader.Text = "Authenticating";
             loader.Hidden = true;
             AddChild(loader);
 
-            errorText = new TextView(ui, "", Fonts.DEFAULT, 24, Color.White, 0, height * 0.80);
+            errorText = new TextView(ui, "", Font.DEFAULT, 24, Color.White, 0, height * 0.75);
             errorText.Hidden = true;
             AddChild(errorText);
 
-           
+            menu = new MenuView();
+            menu.AddMenuOption(textinput_Username, AttemptLogin);
+            menu.AddMenuOption(textinput_Password, AttemptLogin);
+            menu.AddMenuOption(menuoption_LoginAsGuest, LoginAsGuest);
+            AddChild(menu);
 
         }
 
 
-        protected override bool OnKeyInput(KeyEventArgs e) {
+        public void ActivateInput() {
+            loader.Hidden = true;
+            menu.Hidden = false;
 
-            // "Scroll" through input fields
+            // Select first element in menu
+            menu.FocusedOptionIndex = 0;
+        }
+
+
+        protected override bool OnKeyInput(KeyEventArgs e) {
             if (e.Action == KeyAction.PRESSED) {
                 if (e.Key == Keys.Escape) {
                     RequestExit();
                     return true;
                 }
-                if (e.Key == Keys.Up || e.Key == Keys.Down || e.Key == Keys.Tab) {
-                    SwitchInputFocus();
-                    return true;
-                }
-                if (e.Key == Keys.Enter) {
-                    if (input_Username.Text.Length == 0) {
-                        SetInputFocus(input_Username);
-                        ShowError("Enter a username!");
-                    }
-                    else if (input_Password.Text.Length == 0) {
-                        SetInputFocus(input_Password);
-                        ShowError("Enter a password!");
-                    }
-                    else {
-                        AuthenticateUser(input_Username.Text, input_Password.Text);
-                    }
-                    return true;
-                }
             }
-
             return false;
         }
 
-        private void SetInputFocus(TextInput inputToFocus) {
-            input_Username.Focused = inputToFocus == input_Username;
-            input_Password.Focused = inputToFocus == input_Password;
-        }
+        //private void SetInputFocus(TextInput inputToFocus) {
+        //    textinput_Username.Focused = inputToFocus == textinput_Username;
+        //    textinput_Password.Focused = inputToFocus == textinput_Password;
+        //}
 
-        private void SwitchInputFocus() {
-            input_Username.Focused = !input_Username.Focused;
-            input_Password.Focused = !input_Password.Focused;
-        }
+        //private void SwitchInputFocus() {
+        //    textinput_Username.Focused = !textinput_Username.Focused;
+        //    textinput_Password.Focused = !textinput_Password.Focused;
+        //}
 
         private void ShowError(string error) {
             errorText.Text = "Error: " + error;
@@ -111,9 +105,21 @@ namespace DeepFlight.scenes {
         }
 
 
+        private void AttemptLogin() {
+            if (textinput_Username.Text.Length == 0) {
+                ShowError("Enter a username!");
+            }
+            else if (textinput_Password.Text.Length == 0) {
+                ShowError("Enter a password!");
+            }
+            else {
+                AuthenticateUser(textinput_Username.Text, textinput_Password.Text);
+            }
+        }   
+
+
 
         private void AuthenticateUser(string username, string password) {
-
             ShowLoadingScreen();
             loading = true;
         }
@@ -131,10 +137,15 @@ namespace DeepFlight.scenes {
             }
         }
 
+        // Log user in as guest, and switch to main menu
+        private void LoginAsGuest() {
+            UserController.LoginAsGuest();
+            RequestSceneSwitch(new MainMenuScene());
+        }
+
         private void ShowLoadingScreen() {
             errorText.Hidden = true;
-            input_Username.Hidden = true;
-            input_Password.Hidden = true;
+            menu.Hidden = true;
             loader.Hidden = false;
         }
     }

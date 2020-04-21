@@ -12,6 +12,8 @@ static class Textures {
     public static Texture2D TITLE { get; private set; }
     public static Texture2D PIXEL_CIRCLE_9 { get; private set; }
     public static Texture2D PIXEL_CIRCLE_16 { get; private set; }
+    public static Texture2D PIXEL_CIRCLE_64 { get; private set; }
+    public static Texture2D PLANET_64 { get; private set; }
 
 
     // Load the textures
@@ -30,9 +32,12 @@ static class Textures {
         SQUARE.SetData(data);
 
         // CIRCLE
-        CIRCLE = content.Load<Texture2D>("Content/CircleTexture");
+        CIRCLE = content.Load<Texture2D>("Content/Shapes/CircleTexture");
         
         PIXEL_CIRCLE_9 = content.Load<Texture2D>("Content/Shapes/PixelCircle9");
         PIXEL_CIRCLE_16 = content.Load<Texture2D>("Content/Shapes/PixelCircle_16");
+        PIXEL_CIRCLE_64 = content.Load<Texture2D>("Content/Shapes/PixelCircle_64");
+
+        PLANET_64 = content.Load<Texture2D>("Content/Images/Planet_64");
     }
 }

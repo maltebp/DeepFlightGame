@@ -16,7 +16,7 @@ namespace DeepFlight.src.gui.debugoverlay {
         private int fontSize = 14;
         public int FontSize { get => fontSize; set { fontSize = value; UpdateLayout(); }}
 
-        private Font font = Fonts.DEFAULT;
+        private Font font = Font.DEFAULT;
         public Font Font { get => font; set { font = value; UpdateLayout(); }}
 
         // Line spacing is in pixels

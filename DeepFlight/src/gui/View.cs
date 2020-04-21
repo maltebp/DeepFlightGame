@@ -20,13 +20,13 @@ namespace DeepFlight {
         public Color BackgroundColor {
             get {
                 if (background == null) return Color.Transparent;
-                return background.Col;
+                return background.Color;
             }
             set {
                 if (background == null)
                     background = new TextureView(
                         new Camera(layer: 1f), Textures.SQUARE);
-                background.Col = value;
+                background.Color = value;
             }
         }
 
@@ -36,7 +36,6 @@ namespace DeepFlight {
         private float depthOffset = 0f;
         public float DepthOffset { get=>depthOffset; set => depthOffset = value; }
 
-
         private bool focused = false;
         public bool Focused {
             get => focused;
@@ -44,15 +43,16 @@ namespace DeepFlight {
                 if( value == true && focused == false ) {
                     if( Parent != null )
                         Parent.Focused = true;
+                    focused = value;
                     OnFocus();
                 }
                 if( value == false && focused == true ){
-                    foreach(var child in Children){
+                    focused = value;
+                    foreach (var child in Children){
                         child.Focused = false;
                     }
                     OnUnfocus();
                 }
-                focused = value;
             }
         }
         protected virtual void OnFocus() { }
@@ -102,14 +102,19 @@ namespace DeepFlight {
 
             Children.AddLast(child);
             child.Parent = this;
-            child.DepthOffset = DepthOffset -0.01f;
+
+            // This depth offset calculation is a simple, but bad solution
+            // Children Views of this view, may at some point begin to overlap
+            // with others.
+            child.DepthOffset = DepthOffset - (Children.Count * 0.01f);
+
             if (child.Focused) Focused = true;
             if (Hidden) child.Hidden = true;
             if(Initialized) child.Initialize();
 
-            OnChildAdded();
+            OnChildAdded(child);
         }
-        protected virtual void OnChildAdded() { }
+        protected virtual void OnChildAdded(View addedChild) { }
 
         public void RemoveChild(View child) {
             if (!Children.Contains(child))
@@ -117,7 +122,9 @@ namespace DeepFlight {
 
             Children.Remove(child);
             child.Parent = null;
+            OnChildRemoved(child);
         }
+        protected virtual void OnChildRemoved(View removedChild) { }
 
         public void Initialize() {
             ApplicationController.DrawEvent += Draw;

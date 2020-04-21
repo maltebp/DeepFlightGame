@@ -50,12 +50,10 @@ public class ApplicationController : Game {
 
         renderer = new Renderer(graphics);
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
-        Fonts.Load(Content);
-
-        
+        Font.LoadAll(Content);
                 
-        // We can't add it as a Chilld view, so
-        // we just initialize it manually
+        // We can't add it as a Child view since 'Application' is not
+        // a View, so we just initialize it manually
         DebugOverlay.Instance.Initialize();
         DebugOverlay.Instance.Hidden = true;
 

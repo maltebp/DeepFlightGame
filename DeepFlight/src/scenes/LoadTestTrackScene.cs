@@ -1,13 +1,7 @@
-﻿using DeepFlight.rendering;
+﻿
 using DeepFlight.gui;
-using DeepFlight.utility.KeyboardController;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using DeepFlight.src.gui;
 using DeepFlight.generation;
-using System.Threading.Tasks;
-using DeepFlight.scenes;
+
 
 namespace DeepFlight.scenes {
 
@@ -23,7 +17,7 @@ namespace DeepFlight.scenes {
         protected override void OnInitialize() {
             BackgroundColor = Settings.COLOR_PRIMARY;
 
-            loader = new LoadingTextView(ui, Fonts.DEFAULT, 24, Color.White, 0, 0);
+            loader = new LoadingTextView(ui);
             loader.Text = "Loading Test Track...";
             AddChild(loader);
 

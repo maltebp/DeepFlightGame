@@ -16,7 +16,7 @@ namespace DeepFlight.gui {
 
         private TextView textView;
 
-        private string text = "Loading";
+        private string text;
         public string Text { 
             get => text;
             set {
@@ -29,10 +29,12 @@ namespace DeepFlight.gui {
         private double animateCooldown = ANIMATE_FREQ;
         private string dots = "";
 
-        public LoadingTextView(Camera camera, Font font, double fontSize, Color color, double x, double y) : base(camera) {
+        public LoadingTextView(Camera camera, string text = "Loading", Font font = null, double fontSize = 24, Color? color = null, double x = 0, double y = 0) : base(camera) {
             X = x;
             Y = y;
-            textView = new TextView(Camera, text, font, fontSize, color, x, y);
+            this.text = text;
+            if (font == null) font = Font.DEFAULT;
+            textView = new TextView(Camera, text, font, fontSize, color.HasValue ? color.Value : Color.White, x, y);
             textView.HOrigin = HorizontalOrigin.LEFT;
             AddChild(textView);
             UpdatePosition();            

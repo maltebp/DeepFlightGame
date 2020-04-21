@@ -21,7 +21,7 @@ namespace DeepFlight.track {
             X = x;
             Y = y;
             Index = index;
-            Col = color;
+            Color = color;
             Width = Settings.GAME_CHECKPOINT_SIZE;
             Height = Settings.GAME_CHECKPOINT_SIZE;
             RotationVelocity = 0.4f;

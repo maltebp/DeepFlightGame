@@ -80,7 +80,7 @@ public class Renderer {
                // it will draw from the center of the bounds.
                new Rectangle((int)transformed.GetCenterX(), (int)transformed.GetCenterY(), (int)transformed.Width+1, (int)transformed.Height+1),
                null,
-               drawable.Col,
+               drawable.Color,
                transformed.Rotation,
                new Vector2(drawable.Texture.Width / 2, drawable.Texture.Height / 2),
                SpriteEffects.None, camera.Layer+drawable.DepthOffset);
@@ -155,7 +155,7 @@ public class Renderer {
             // offset below (we adjust it to center of texture)
             new Vector2( (float) transformed.GetCenterX(), (float) transformed.GetCenterY() ),
 
-            drawable.Col,
+            drawable.Color,
             transformed.Rotation,
 
             // Offet of drawing (and rotation) origin
