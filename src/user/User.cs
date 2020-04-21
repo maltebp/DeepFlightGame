@@ -4,17 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeepFlight.network {
-    public class UserAPIConnector {
+namespace DeepFlight.src.user {
+    public class User {
 
-
-
-
-        public void Authenticate() {
-
-        }
-
-
+        string Username { get; }
+        int Rating { get;  }
 
 
     }

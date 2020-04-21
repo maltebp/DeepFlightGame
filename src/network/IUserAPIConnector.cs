@@ -5,14 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DeepFlight.network {
-    public class UserAPIConnector {
-
-
-
-
-        public void Authenticate() {
-
-        }
+    public interface IUserAPIConnector {
 
 
 

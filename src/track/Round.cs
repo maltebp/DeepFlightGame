@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DeepFlight.track {
-    class Round {
+    public class Round {
 
         // TODO: Add start and end date
 
