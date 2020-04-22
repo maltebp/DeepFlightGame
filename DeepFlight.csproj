@@ -52,9 +52,10 @@
     <Compile Include="src\gui\debugoverlay\DebugOverlay.cs" />
     <Compile Include="src\gui\LoadingTextView.cs" />
     <Compile Include="src\gui\MenuView.cs" />
-    <Compile Include="src\gui\planetbox\PlanetBoxView.cs" />
-    <Compile Include="src\gui\planetbox\TextPlanetBoxView.cs" />
-    <Compile Include="src\gui\planetbox\TrackInfoView.cs" />
+    <Compile Include="src\gui\trackinfo\PlanetBoxView.cs" />
+    <Compile Include="src\gui\trackinfo\TextPlanetBoxView.cs" />
+    <Compile Include="src\gui\trackinfo\TimeLabelView.cs" />
+    <Compile Include="src\gui\trackinfo\TrackInfoView.cs" />
     <Compile Include="src\gui\SimpleMenuView.cs" />
     <Compile Include="src\gui\TextInput.cs" />
     <Compile Include="src\gui\TextureView.cs" />

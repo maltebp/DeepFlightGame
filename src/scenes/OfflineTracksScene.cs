@@ -82,7 +82,7 @@ namespace DeepFlight.scenes {
 
                 int count = 0;
                 foreach(var track in offlineTracks) {
-                    TrackInfoView planet = new TrackInfoView(camera_UI, track);
+                    TrackInfoView planet = new TrackInfoView(camera_UI, track, false);
                     planet.FocusColor = track.Planet.Color;
                     planet.X = ScreenController.BaseWidth * (count + 1) * 0.20;
                     planet.Y = ScreenController.BaseHeight * 0.50;

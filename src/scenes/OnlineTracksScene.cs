@@ -85,7 +85,7 @@ namespace DeepFlight.scenes {
 
             int count = 0;
             foreach (var track in round.Tracks) {
-                TrackInfoView planet = new TrackInfoView(camera_UI, track);
+                TrackInfoView planet = new TrackInfoView(camera_UI, track, true);
                 planet.FocusColor = track.Planet.Color;
                 planet.X = ScreenController.BaseWidth * (count + 1) * 0.20;
                 planet.Y = ScreenController.BaseHeight * 0.50;

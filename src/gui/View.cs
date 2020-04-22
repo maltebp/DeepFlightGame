@@ -33,8 +33,21 @@ namespace DeepFlight {
 
         public bool Initialized { get; private set; }
 
-        private float depthOffset = 0f;
-        public float DepthOffset { get=>depthOffset; set => depthOffset = value; }
+
+        /* Determines the layering of children when drawn.
+         * Lowest DepthOffset gets drawn in the front */
+        private float depthOffset = 0.0f;
+        public float DepthOffset {
+            get => depthOffset;
+            set {
+                depthOffset = value;
+                var childDepth = depthOffset;
+                foreach( var child in Children) {
+                    childDepth -= 0.01f;
+                    child.DepthOffset = childDepth;
+                }
+            }
+        }
 
         private bool focused = false;
         public bool Focused {
@@ -85,7 +98,6 @@ namespace DeepFlight {
 
         public View(Camera camera = null) {
             Camera = camera;
-
         }
 
 
@@ -103,10 +115,8 @@ namespace DeepFlight {
             Children.AddLast(child);
             child.Parent = this;
 
-            // This depth offset calculation is a simple, but bad solution
-            // Children Views of this view, may at some point begin to overlap
-            // with others.
-            child.DepthOffset = DepthOffset - (Children.Count * 0.01f);
+            // Bad solution, but it updates offset of all children (including new one)
+            DepthOffset = depthOffset;
 
             if (child.Focused) Focused = true;
             if (Hidden) child.Hidden = true;
@@ -202,6 +212,6 @@ namespace DeepFlight {
         protected virtual bool OnCharInput(CharEventArgs e) { return false;  }
         
 
-        
+
     }
 }

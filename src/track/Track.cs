@@ -20,6 +20,9 @@ public class Track {
     public int      StartY { get; set; }
     public double StartRotation { get; set; }
 
+    public long BestTimeGlobal { get; set; }
+    public long BestTimeUser { get; set; }
+
     public bool BlockDataDeserialized { get; set; }
 
     public Planet Planet { get; set; }

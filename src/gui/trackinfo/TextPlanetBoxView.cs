@@ -1,10 +1,5 @@
 ﻿using DeepFlight.gui;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeepFlight.src.gui {
 
