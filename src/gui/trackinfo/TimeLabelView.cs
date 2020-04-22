@@ -26,14 +26,20 @@ namespace DeepFlight.src.gui.planetbox {
 
         public long Time {
             set {
-                // Build time string
-                var time = TimeSpan.FromMilliseconds(value);
-                string timeString = "";
-                if( time.Minutes > 0 )
-                    timeString += time.Minutes.ToString("00:");
-                timeString += time.Seconds.ToString("00:");
-                timeString += (time.Milliseconds / 10).ToString("00");
-                text_Time.Text = timeString; 
+                if( value == 0) {
+                    text_Time.Text = "No Record";
+                }
+                else {
+                    // Build time string
+                    var time = TimeSpan.FromMilliseconds(value);
+                    string timeString = "";
+                    if (time.Minutes > 0)
+                        timeString += time.Minutes.ToString("00:");
+                    timeString += time.Seconds.ToString("00:");
+                    timeString += (time.Milliseconds / 10).ToString("00");
+                    text_Time.Text = timeString;
+                }
+                
             }
         }
 
@@ -70,12 +76,12 @@ namespace DeepFlight.src.gui.planetbox {
 
         // Update label and time position
         protected void UpdateLayout() {
-            text_Label.Size = fontSize * 0.9;
-            text_Label.Y = Y - fontSize/15;
+            text_Label.Size = fontSize * 0.8;
+            text_Label.Y = Y - fontSize/25;
             text_Label.X = X;
 
             text_Time.Size = fontSize;
-            text_Time.Y = Y + fontSize/15;
+            text_Time.Y = Y + fontSize/25;
             text_Time.X = X;
         }
 

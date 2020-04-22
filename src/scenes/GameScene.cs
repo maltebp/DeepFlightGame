@@ -174,6 +174,7 @@ namespace DeepFlight.scenes {
             countdownTextBox.Hidden = true;
         }
 
+
         private void TrackFinished() {
             RequestSceneSwitch(new TrackCompleteScene(track, stopWatch.Elapsed, onlineTrack));
         }

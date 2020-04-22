@@ -34,7 +34,8 @@ namespace DeepFlight.scenes {
 
             BackgroundColor = Settings.COLOR_PRIMARY;
 
-            text_SceneTitle = new TextView(camera_UI, "Online Tracks", Font.DEFAULT, 42, Color.White, width * 0.50, height * 0.20);
+            text_SceneTitle = new TextView(camera_UI, "<ROUND TITLE>", Font.DEFAULT, 42, Color.White, width * 0.50, height * 0.20);
+            text_SceneTitle.Hidden = true;
             AddChild(text_SceneTitle);
 
             // Menu which contains the different Tracks
@@ -94,8 +95,12 @@ namespace DeepFlight.scenes {
             }
 
             loader.Hidden = true;
+
             menu_Tracks.Hidden = false;
             menu_Tracks.Focused = true;
+
+            text_SceneTitle.Hidden = false;
+            text_SceneTitle.Text = string.Format("Round #{0} Tracks", round.RoundNumber);
         }
 
         private void DisplayError(string errorMessage) {

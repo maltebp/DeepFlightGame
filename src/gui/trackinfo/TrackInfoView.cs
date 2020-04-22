@@ -75,7 +75,7 @@ namespace DeepFlight.src.gui {
             double topY = Y - scaledSize / 2.0;
 
             if ( text_PlanetName != null) {
-                text_PlanetName.Y = topY + scaledSize * 0.20;
+                text_PlanetName.Y = topY + scaledSize * 0.15;
                 text_PlanetName.X = centerX;
                 text_PlanetName.Size = 20 * focusScale; // Font Size
                 text_PlanetName.Color = fontColor;
@@ -84,7 +84,7 @@ namespace DeepFlight.src.gui {
             if (text_TrackName != null) {
                 text_TrackName.Y = topY + scaledSize * 0.35;
                 text_TrackName.X = centerX;
-                text_TrackName.Size = 25 * focusScale; // Font 
+                text_TrackName.Size = 28 * focusScale; // Font 
                 text_TrackName.Color = fontColor;
             }
 
@@ -92,15 +92,15 @@ namespace DeepFlight.src.gui {
                 time_PersonalBest.FontSize = (int)(19 * focusScale);
                 time_PersonalBest.Color = fontColor;
                 time_PersonalBest.X = centerX;
-                time_PersonalBest.Y = topY + scaledSize * 0.70;
+                time_PersonalBest.Y = topY + scaledSize * 0.65;
             }
 
             if ( time_GlobalBest != null) {
                 time_GlobalBest.FontSize = (int) (17 * focusScale);
                 time_GlobalBest.Color = fontColor;
                 time_GlobalBest.X = centerX;
-                time_GlobalBest.Y = topY + scaledSize * 0.60;
-                time_PersonalBest.Y = topY + scaledSize * 0.85;
+                time_GlobalBest.Y = topY + scaledSize * 0.57;
+                time_PersonalBest.Y = topY + scaledSize * 0.82;
                 time_PersonalBest.FontSize = (int)(17 * focusScale);
             }
         }
