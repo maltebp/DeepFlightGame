@@ -1,16 +1,16 @@
-﻿using DeepFlight.track;
+﻿using DeepFlight.network.exceptions;
+using DeepFlight.src.user;
+using DeepFlight.track;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace DeepFlight.src.network {
+namespace DeepFlight.network {
 
-    class GameAPIConnector {
+    public class GameAPIConnector : IGameAPIConnector {
 
         private static readonly string URL = "http://localhost:10000/gameapi";
 
@@ -23,16 +23,21 @@ namespace DeepFlight.src.network {
         }
 
 
-        // Deserialize the current round
+
         public Task<Round> GetCurrentRound() {      
             return Task.Run(() => {
 
                 var request = new RestRequest("round/current", DataFormat.Json);
                 var response = client.Get(request);
 
-                if( response.StatusCode != HttpStatusCode.OK ) {
-                    // TODO: Implement error handling 
-                    return null;
+                // Check connection error
+                if (response.ErrorException != null)
+                    throw new ConnectionException(client.BaseUrl.ToString());
+
+                // Check for other unhandled status codes
+                if (response.StatusCode != HttpStatusCode.OK) {
+                    Console.WriteLine("Unhandled status code when loading current round: " + response.StatusCode);
+                    throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
                 }
 
                 var round = JsonConvert.DeserializeObject<Round>(response.Content);
@@ -42,40 +47,59 @@ namespace DeepFlight.src.network {
         }
 
 
-        public Task GetTrackBlockData(Track track) {
+
+        public Task<Round> GetPreviousRound() {
+            throw new System.NotImplementedException();
+        }
+
+
+        public Task<SortedDictionary<string, int>> GetRoundRatings(Round round, int count) {
+            throw new System.NotImplementedException();
+        }
+
+
+        public Task<byte[]> GetTrackBlockData(Track track) {
             return Task.Run(() => {
                 var request = new RestRequest("track/" +track.ID + "/blockdata");
                 var response = client.Get(request);
 
+                // Check connection error
+                if (response.ErrorException != null)
+                    throw new ConnectionException(client.BaseUrl.ToString());
+
+                // Check for other unhandled status codes
                 if (response.StatusCode != HttpStatusCode.OK) {
-                    // TODO: Implement error handling 
-                    return;
+                    Console.WriteLine("Unhandled status code when loading current round: " + response.StatusCode);
+                    throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
                 }
 
-                var blockData = response.RawBytes;
-                track.BlockData = blockData;
+                return response.RawBytes;
             });
         }
 
 
+        public Task<SortedDictionary<string, long>> GetUniversalRatings(int count) {
+            throw new System.NotImplementedException();
+        }
 
-        //public class RoundJsonConverter : JsonConverter {
 
-        //}
+        public Task<SortedDictionary<string, long>> GetTrackTimes(Track track, int count) {
+            throw new System.NotImplementedException();
+        }
+        
+
+        public Task<ulong> GetUserTrackTime(User user, Track track) {
+            throw new System.NotImplementedException();
+        }
 
 
-        //public class TemperatureConverter : JsonConverter<Temperature> {
-        //    public override Temperature Read(
-        //        ref Utf8JsonReader reader,
-        //        Type typeToConvert,
-        //        JsonSerializerOptions options) =>
-        //            Temperature.Parse(reader.GetString());
+        public Task<bool> UpdateUserTrackTime(User user, Track track, ulong newTime) {
+            throw new System.NotImplementedException();
+        }
 
-        //    public override void Write(
-        //        Utf8JsonWriter writer,
-        //        Temperature temperature,
-        //        JsonSerializerOptions options) =>
-        //            writer.WriteStringValue(temperature.ToString());
-        //}
+
+        Task<byte[]> IGameAPIConnector.GetTrackBlockData(Track track) {
+            throw new System.NotImplementedException();
+        }
     }
 }

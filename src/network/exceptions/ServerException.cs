@@ -10,10 +10,10 @@ namespace DeepFlight.network.exceptions {
 
         public string Response { get; }
 
-        ServerException() : base("An unknown exception occured on the server") { }
+        public ServerException() : base("An unknown exception occured on the server") { }
 
         /// <param name="responseMsg">Message obtained from the server</param>
-        ServerException(string response) : this() {
+        public ServerException(string response) : this() {
             Response = response;
         }
     }

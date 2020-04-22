@@ -61,8 +61,14 @@
     <Compile Include="src\gui\TextView.cs" />
     <Compile Include="src\gui\View.cs" />
     <Compile Include="src\Main.cs" />
+    <Compile Include="src\network\exceptions\APIException.cs" />
+    <Compile Include="src\network\exceptions\ConnectionException.cs" />
+    <Compile Include="src\network\exceptions\UnknownTrackException.cs" />
+    <Compile Include="src\network\exceptions\UnknownUserException.cs" />
     <Compile Include="src\network\GameAPIConnector.cs" />
-    <Compile Include="src\network\RestClint.cs" />
+    <Compile Include="src\network\IUserAPIConnector.cs" />
+    <Compile Include="src\network\IGameAPIConnector.cs" />
+    <Compile Include="src\network\exceptions\ServerException.cs" />
     <Compile Include="src\network\UserAPIConnector.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\physics\Movable.cs" />
@@ -74,7 +80,6 @@
     <Compile Include="src\rendering\Textures.cs" />
     <Compile Include="src\RestTest.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
-    <Compile Include="src\scenes\GlobalTracksScene.cs" />
     <Compile Include="src\scenes\LoadTestTrackScene.cs" />
     <Compile Include="src\scenes\LoginScene.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
@@ -94,6 +99,7 @@
     <Compile Include="src\track\TrackDeserializer.cs" />
     <Compile Include="src\track\TrackGenerator.cs" />
     <Compile Include="src\track\TrackLoader.cs" />
+    <Compile Include="src\user\User.cs" />
     <Compile Include="src\user\UserController.cs" />
     <Compile Include="src\utility\CharLists.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />

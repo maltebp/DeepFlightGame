@@ -1,14 +1,9 @@
 ﻿using DeepFlight.generation;
 using DeepFlight.gui;
+using DeepFlight.network;
 using DeepFlight.rendering;
 using DeepFlight.scenes;
-using DeepFlight.src.network;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeepFlight.src.scenes {
 
@@ -49,7 +44,7 @@ namespace DeepFlight.src.scenes {
 
             // Setup loading text
             loader = new LoadingTextView(camera_UI, y: height*0.10);
-            if (track != null) loader.Text = string.Format("Loading cave {0} from planet {1}", track.Name, track.Planet.Name);
+            if (track != null) loader.Text = string.Format("Travelling to cave {0} from planet {1}", track.Name, track.Planet.Name);
             else loader.Text = string.Format("Finding an unused cave from some planet");
 
             AddChildren(spinningPlanet, loader);
@@ -70,7 +65,8 @@ namespace DeepFlight.src.scenes {
             }
             if( online) {
                 var gameApi = new GameAPIConnector();
-                await gameApi.GetTrackBlockData(track);
+                var blockData = await gameApi.GetTrackBlockData(track);
+                track.BlockData = blockData;
             }
             await track.DeserializeBlockDataAsync();
             FinishLoad(track);

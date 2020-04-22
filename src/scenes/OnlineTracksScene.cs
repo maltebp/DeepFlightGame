@@ -1,14 +1,16 @@
-﻿using DeepFlight.generation;
+﻿
+using System; 
 using DeepFlight.gui;
+using DeepFlight.network;
+using DeepFlight.network.exceptions;
 using DeepFlight.rendering;
 using DeepFlight.src.gui;
-using DeepFlight.src.network;
 using DeepFlight.src.scenes;
 using DeepFlight.track;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
+
 
 
 namespace DeepFlight.scenes {
@@ -41,7 +43,7 @@ namespace DeepFlight.scenes {
             AddChild(menu_Tracks);
 
             // TextView for displaing potential error
-            text_Error = new TextView(camera_UI, "", Font.DEFAULT, 24, Color.White, width*0.5, height * 0.75);
+            text_Error = new TextView(camera_UI, "", Font.DEFAULT, 24, Color.White, width*0.5, height * 0.5);
             text_Error.Hidden = true;
             AddChild(text_Error);
 
@@ -69,8 +71,17 @@ namespace DeepFlight.scenes {
             loader.Hidden = false;
 
             // Load current round
-            var gameApi = new GameAPIConnector();
-            round = await gameApi.GetCurrentRound();
+
+            try {
+                var gameApi = new GameAPIConnector();
+                round = await gameApi.GetCurrentRound();
+            } catch(ConnectionException e) {
+                DisplayError("The universe seems to be offline right now :(");
+                return;
+            } catch(ServerException e) {
+                DisplayError("An unknown mishap seems to have occured :(");
+                return;
+            }
 
             int count = 0;
             foreach (var track in round.Tracks) {
@@ -82,6 +93,7 @@ namespace DeepFlight.scenes {
                 count++;
             }
 
+            loader.Hidden = true;
             menu_Tracks.Hidden = false;
             menu_Tracks.Focused = true;
         }
@@ -89,6 +101,8 @@ namespace DeepFlight.scenes {
         private void DisplayError(string errorMessage) {
             text_Error.Text = "Error: " + errorMessage;
             text_Error.Hidden = false;
+            menu_Tracks.Hidden = true;
+            loader.Hidden = true;
         }
 
     }

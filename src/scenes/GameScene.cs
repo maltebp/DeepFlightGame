@@ -180,7 +180,7 @@ namespace DeepFlight.scenes {
             if (e.Action == KeyAction.PRESSED) {
                 // Quit track
                 if (e.Key == Keys.Escape) {
-                    RequestSceneSwitch(new TrackSelectionScene());
+                    RequestSceneSwitch(new MainMenuScene());
                     return true;
                 }
 

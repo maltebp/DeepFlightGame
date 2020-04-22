@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace DeepFlight.network {
     public interface IGameAPIConnector {
 
-
         /// <summary>
         /// Get the current Round, including Track metadata, but not round ratings
         /// </summary>
@@ -66,7 +65,7 @@ namespace DeepFlight.network {
         /// <exception cref="UnknownTrackException"> Couldn't find track within API </exception>
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        bool UpdateUserTrackTime(User user, Track track, ulong newTime);
+        Task<bool> UpdateUserTrackTime(User user, Track track, ulong newTime);
 
 
         /// <summary>

@@ -4,21 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Linq;
-using DeepFlight.utility;
-
-//// Holds and initialize the loading, of the variious fonts in the game
-//public static class Font {
-
-//    p
-    
-   
-
-//    // Loads all created Font objects, using the given content
-//    public static void Load(ContentManager content) {
-//        Font.LoadAll(content);
-//    }
-//}
 
 /// <summary>
 /// Defines a Font in a series of different sizes
@@ -42,9 +27,9 @@ public class Font {
     private static LinkedList<Font> allFonts = new LinkedList<Font>();
 
 
-    public static readonly Font ROBOTO_BOLD_ITALIC = new Font("Roboto", true, true);
-    public static readonly Font ROBOTO_BOLD = new Font("Roboto", true, false);
-    public static readonly Font ARIAL = new Font("Arial");
+    //public static readonly Font ROBOTO_BOLD_ITALIC = new Font("Roboto", true, true);
+    //public static readonly Font ROBOTO_BOLD = new Font("Roboto", true, false);
+    //public static readonly Font ARIAL = new Font("Arial");
     public static readonly Font PIXELLARI = new Font("Pixellari");
 
     public static readonly Font DEFAULT = PIXELLARI;

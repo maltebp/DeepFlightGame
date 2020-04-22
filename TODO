@@ -7,6 +7,11 @@
         ☐ Online Track Selection (+ loading)
         ☐ Ranking
 
+    ✔ Setup Build
+        ✔ Linux
+        ✔ Windows
+        ✔ Mac
+
     ☐ User controller
     Should handle information about user that is logged in
 
@@ -19,6 +24,11 @@
     ☐ Drop shadow for textures and fonts
 
     ☐ Pop up window
+
+    ☐ Cancel awaited tasks  
+
+    ☐ Optimize Font loading
+    Check for existing files instead instead throwing exceptions
 
     ✔ Increase generation priority
 
@@ -33,10 +43,7 @@
     
     ☐ Stop inputs while minimized
 
-    ☐ Setup Build
-        ☐ Linux
-        ☐ Windows
-        ☐ Mac
+    
 
     Game Rendering:
     Optimize rendering of game
