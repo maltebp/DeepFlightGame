@@ -2,7 +2,8 @@
 using DeepFlight.rendering;
 using DeepFlight.src.gui;
 using DeepFlight.src.gui.debugoverlay;
-using DeepFlight.src.user;
+using DeepFlight.user;
+using DeepFlight.user;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -139,7 +140,7 @@ namespace DeepFlight.scenes {
 
         // Log user in as guest, and switch to main menu
         private void LoginAsGuest() {
-            UserController.LoginAsGuest();
+            User.LocalUser.Guest = true;
             RequestSceneSwitch(new MainMenuScene());
         }
 

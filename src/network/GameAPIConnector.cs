@@ -1,5 +1,5 @@
 ﻿using DeepFlight.network.exceptions;
-using DeepFlight.src.user;
+using DeepFlight.user;
 using DeepFlight.track;
 using Newtonsoft.Json;
 using RestSharp;
@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace DeepFlight.network {
 
@@ -36,7 +37,7 @@ namespace DeepFlight.network {
 
                 // Check for other unhandled status codes
                 if (response.StatusCode != HttpStatusCode.OK) {
-                    Console.WriteLine("Unhandled status code when loading current round: " + response.StatusCode);
+                    Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
                     throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
                 }
 
@@ -69,7 +70,7 @@ namespace DeepFlight.network {
 
                 // Check for other unhandled status codes
                 if (response.StatusCode != HttpStatusCode.OK) {
-                    Console.WriteLine("Unhandled status code when loading current round: " + response.StatusCode);
+                    Console.WriteLine("Unhandled status code when fetching Track data: " + response.StatusCode);
                     throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
                 }
 
@@ -94,7 +95,11 @@ namespace DeepFlight.network {
 
 
         public Task<bool> UpdateUserTrackTime(User user, Track track, ulong newTime) {
-            throw new System.NotImplementedException();
+            return Task.Run(() => {
+                // TODO: Implement track time updating here!
+                Thread.Sleep(2000);
+                return true;
+            });
         }
 
 

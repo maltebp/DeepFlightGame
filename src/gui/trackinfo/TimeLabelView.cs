@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace DeepFlight.src.gui.planetbox {
 
-
-
     /// <summary>
     /// View to display a time paired with a label:
     /// 
@@ -28,13 +26,14 @@ namespace DeepFlight.src.gui.planetbox {
 
         public long Time {
             set {
+                // Build time string
                 var time = TimeSpan.FromMilliseconds(value);
                 string timeString = "";
                 if( time.Minutes > 0 )
-                    timeString += time.Minutes.ToString("0:");
+                    timeString += time.Minutes.ToString("00:");
                 timeString += time.Seconds.ToString("00:");
                 timeString += (time.Milliseconds / 10).ToString("00");
-                text_Time.Text = timeString;
+                text_Time.Text = timeString; 
             }
         }
 

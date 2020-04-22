@@ -81,7 +81,6 @@
     <Compile Include="src\rendering\Textures.cs" />
     <Compile Include="src\RestTest.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
-    <Compile Include="src\scenes\LoadTestTrackScene.cs" />
     <Compile Include="src\scenes\LoginScene.cs" />
     <Compile Include="src\scenes\MainMenuScene.cs" />
     <Compile Include="src\scenes\OfflineTracksScene.cs" />
@@ -90,7 +89,6 @@
     <Compile Include="src\scenes\Scene.cs" />
     <Compile Include="src\scenes\TrackCompleteScene.cs" />
     <Compile Include="src\scenes\TrackLoadingScene.cs" />
-    <Compile Include="src\scenes\TrackSelectionScene.cs" />
     <Compile Include="src\Settings.cs" />
     <Compile Include="src\track\Checkpoint.cs" />
     <Compile Include="src\track\Generator.cs" />
@@ -101,7 +99,6 @@
     <Compile Include="src\track\TrackGenerator.cs" />
     <Compile Include="src\track\TrackLoader.cs" />
     <Compile Include="src\user\User.cs" />
-    <Compile Include="src\user\UserController.cs" />
     <Compile Include="src\utility\CharLists.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
     <Compile Include="src\utility\InputController.cs" />

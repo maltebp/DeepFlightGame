@@ -36,6 +36,6 @@ class Settings {
     public static readonly Color CLEAR_COLOR = Color.Green;
 
 
-    public static readonly Color COLOR_PRIMARY = new Color(15, 19, 27);
+    public static readonly Color COLOR_PRIMARY = new Color(40, 44, 52);
 
 }

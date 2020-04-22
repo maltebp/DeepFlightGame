@@ -74,7 +74,7 @@ namespace DeepFlight.src.scenes {
 
 
         private void FinishLoad(Track loadedTrack) {
-            RequestSceneSwitch(new GameScene(loadedTrack));
+            RequestSceneSwitch(new GameScene(loadedTrack, online));
         }
     }
 }

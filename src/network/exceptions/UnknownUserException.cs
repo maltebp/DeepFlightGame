@@ -1,4 +1,4 @@
-﻿using DeepFlight.src.user;
+﻿using DeepFlight.user;
 
 namespace DeepFlight.network.exceptions {
 

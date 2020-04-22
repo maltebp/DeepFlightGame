@@ -1,7 +1,7 @@
 ﻿using DeepFlight.gui;
 using DeepFlight.rendering;
 using DeepFlight.src.gui;
-using DeepFlight.src.user;
+using DeepFlight.user;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -39,7 +39,7 @@ namespace DeepFlight.scenes {
             menu.AddSimpleOption("Rankings", () => RequestSceneSwitch(new RankingsScene()));
             menu.AddSimpleOption("Offline Tracks", () => RequestSceneSwitch(new OfflineTracksScene()));
             menu.AddSimpleOption("Website", () => GoToWebsite() );
-            if( UserController.LoggedInAsGuest )
+            if( User.LocalUser.Guest )
                 menu.AddSimpleOption("Login", () => ToLoginScene() );
             else
                 menu.AddSimpleOption("Logout", () => ToLoginScene() );
@@ -62,7 +62,7 @@ namespace DeepFlight.scenes {
 
 
         private void ToLoginScene() {
-            UserController.Logout();
+            User.ResetLocalUser();
             RequestSceneSwitch(new LoginScene());
         }
 

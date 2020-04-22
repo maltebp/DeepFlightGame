@@ -38,16 +38,20 @@ namespace DeepFlight.scenes {
 
         private bool collisionEnabled = true;
 
+        private bool onlineTrack = false;
+
         private DebugInfoLine 
             infoLine_ShipPos,
             infoLine_ShipVel,
             infoLine_ShipRes,
             infoLine_ShipAcc,
             infoLine_CollisionEnabled;
+
         
 
-        public GameScene(Track track) {
+        public GameScene(Track track, bool onlineTrack) {
             this.track = track;
+            this.onlineTrack = onlineTrack;
             gameCamera.Zoom = DEFAULT_ZOOM;
         }
 
@@ -171,7 +175,7 @@ namespace DeepFlight.scenes {
         }
 
         private void TrackFinished() {
-            RequestSceneSwitch(new TrackCompleteScene(track, stopWatch.Elapsed));
+            RequestSceneSwitch(new TrackCompleteScene(track, stopWatch.Elapsed, onlineTrack));
         }
         
         
