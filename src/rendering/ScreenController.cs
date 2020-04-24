@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace DeepFlight.rendering {
 
     /// <summary>
@@ -13,7 +14,6 @@ namespace DeepFlight.rendering {
     /// </summary>
     public static class ScreenController {
         private static readonly double  BASE_HEIGHT = 720;
-        private static readonly bool    FULLSCREEN  = false;
 
         // Logical width/height of the screen (used as a base
         // for scaling different resolutions)
@@ -27,7 +27,9 @@ namespace DeepFlight.rendering {
         // Supported resolutions in th esystem
         public static Resolution[] allResolutions = {
             new Resolution(1920, 1080, 16, 9),
+            new Resolution(1600, 900, 16, 9),
             new Resolution(1366, 768, 16, 9),
+            new Resolution(1360, 768, 16, 9),
             new Resolution(1280, 720, 16, 9),
             new Resolution(1440, 900, 16, 10) // Mac
         };
@@ -65,8 +67,9 @@ namespace DeepFlight.rendering {
             availableResolutions = availableResolutionsLinked.ToArray();
 
             // Get the actual screen dimensions
-            if (FULLSCREEN)
+            #if !DEBUG
                 graphics.ToggleFullScreen();
+            #endif
 
             SetResolution(ScreenSize);
 

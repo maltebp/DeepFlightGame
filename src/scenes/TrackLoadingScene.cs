@@ -13,7 +13,7 @@ namespace DeepFlight.src.scenes {
     /// or deserializing the blocks depending on construct argument.
     /// The scene then starte the Game scene with that track.
     /// </summary>
-    public class TrackLoadingScene :Scene {
+    public class TrackLoadingScene : Scene {
 
         private Camera camera_UI = new Camera();
         private PlanetBoxView spinningPlanet;

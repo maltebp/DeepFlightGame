@@ -1,6 +1,8 @@
 ﻿using DeepFlight.generation;
 using DeepFlight.src;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 
 public static class Program {
@@ -9,10 +11,33 @@ public static class Program {
 
     [STAThread]
     static void Main() {
-        //BlockMapTest.RunTests();
+        
+        // Setup logging
+        Directory.CreateDirectory("logs");
+        var traceListener = new TextWriterTraceListener(Path.Combine("logs", "generic.log"));
+        Trace.Listeners.Add(traceListener);
+        Trace.AutoFlush = true;
 
-        var game = new ApplicationController();
-        game.Run();
+        Trace.TraceInformation("Program started");
+
+        bool error = false;
+
+        try {
+            var game = new ApplicationController();
+            game.Run();
+        } catch( Exception e) {
+            //Console.WriteLine("Exception occure: " + e.Message);
+            Trace.TraceError("\nFatal error: " + e);
+            error = true;
+        }
+
+        if (error)
+            Trace.TraceInformation("Program terminated with errors");
+        else
+            Trace.TraceInformation("Program terminated without errors");
+
+        // Apparently process is not killed automatically
+        Process.GetCurrentProcess().Kill();
 
         //TestTrackLoading();
 

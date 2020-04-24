@@ -4,7 +4,7 @@
         ✔ Login
         ✔ Offline Track Selection
         ✔ Main Menu
-        ☐ Online Track Selection (+ loading)
+        ✔ Online Track Selection (+ loading)
         ☐ Ranking
 
     ✔ Setup Build
@@ -12,7 +12,7 @@
         ✔ Windows
         ✔ Mac
 
-    ☐ User controller
+    ✔ User controller (named User simply)
     Should handle information about user that is logged in
 
     ☐ Create Box
@@ -42,8 +42,6 @@
     ☐ Make sure GameScene (or Track at least) is garbage collected
     
     ☐ Stop inputs while minimized
-
-    
 
     Game Rendering:
     Optimize rendering of game

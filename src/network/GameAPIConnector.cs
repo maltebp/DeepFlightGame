@@ -13,7 +13,7 @@ namespace DeepFlight.network {
 
     public class GameAPIConnector : IGameAPIConnector {
 
-        private static readonly string URL = "http://localhost:10000/gameapi";
+        private static readonly string URL = "http://maltebp.dk:10000/gameapi";
 
         private RestClient client;
 
@@ -25,7 +25,7 @@ namespace DeepFlight.network {
 
 
 
-        public Task<Round> GetCurrentRound() {      
+        public Task<Round> GetCurrentRound() {
             return Task.Run(() => {
 
                 var request = new RestRequest("round/current", DataFormat.Json);
@@ -62,6 +62,10 @@ namespace DeepFlight.network {
         public Task<byte[]> GetTrackBlockData(Track track) {
             return Task.Run(() => {
                 var request = new RestRequest("track/" +track.ID + "/blockdata");
+
+                Console.WriteLine("\nClient timeout: " + client.Timeout);
+                Console.WriteLine("Request timeout: " + request.Timeout);
+
                 var response = client.Get(request);
 
                 // Check connection error

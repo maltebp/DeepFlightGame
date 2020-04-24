@@ -61,6 +61,7 @@
     <Compile Include="src\gui\TextureView.cs" />
     <Compile Include="src\gui\TextView.cs" />
     <Compile Include="src\gui\View.cs" />
+    <Compile Include="src\logging\TraceWriter.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="src\network\exceptions\APIException.cs" />
     <Compile Include="src\network\exceptions\ConnectionException.cs" />

@@ -1,0 +1,21 @@
+erlend@WALL-E:~/Downloads/DeepFlight.zip/DeepFlight$ mono DeepFlight.exe
+
+Unhandled Exception:
+System.TypeLoadException: Could not load type 'Microsoft.Xna.Framework.Audio.OggStreamer' from assembly 'MonoGame.Framework, Version=3.7.1.189, Culture=neutral, PublicKeyToken=null'.
+  at Microsoft.Xna.Framework.Audio.OpenALSoundController..ctor () [0x00011] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.Audio.OpenALSoundController.get_GetInstance () [0x00007] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.SdlGamePlatform..ctor (Microsoft.Xna.Framework.Game game) [0x000d2] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.GamePlatform.PlatformCreate (Microsoft.Xna.Framework.Game game) [0x00000] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.Game..ctor () [0x001fb] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at ApplicationController..ctor () [0x0000b] in <6071301436bd402f90f0ac9da6abe72a>:0 
+  at Program.Main () [0x00000] in <6071301436bd402f90f0ac9da6abe72a>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.TypeLoadException: Could not load type 'Microsoft.Xna.Framework.Audio.OggStreamer' from assembly 'MonoGame.Framework, Version=3.7.1.189, Culture=neutral, PublicKeyToken=null'.
+  at Microsoft.Xna.Framework.Audio.OpenALSoundController..ctor () [0x00011] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.Audio.OpenALSoundController.get_GetInstance () [0x00007] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.SdlGamePlatform..ctor (Microsoft.Xna.Framework.Game game) [0x000d2] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.GamePlatform.PlatformCreate (Microsoft.Xna.Framework.Game game) [0x00000] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at Microsoft.Xna.Framework.Game..ctor () [0x001fb] in <4fc8466c27384bb19c7b81b2a6a71083>:0 
+  at ApplicationController..ctor () [0x0000b] in <6071301436bd402f90f0ac9da6abe72a>:0 
+  at Program.Main () [0x00000] in <6071301436bd402f90f0ac9da6abe72a>:0 
+erlend@WALL-E:~/Downloads/DeepFlight.zip/DeepFlight$
+
