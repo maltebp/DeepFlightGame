@@ -67,7 +67,9 @@ namespace DeepFlight.src.gui {
         public SimpleMenuOption(Camera camera, string label, Font font, int fontSize, Color color)
             : base(camera, label, font, fontSize, color, 0, 0) {
             rightMarker = new SelectionMarker(this);
+            rightMarker.Hidden = true;
             leftMarker = new SelectionMarker(this);
+            leftMarker.Hidden = true;
             AddChildren(rightMarker, leftMarker);
             VOrigin = VerticalOrigin.TOP;
             UpdatePosition();

@@ -1,7 +1,0 @@
-Ikke-afviklet undtagelse: System.NullReferenceException: Screen resolution 1600x900 not supported.
-   ved DeepFlight.rendering.ScreenController.Initialize(GraphicsDeviceManager graphics) i C:\Users\malte\VisualStudioProjects\DeepFlight\src\rendering\ScreenController.cs:linje 56
-   ved ApplicationController.LoadContent() i C:\Users\malte\VisualStudioProjects\DeepFlight\src\Application.cs:linje 52
-   ved Microsoft.Xna.Framework.Game.Initialize()
-   ved Microsoft.Xna.Framework.Game.DoInitialize()
-   ved Microsoft.Xna.Framework.Game.Run(GameRunBehavior runBehavior)
-   ved Program.Main() i C:\Users\malte\VisualStudioProjects\DeepFlight\src\Main.cs:linje 30

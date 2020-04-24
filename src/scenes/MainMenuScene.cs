@@ -35,9 +35,9 @@ namespace DeepFlight.scenes {
             menu = new SimpleMenuView(ui, Font.DEFAULT, 34, Color.White, 35);
             menu.Y = height * 0.20;
 
-            menu.AddSimpleOption("Play Track", () => RequestSceneSwitch(new OnlineTracksScene()));
-            menu.AddSimpleOption("Rankings", () => RequestSceneSwitch(new RankingsScene()));
+            menu.AddSimpleOption("Online Tracks", () => RequestSceneSwitch(new OnlineTracksScene()));
             menu.AddSimpleOption("Offline Tracks", () => RequestSceneSwitch(new OfflineTracksScene()));
+            menu.AddSimpleOption("Rankings", () => RequestSceneSwitch(new RankingsScene()));
             menu.AddSimpleOption("Website", () => GoToWebsite() );
             if( User.LocalUser.Guest )
                 menu.AddSimpleOption("Login", () => ToLoginScene() );

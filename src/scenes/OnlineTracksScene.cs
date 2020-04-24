@@ -49,7 +49,7 @@ namespace DeepFlight.scenes {
             AddChild(text_Error);
 
             // Loader 
-            loader = new LoadingTextView(camera_UI, "Loading offline tracks", Font.DEFAULT, 24, Color.White, width*0.5, height*0.5);
+            loader = new LoadingTextView(camera_UI, "Loading tracks for current round", Font.DEFAULT, 24, Color.White, width*0.5, height*0.5);
             loader.Hidden = true;
             AddChild(loader);
 

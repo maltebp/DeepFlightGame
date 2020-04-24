@@ -87,7 +87,7 @@ namespace DeepFlight.scenes {
             menu.Hidden = true;
             text_Result.Hidden = true;
             loader.Hidden = false;
-            loader.Text = "Checking for a new record...";
+            loader.Text = "Checking for a new record";
 
             bool newRecord = false;
             try {
@@ -117,11 +117,18 @@ namespace DeepFlight.scenes {
         }
 
         private void DisplayResult(string result) {
-            menu.Focused = true;
             menu.Hidden = false;
+            menu.Focused = true;
+
+            /* Due to the way things are drawn, the simple menu options bug out,
+             * causing them to be drawn while not focused.
+             * This is a bad fix, but it's a fix nonetheless
+             */
+            menu.FocusedOptionIndex = 1;
+            menu.FocusedOptionIndex = 0;
+
             text_Result.Hidden = false;
             loader.Hidden = true;
-
             text_Result.Text = result;
         }
 

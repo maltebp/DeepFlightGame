@@ -11,78 +11,52 @@ using System.Windows;
 namespace DeepFlight.generation {
     public static class TrackLoader {
 
-        // Whether or not to use saved track files or generate new ones
-        private static readonly bool LOAD_TRACKS = true;
+        private static readonly string GENERATOR_FILE_NAME  = "TrackGenerator.exe";
+        private static readonly string LOCAL_TRACK_FOLDER   = "localtrack";
+        private static readonly string FILE_EXTENSION       = ".dftbd";
+       
 
-        // Save track as a file after generating it
-        private static readonly bool SAVE_TRACK = true;
-
-        private static readonly string FILE_EXTENSION = ".dftbd";
-
-        private static readonly bool RANDOM_GENERATION = true;
-        private static readonly int GENERATION_SEED = 1234;
-
-        private static readonly string LOCAL_TRACK_FOLDER = "localtrack";
-        private static readonly string GENERATOR_FILE_NAME = "TrackGenerator.exe";
-
-
-
-        public static Task<Track[]> LoadOnlineTracks() { 
-            // Running a seperate task, and returning Task, we make the
-            // method 'awaitable'.
+        /// <summary>
+        /// Load all the pregenerated Tracks which are shipped with the game,
+        /// and can be played offline.
+        /// </summary>
+        /// <returns></returns>
+        public static Task<Track[]> LoadOfflineTracks() {
             return Task.Run(() => {
-                    Console.WriteLine("Loading tracks...");
+                Console.WriteLine("Loading offline tracks...");
+                var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "/";
+                string[] trackFiles = Directory.GetFiles(offlineTracksFolder, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
 
-                    // Fetching the permanent assembly execution path (for this assembly that is)
-                    string executionPath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-                    Console.WriteLine("Execution path: '{0}'", executionPath);
+                Track track;
+                var tracks = new LinkedList<Track>();
 
-                    // Adjust to directory, not executable file
-                    Uri baseAddress = new Uri(executionPath);
-                    //Uri directory = new Uri(baseAddress, ".").LocalPath;
+                track = LoadTrackFile(offlineTracksFolder + "aerth" + FILE_EXTENSION);
+                track.ID = 0;
+                track.Name = "AGRC-313";
+                track.Seed = 0;
+                track.Planet = new Planet(1, "Aerth", new int[] { 49, 102, 44 });
+                tracks.AddLast(track);
 
-                    string executionDirectory = new Uri(new Uri(executionPath), ".").LocalPath;// new Uri(executionPath).LocalPath;//directory.OriginalString.Remove(0, 8); // Remove the 'file:///' from the string
-                    Console.WriteLine("Execution directory: " + executionDirectory);
+                track = LoadTrackFile(offlineTracksFolder + "smar" + FILE_EXTENSION);
+                track.ID = 0;
+                track.Name = "IAUI-636";
+                track.Seed = 0;
+                track.Planet = new Planet(1, "Smar", new int[] { 150, 30, 9 });
+                tracks.AddLast(track);
 
-                    string[] trackFiles = Directory.GetFiles(executionDirectory, "*"+FILE_EXTENSION).Select(Path.GetFileName).ToArray();
-                    Console.WriteLine("Track files:  " );
-                    foreach (var file in trackFiles) Console.Write("'{0}'  ", file);
-                    Console.WriteLine("\n");
+                track = LoadTrackFile(offlineTracksFolder + "turnsa" + FILE_EXTENSION);
+                track.ID = 0;
+                track.Name = "NSIY-432";
+                track.Seed = 0;
+                track.Planet = new Planet(1, "Turnsa", new int[] { 120, 120, 90 });
+                tracks.AddLast(track);
 
-                    LinkedList<Track> tracks = new LinkedList<Track>();
+                Console.WriteLine("Loaded offline tracks: ");
+                foreach (var offlineTrack in tracks) {
+                    Console.WriteLine("\t" + offlineTrack);
+                }
 
-                    // Load saved tracks
-                    if(LOAD_TRACKS && trackFiles.Length > 0) {
-                            Console.WriteLine("Loading saved tracks");
-                            foreach(var file in trackFiles) {
-                                var trackData = File.ReadAllBytes(file);
-                                var track = TrackDeserializer.DeserializeMetaData(trackData);
-                                Console.WriteLine("Loaded track: " + track.Name);
-                                tracks.AddLast(track);
-                            }
-                        }
-
-                    // Generate new track
-                    else {
-                        Console.WriteLine("Generating new track");
-                        // Generate track (textures must be loaded before generating)
-                        var seed = GENERATION_SEED;
-                        if (RANDOM_GENERATION) {
-                            Console.WriteLine("Using random seed");
-                            Random rand = new Random();
-                        seed = rand.Next(0, 999999);
-                        }
-                        var track = Generator.GenerateTrack(seed);
-                        Console.WriteLine("Generated track: " + track);
-                        if (SAVE_TRACK) {
-                            Console.WriteLine("Saving track");
-                            //File.WriteAllBytes(seed + ".dft", TrackSerializer.Serialize(track));
-                        }
-                        track.Name = seed.ToString();
-                        tracks.AddLast(track);
-                    }
-
-                    return tracks.ToArray();
+                return tracks.ToArray();
             });
         }
 
@@ -157,50 +131,6 @@ namespace DeepFlight.generation {
             return LoadTrackFile(folderPath + trackFiles[0]);            
         }
 
-
-        /// <summary>
-        /// Load all the pregenerated Tracks which are shipped with the game,
-        /// and can be played offline.
-        /// </summary>
-        /// <returns></returns>
-        public static Task<Track[]> LoadOfflineTracks() {
-            return Task.Run(() => {
-                Console.WriteLine("Loading offline tracks...");
-                var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "/";
-                string[] trackFiles = Directory.GetFiles(offlineTracksFolder, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
-
-                Track track;
-                var tracks = new LinkedList<Track>();
-
-                track = LoadTrackFile(offlineTracksFolder + "aerth" + FILE_EXTENSION);
-                track.ID = 0;
-                track.Name = "AGRC-313";
-                track.Seed = 0;
-                track.Planet = new Planet(1, "Aerth", new int[] { 49, 102, 44 });
-                tracks.AddLast(track);
-
-                track = LoadTrackFile(offlineTracksFolder + "smar" + FILE_EXTENSION);
-                track.ID = 0;
-                track.Name = "IAUI-636";
-                track.Seed = 0;
-                track.Planet = new Planet(1, "Smar", new int[] { 150, 30, 9 });
-                tracks.AddLast(track);
-
-                track = LoadTrackFile(offlineTracksFolder + "turnsa" + FILE_EXTENSION);
-                track.ID = 0;
-                track.Name = "NSIY-432";
-                track.Seed = 0;
-                track.Planet = new Planet(1, "Turnsa", new int[] { 120, 120, 90 });
-                tracks.AddLast(track);
-                
-                Console.WriteLine("Loaded offline tracks: ");
-                foreach(var offlineTrack in tracks) {
-                    Console.WriteLine("\t" + offlineTrack);
-                }
-
-                return tracks.ToArray();
-            });
-        }
 
 
 

@@ -65,7 +65,9 @@ namespace DeepFlight.gui {
         public void AddMenuOption(View optionView, OptionSelectCallback optionCallback) {
             AddChild(optionView);
             options.AddLast(optionView);
-            optionCallbacks.Add(optionView, optionCallback);            
+            optionCallbacks.Add(optionView, optionCallback);
+            if (Focused && OptionCount == 1)
+                FocusedOptionIndex = 0;
         }
 
         protected override void OnChildRemoved(View removedChild) {
