@@ -15,6 +15,8 @@
     ✔ User controller (named User simply)
     Should handle information about user that is logged in
 
+    ☐ Make file paths independent of OS
+
     ☐ Create Box
     White box which you can put some content in
 
@@ -23,8 +25,6 @@
 
     ☐ Make it resolution independent
     Right now you must have one of the available resolutions to play it
-
-    
  
     ☐ Drop shadow for textures and fonts
 

@@ -51,8 +51,6 @@ namespace DeepFlight.generation {
 
                     LinkedList<Track> tracks = new LinkedList<Track>();
 
-        
-
                     // Load saved tracks
                     if(LOAD_TRACKS && trackFiles.Length > 0) {
                             Console.WriteLine("Loading saved tracks");
@@ -98,7 +96,7 @@ namespace DeepFlight.generation {
 
             // Setup needed paths
             var executionDir = GetExecutionDirectory();
-            var trackFolderPath = GetExecutionDirectory() + LOCAL_TRACK_FOLDER + "\\";
+            var trackFolderPath = GetExecutionDirectory() + LOCAL_TRACK_FOLDER + "/";
             var generatorPath = GetExecutionDirectory() + GENERATOR_FILE_NAME;
                 
             var tcs = new TaskCompletionSource<Track>();
@@ -168,7 +166,7 @@ namespace DeepFlight.generation {
         public static Task<Track[]> LoadOfflineTracks() {
             return Task.Run(() => {
                 Console.WriteLine("Loading offline tracks...");
-                var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "\\";
+                var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "/";
                 string[] trackFiles = Directory.GetFiles(offlineTracksFolder, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
 
                 Track track;
