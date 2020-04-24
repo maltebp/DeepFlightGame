@@ -310,7 +310,8 @@ namespace DeepFlight.scenes {
             gameCamera.Y = ship.Y;
 
             track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
-                renderer.Draw(gameCamera, block);
+                if( block.Type == BlockType.SPACE )
+                    renderer.Draw(gameCamera, block);
             });
 
         }

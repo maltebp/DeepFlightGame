@@ -20,6 +20,11 @@
 
     ☐ Border Box
     Box with just a border
+
+    ☐ Make it resolution independent
+    Right now you must have one of the available resolutions to play it
+
+    
  
     ☐ Drop shadow for textures and fonts
 
