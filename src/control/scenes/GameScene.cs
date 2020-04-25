@@ -69,7 +69,10 @@ namespace DeepFlight.scenes {
             uiCamera.X = width / 2;
 
             // Create background
-            BackgroundColor = track.Planet.Color;
+            Color wallColor = (track.Planet.Color * Settings.TRACK_COLOR_ADJUST_WALL);
+            
+            wallColor.A = 255;
+            BackgroundColor = wallColor;
 
             ship = new Ship(gameCamera);
             AddChild(ship);
@@ -100,7 +103,6 @@ namespace DeepFlight.scenes {
             foreach (var checkpoint in track.Checkpoints) {
                 checkpoint.Reached = false;
                 checkpoint.Camera = gameCamera;
-                checkpoint.Color = new Color(track.Planet.Color*0.5f, 0.5f);
                 AddChild(checkpoint);
             }
 

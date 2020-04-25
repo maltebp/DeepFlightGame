@@ -25,6 +25,12 @@ namespace DeepFlight.track {
             Color = new Color(color[0], color[1], color[2]);
         }
 
+        public Planet(long id, string name, Color color) {
+            ID = id;
+            Name = name;
+            Color = color;
+        }
+
         public override string ToString() {
             return
                 "Planet( " +

@@ -36,6 +36,7 @@ namespace DeepFlight.src.scenes {
             var height = ScreenController.BaseHeight;
 
             BackgroundColor = Settings.COLOR_PRIMARY;
+            BackgroundTexture = Textures.BACKGROUND;
 
             // Setup the spinning planet
             spinningPlanet = new PlanetBoxView(camera_UI, unfocusColor: track != null ? track.Planet.Color : Color.White);

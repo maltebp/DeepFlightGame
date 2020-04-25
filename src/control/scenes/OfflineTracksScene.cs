@@ -29,6 +29,7 @@ namespace DeepFlight.scenes {
             float width = (float) ScreenController.BaseWidth;
 
             BackgroundColor = Settings.COLOR_PRIMARY;
+            BackgroundTexture = Textures.BACKGROUND;
 
             text_SceneTitle = new TextView(camera_UI, "Offline Tracks", Font.DEFAULT, 42, Color.White, width * 0.50, height * 0.20);
             AddChild(text_SceneTitle);

@@ -100,7 +100,7 @@ namespace DeepFlight.generation {
                     generatedTrack.ID = 0;
                     generatedTrack.Name = "Unknown Cave";
                     generatedTrack.Seed = DateTime.Now.Millisecond;
-                    generatedTrack.Planet = new Planet(1, "Unknown Planet", new int[] { 40, 40, 80 });
+                    generatedTrack.Planet = new Planet(1, "Unknown Planet", Settings.COLOR_PRIMARY * 1.25f);
 
                     var timeController = OfflineTrackTimeController.Instance;
                     timeController.DeleteTime(generatedTrack.Name);

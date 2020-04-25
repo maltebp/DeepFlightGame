@@ -123,7 +123,9 @@ public static class TrackDeserializer {
                 track.StartY = reader.ReadInt32();
                 track.StartRotation = reader.ReadDouble();
 
-
+                var brigtenColor = Settings.TRACK_COLOR_ADJUST_TRACK;
+                var planetColor = track.Planet.Color;
+                var trackColor = new Color(planetColor.R+brigtenColor, planetColor.G+brigtenColor, planetColor.B+brigtenColor);
 
                 // Deserialize Blocks
                 while (true) {
@@ -137,13 +139,14 @@ public static class TrackDeserializer {
                     // Console.WriteLine("Read block: x={0}, y={1}, type={2}", blockX, blockY, blockType);
 
                     track.SetBlock((BlockType)blockType, blockX, blockY);
+                    track.GetBlock(blockX, blockY).Color = trackColor;
                 }
                  
                 // Deserialize Checkpoints
                 LinkedList<Checkpoint> checkpoints = new LinkedList<Checkpoint>();
                 int checkPointIndex = 0;
                 while (stream.Position != stream.Length) {
-                    Checkpoint checkpoint = new Checkpoint(checkPointIndex++, new Color(Color.Red, 0.5f), reader.ReadInt32(), reader.ReadInt32());
+                    Checkpoint checkpoint = new Checkpoint(checkPointIndex++, new Color(Color.White, 0.5f), reader.ReadInt32(), reader.ReadInt32());
                     //Console.WriteLine("Read checkpoint: x={0}, y={1} ", checkpoint.X, checkpoint.Y);
                     checkpoints.AddLast(checkpoint);
                 }

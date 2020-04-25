@@ -28,6 +28,7 @@ namespace DeepFlight.scenes {
 
             // General background of Scene
             BackgroundColor = Settings.COLOR_PRIMARY;
+            BackgroundTexture = Textures.BACKGROUND;
 
             sceneTitle = new TextView(camera_UI, "Rankings", Font.DEFAULT, 42, Color.White, 0, height * 0.20);
             AddChild(sceneTitle);
