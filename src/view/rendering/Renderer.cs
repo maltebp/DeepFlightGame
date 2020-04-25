@@ -33,6 +33,7 @@ public class Renderer {
 
             spriteBatch.Begin(
                 sortMode: SpriteSortMode.BackToFront,
+                blendState: BlendState.NonPremultiplied,
                 samplerState: SamplerState.PointClamp // Turn of anti-alias
             );
         }

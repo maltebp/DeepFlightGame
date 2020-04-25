@@ -15,7 +15,7 @@ public class Entity  {
     public virtual float Height { get; set; } = 1f;
 
     private float rotation = 0f;
-    public float Rotation {
+    public virtual float Rotation {
         get => rotation;
         set => rotation = MathExtension.Mod(value, (float)(2 * Math.PI));
     }

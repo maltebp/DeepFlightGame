@@ -67,9 +67,11 @@
     <Compile Include="src\control\Application.cs" />
     <Compile Include="src\control\offlinetracktime\OfflineTrackTimeController.cs" />
     <Compile Include="src\control\offlinetracktime\OfflineTrackTimeMap.cs" />
+    <Compile Include="src\control\scenes\MainMenuScene.cs" />
     <Compile Include="src\model\gameobjects\Entity.cs" />
     <Compile Include="src\model\gameobjects\Ship.cs" />
     <Compile Include="src\model\gameobjects\Space.cs" />
+    <Compile Include="src\view\gui\BorderView.cs" />
     <Compile Include="src\view\gui\debugoverlay\DebugInfoView.cs" />
     <Compile Include="src\view\gui\debugoverlay\DebugOverlay.cs" />
     <Compile Include="src\view\gui\LoadingTextView.cs" />
@@ -103,7 +105,6 @@
     <Compile Include="src\view\rendering\Textures.cs" />
     <Compile Include="src\control\scenes\GameScene.cs" />
     <Compile Include="src\control\scenes\LoginScene.cs" />
-    <Compile Include="src\control\scenes\MainMenuScene.cs" />
     <Compile Include="src\control\scenes\OfflineTracksScene.cs" />
     <Compile Include="src\control\scenes\OnlineTracksScene.cs" />
     <Compile Include="src\control\scenes\RankingsScene.cs" />

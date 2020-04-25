@@ -19,17 +19,17 @@
 
     ✔ Increase generation priority
 
-    ☐ Implement time tracking for offline trackks
+    ✔ Stop inputs while minimized
+
+    ✔ Implement time tracking for offline trackks
+
+    ☐ Border Box
+    Box with just a border
 
     ☐ Cancel awaited tasks  
 
     ☐ Kill generation process
     When generation of a track is cancelled preemptively, the generator process is not killed
-
-    ☐ Stop inputs while minimized
-
-    ☐ Border Box
-    Box with just a border
 
     ☐ Create Box
     White box which you can put some content in
