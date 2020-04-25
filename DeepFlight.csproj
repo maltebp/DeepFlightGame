@@ -76,6 +76,7 @@
     <Compile Include="src\view\gui\debugoverlay\DebugOverlay.cs" />
     <Compile Include="src\view\gui\LoadingTextView.cs" />
     <Compile Include="src\view\gui\MenuView.cs" />
+    <Compile Include="src\view\gui\RatingboardView.cs" />
     <Compile Include="src\view\gui\trackinfo\PlanetBoxView.cs" />
     <Compile Include="src\view\gui\trackinfo\TextPlanetBoxView.cs" />
     <Compile Include="src\view\gui\trackinfo\TimeLabelView.cs" />

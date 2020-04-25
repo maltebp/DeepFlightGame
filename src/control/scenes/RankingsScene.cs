@@ -1,5 +1,9 @@
-﻿using DeepFlight.rendering;
+﻿using DeepFlight.gui;
+using DeepFlight.network;
+using DeepFlight.network.exceptions;
+using DeepFlight.rendering;
 using DeepFlight.utility.KeyboardController;
+using DeepFlight.view.gui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -17,6 +21,12 @@ namespace DeepFlight.scenes {
 
         private TextView text_Error;
 
+        private LoadingTextView loader; 
+
+        private RatingboardView 
+            ratingboard_LastRound,
+            ratingboard_Universal;
+
         protected override void OnInitialize() {
 
             // Height of UI screen
@@ -30,7 +40,7 @@ namespace DeepFlight.scenes {
             BackgroundColor = Settings.COLOR_PRIMARY;
             BackgroundTexture = Textures.BACKGROUND;
 
-            sceneTitle = new TextView(camera_UI, "Rankings", Font.DEFAULT, 42, Color.White, 0, height * 0.20);
+            sceneTitle = new TextView(camera_UI, "Online Rankings", Font.DEFAULT, 42, Color.White, 0, height * 0.15);
             AddChild(sceneTitle);
 
             // Text for displaying errors on center of screen
@@ -38,8 +48,46 @@ namespace DeepFlight.scenes {
             text_Error.Hidden = true;
             AddChild(text_Error);
 
-            // TODO: Remove this once the scene is implemented
-            DisplayError("This scene is not implemented yet! :( Come back later...");
+
+            ratingboard_Universal = new RatingboardView(camera_UI, "Universal Ratings (Top 5)", -width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
+            ratingboard_LastRound = new RatingboardView(camera_UI, "Last Round Ratings (Top 5)", width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
+            AddChildren(ratingboard_Universal, ratingboard_LastRound);
+
+            loader = new LoadingTextView(camera_UI, y: height*0.5);
+            AddChild(loader);
+
+            LoadRatings();
+        }
+
+
+
+        /*
+         * Contant the GameAPI for the current ratings */
+        public async void LoadRatings() {
+            ratingboard_Universal.Hidden = true;
+            ratingboard_LastRound.Hidden = true;
+
+            loader.Hidden = false;
+            loader.Text = "Checking who's the very best";
+
+            try {
+                var gameApi = new GameAPIConnector();
+                ratingboard_Universal.UpdateRatings(await gameApi.GetUniversalRatings(5));
+                ratingboard_LastRound.UpdateRatings(await gameApi.GetRoundRatings(null, 5));
+            }
+            catch (ConnectionException e) {
+                DisplayError("The universe seems to be offline right now :(");
+                return;
+            }
+            catch (ServerException e) {
+                DisplayError("An unknown mishap seems to have occured :(");
+                return;
+            }
+
+            loader.Hidden = true;
+            ratingboard_Universal.Hidden = false;
+            ratingboard_LastRound.Hidden = false;
+
         }
 
 
@@ -55,6 +103,7 @@ namespace DeepFlight.scenes {
         }
 
         private void DisplayError(string message) {
+            loader.Hidden = true;
             text_Error.Text = "Error: " + message;
             text_Error.Hidden = false;
         }

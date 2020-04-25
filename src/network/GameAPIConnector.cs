@@ -54,8 +54,22 @@ namespace DeepFlight.network {
         }
 
 
-        public Task<SortedDictionary<string, int>> GetRoundRatings(Round round, int count) {
-            throw new System.NotImplementedException();
+        public Task<List<UserRating>> GetRoundRatings(Round round, int count) {
+            return Task.Run(() => {
+                // TODO: Implement correct api!!
+
+                List<UserRating> ratings = new List<UserRating>();
+                ratings.Add(new UserRating() { name = "s123456", rating = 3.30 });
+                ratings.Add(new UserRating() { name = "s185139", rating = 3.12 });
+                ratings.Add(new UserRating() { name = "s234902", rating = 2.90 });
+                ratings.Add(new UserRating() { name = "s249358", rating = 2.54 });
+                ratings.Add(new UserRating() { name = "s234009", rating = 2.40 });
+                ratings.Add(new UserRating() { name = "s124639", rating = 2.35 });
+                ratings.Add(new UserRating() { name = "s143964", rating = 1.99 });
+
+                Thread.Sleep(2000);
+                return ratings;
+            });
         }
 
 
@@ -83,12 +97,28 @@ namespace DeepFlight.network {
         }
 
 
-        public Task<SortedDictionary<string, long>> GetUniversalRatings(int count) {
-            throw new System.NotImplementedException();
+        public Task<List<UserRating>> GetUniversalRatings(int count) {
+            return Task.Run(() => {
+                // TODO: Implement correct api!!
+
+                List<UserRating> ratings = new List<UserRating>();
+                ratings.Add(new UserRating() { name = "s185139", rating = 3.59 });
+                ratings.Add(new UserRating() { name = "s123456", rating = 3.12 });
+                ratings.Add(new UserRating() { name = "s249358", rating = 2.80 });
+                ratings.Add(new UserRating() { name = "s234902", rating = 2.23 });
+                ratings.Add(new UserRating() { name = "s124639", rating = 1.50 });
+                ratings.Add(new UserRating() { name = "s143964", rating = 1.26 });
+                ratings.Add(new UserRating() { name = "s234009", rating = 1.24 });
+
+                Thread.Sleep(2000);
+                return ratings;
+            });
         }
 
 
-        public Task<SortedDictionary<string, long>> GetTrackTimes(Track track, int count) {
+
+
+        public Task<List<UserTrackTime>> GetTrackTimes(Track track, int count) {
             throw new System.NotImplementedException();
         }
         
@@ -106,9 +136,12 @@ namespace DeepFlight.network {
             });
         }
 
+        public Task<double> GetUserUniversalRating(User user) {
+            throw new NotImplementedException();
+        }
 
-        Task<byte[]> IGameAPIConnector.GetTrackBlockData(Track track) {
-            throw new System.NotImplementedException();
+        public Task<double> GetUserRoundRating(User user, Round round) {
+            throw new NotImplementedException();
         }
     }
 }

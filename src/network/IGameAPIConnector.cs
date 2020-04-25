@@ -72,35 +72,75 @@ namespace DeepFlight.network {
         /// Get the Universal Rating of highest rated users
         /// </summary>
         /// <param name="numberOfRatings"> Maximum number of ratings to get </param>
-        /// <returns> Dictionairy of usernames paired with ratings sorted from best to worst</returns>
+        /// <returns> A list of UserRating structs sorted from best to worts rating</returns>
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<SortedDictionary<string, long>> GetUniversalRatings(int count);
+        Task<List<UserRating>> GetUniversalRatings(int count);
+
+
+
+
+        /// <summary>
+        /// Gets the Universal rating for the user
+        /// </summary>
+        /// <param name="user">User to find rating for</param>
+        /// <returns>The rating of the user</returns>
+        /// 
+        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
+        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
+        Task<double> GetUserUniversalRating(User user);
 
 
         /// <summary>
         /// Get the Rating of the highest rated Users on the given Round
         /// </summary>
         /// <param name="numberOfRatings"> Maximum number of ratings to get </param>
-        /// <returns> Dictionairy of usernames paired with ratings sorted from best to worst,
+        /// <returns> A list of UserRating structs sorted from best to worst,
         ///            or an empty list if the Round hasn't been rated yet</returns>
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<SortedDictionary<string, int>> GetRoundRatings(Round round, int count);
+        Task<List<UserRating>> GetRoundRatings(Round round, int count);
+
+
+
+        /// <summary>
+        /// Gets the rating for the given user for the given round
+        /// </summary>
+        /// <param name="user">User to find rating for</param>
+        /// <param name="round">Round to find rating for</param>
+        /// <returns>The rating of the user</returns>
+        /// 
+        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
+        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
+        Task<double> GetUserRoundRating(User user, Round round);
 
 
         /// <summary>
         /// Get the track times for the given Track sorted from best time to worst.
         /// </summary>
         /// <param name="count"> Number of maximum times to get </param>
-        /// <returns> Dictionairy of usernames paired with their track time sorted from best to worst. Size if between 0 and 'count' </returns>
+        /// <returns> List of USerTrackTime structs withs sernames paired with their track time sorted from best to worst.
+        /// Size if between 0 and 'count' </returns>
         ///
         /// <exception cref="UnknownTrackException"> Track doesn't exist </exception>
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<SortedDictionary<string, long>> GetTrackTimes(Track track, int count);
+        Task<List<UserTrackTime>> GetTrackTimes(Track track, int count);
 
+
+
+    }
+
+
+    public struct UserTrackTime {
+        public string name;
+        public long time;
+    }
+
+    public struct UserRating {
+        public string name;
+        public double rating;
     }
 }

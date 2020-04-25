@@ -43,6 +43,7 @@ namespace DeepFlight.scenes {
 
             // Player box
             border_User = new BorderView(ui, borderWidth: 5f, x: menuX, y: height* 0.20, width: width * 0.27f, height: height * 0.23f);
+            border_User.BackgroundColor = new Color(Color.Black, 0.25f);
             AddChild(border_User);
 
             text_PlayingAs = new TextView(ui, "Playing as", size: 24, x: menuX, y:  height * 0.13);
