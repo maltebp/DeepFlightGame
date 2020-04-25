@@ -19,6 +19,8 @@ public class Settings {
 
     public static readonly Color CLEAR_COLOR = Color.Green;
 
+    public static readonly float TRACK_COLOR_ADJUST_TRACK   = 0.75f;
+    public static readonly float TRACK_COLOR_ADJUST_WALL    = 1.25f;
 
     public static readonly Color COLOR_PRIMARY = new Color(40, 44, 52);
 

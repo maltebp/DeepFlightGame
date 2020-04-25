@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework;
 
 class Ship : TextureView {
 
-    // TODO: Fix the base constructor call
-    public Ship(Camera camera) : base(camera, Textures.SHIP, Color.White, 0,0, 5, 3) {
+    public Ship(Camera camera) : base(camera, Textures.SHIP, Color.White, 0,0, 5, 3.2f) {
         Resistance = 0.97f;
-        Color = Color.DarkRed;
+        Color = Color.White;
         MaxVelocity = 20f;
         AddCollider(new TriangleCollider(this));
     }

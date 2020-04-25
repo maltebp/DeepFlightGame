@@ -1,6 +1,7 @@
 ﻿using DeepFlight.rendering;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,23 @@ namespace DeepFlight {
             set {
                 if (background == null)
                     background = new TextureView(
-                        new Camera(layer: 1f), Textures.SQUARE);
+                        new Camera(layer: 1f), BackgroundTexture);
                 background.Color = value;
+            }
+        }
+
+
+        public Texture2D BackgroundTexture {
+            get {
+                if (background == null) return Textures.SQUARE;
+                return background.Texture;
+            }
+            set {
+                if (background == null)
+                    background = new TextureView(
+                        new Camera(layer: 1f), value);
+                background.Color = BackgroundColor;
+                background.Texture = value;
             }
         }
 

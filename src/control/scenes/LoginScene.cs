@@ -16,6 +16,7 @@ namespace DeepFlight.scenes {
         private Camera ui = new Camera();
         private TextureView title;
         private TextView errorText;
+        private TextView text_Login;
         private LoadingTextView loader;
         private TextInput textinput_Username, textinput_Password;
         private SimpleMenuOption menuoption_LoginAsGuest;
@@ -31,34 +32,44 @@ namespace DeepFlight.scenes {
             ui.Y = height / 2;
 
             BackgroundColor = Settings.COLOR_PRIMARY;
+            BackgroundTexture = Textures.BACKGROUND;
+
 
             title = new TextureView(ui, Textures.TITLE);
-            title.Height = (int)(height / 6);
-            title.Width = title.Height * (Textures.TITLE.Width / Textures.TITLE.Height);
-            title.X = 0;
-            title.Y = height * 0.20;
+            title.Height = (int)(height * 0.45);
+            title.Width = title.Height * (Textures.TITLE.Width / (float) Textures.TITLE.Height);
+            title.X = width*0.22;
+            title.Y = height * 0.45;
             AddChild(title);
 
-            textinput_Username = new TextInput(ui, "Username", Font.PIXELLARI, 36, Color.White, 0, height * 0.45, (float)width * 0.30f);
+
+            var menuX = -width * 0.25;
+
+
+            text_Login = new TextView(ui, "Login", Font.DEFAULT, 38, Color.White, menuX, height * 0.20);
+            AddChild(text_Login);
+
+            textinput_Username = new TextInput(ui, "Username", Font.PIXELLARI, 36, Color.White, menuX, height * 0.40, (float)width * 0.30f);
             textinput_Username.MaxLength = 20;
             textinput_Username.Focused = true;
             AddChild(textinput_Username);
 
-            textinput_Password = new TextInput(ui, "Password", Font.PIXELLARI, 36, Color.White, 0, height * 0.65, (float)width * 0.30f);
+            textinput_Password = new TextInput(ui, "Password", Font.PIXELLARI, 36, Color.White, menuX, height * 0.60, (float)width * 0.30f);
             textinput_Password.PasswordInput = true;
             textinput_Password.MaxLength = 20;
             AddChild(textinput_Password);
 
             menuoption_LoginAsGuest = new SimpleMenuOption(ui, "Play as guest", Font.PIXELLARI, 24, Color.White);
-            menuoption_LoginAsGuest.Y = height * 0.85;
+            menuoption_LoginAsGuest.Y = height * 0.75   ;
+            menuoption_LoginAsGuest.X = menuX;
 
             // Create loading component
-            loader = new LoadingTextView(ui, y: height / 2);
+            loader = new LoadingTextView(ui, fontSize: 20, x: menuX, y: height* 0.5);
             loader.Text = "Authenticating";
             loader.Hidden = true;
             AddChild(loader);
 
-            errorText = new TextView(ui, "", Font.DEFAULT, 24, Color.White, 0, height * 0.75);
+            errorText = new TextView(ui, "", Font.DEFAULT, 20, Color.White, menuX, height * 0.70f);
             errorText.Hidden = true;
             AddChild(errorText);
 
@@ -89,16 +100,6 @@ namespace DeepFlight.scenes {
             }
             return false;
         }
-
-        //private void SetInputFocus(TextInput inputToFocus) {
-        //    textinput_Username.Focused = inputToFocus == textinput_Username;
-        //    textinput_Password.Focused = inputToFocus == textinput_Password;
-        //}
-
-        //private void SwitchInputFocus() {
-        //    textinput_Username.Focused = !textinput_Username.Focused;
-        //    textinput_Password.Focused = !textinput_Password.Focused;
-        //}
 
         private void ShowError(string error) {
             errorText.Text = "Error: " + error;
@@ -133,6 +134,7 @@ namespace DeepFlight.scenes {
             if (loading) {
                 loadTimer -= deltaTime;
                 if (loadTimer < 0) {
+                    User.LocalUser.Guest = false;
                     RequestSceneSwitch(new MainMenuScene());
                 }
             }

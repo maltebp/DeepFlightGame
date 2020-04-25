@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class TextureView : View {
 
-    public Texture2D Texture { get; private set; } = null;
+    public Texture2D Texture { get; set; } = null;
     public Color Color { get; set; } = Color.White;
 
     public TextureView(Camera camera, Texture2D texture) : base(camera) {

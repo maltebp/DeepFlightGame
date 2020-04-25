@@ -123,6 +123,8 @@ public static class TrackDeserializer {
                 track.StartY = reader.ReadInt32();
                 track.StartRotation = reader.ReadDouble();
 
+
+
                 // Deserialize Blocks
                 while (true) {
                     int blockX = reader.ReadInt32();

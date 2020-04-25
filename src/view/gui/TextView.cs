@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class TextView : View {
 
-    private Font font;
+    private Font font = Font.DEFAULT;
     public Font Font {
         get { return font; }
         set { font = value; UpdateSize(); }
@@ -27,13 +27,15 @@ public class TextView : View {
     }
 
 
-    public TextView(Camera camera, string text, Font font, double size, Color col, double x, double y) : base(camera) {
+    public TextView(Camera camera, string text, Font font = null, double size = 24, Color? color = null, double x = 0, double y = 0) : base(camera) {
         this.text = text;
-        this.font = font;
         this.size = size;
+
+        if (font != null) this.font = font;
+
         X = x;
         Y = y;
-        Color = col;
+        if (color.HasValue) Color = color.Value;
         UpdateSize();
     }
 
