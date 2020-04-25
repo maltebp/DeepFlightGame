@@ -79,7 +79,6 @@ namespace DeepFlight.scenes {
                 }
 
                 // Create planet views
-
                 int count = 0;
                 foreach(var track in offlineTracks) {
                     TrackInfoView planet = new TrackInfoView(camera_UI, track, false);

@@ -25,6 +25,8 @@ public class Track {
 
     public bool BlockDataDeserialized { get; set; }
 
+    public bool Generated { get; set; } = false; 
+
     public Planet Planet { get; set; }
 
     public Checkpoint[] Checkpoints { get; set; } = new Checkpoint[0];

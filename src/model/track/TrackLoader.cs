@@ -1,4 +1,5 @@
-﻿using DeepFlight.track;
+﻿using DeepFlight.control.offlinetracktime;
+using DeepFlight.track;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +28,8 @@ namespace DeepFlight.generation {
                 var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "/";
                 string[] trackFiles = Directory.GetFiles(offlineTracksFolder, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
 
+                var trackTimeController = OfflineTrackTimeController.Instance;
+
                 Track track;
                 var tracks = new LinkedList<Track>();
 
@@ -35,6 +38,7 @@ namespace DeepFlight.generation {
                 track.Name = "AGRC-313";
                 track.Seed = 0;
                 track.Planet = new Planet(1, "Aerth", new int[] { 49, 102, 44 });
+                track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 track = LoadTrackFile(offlineTracksFolder + "smar" + FILE_EXTENSION);
@@ -42,6 +46,7 @@ namespace DeepFlight.generation {
                 track.Name = "IAUI-636";
                 track.Seed = 0;
                 track.Planet = new Planet(1, "Smar", new int[] { 150, 30, 9 });
+                track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 track = LoadTrackFile(offlineTracksFolder + "turnsa" + FILE_EXTENSION);
@@ -49,6 +54,7 @@ namespace DeepFlight.generation {
                 track.Name = "NSIY-432";
                 track.Seed = 0;
                 track.Planet = new Planet(1, "Turnsa", new int[] { 120, 120, 90 });
+                track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 Console.WriteLine("Loaded offline tracks: ");
@@ -95,6 +101,10 @@ namespace DeepFlight.generation {
                     generatedTrack.Name = "Unknown Cave";
                     generatedTrack.Seed = DateTime.Now.Millisecond;
                     generatedTrack.Planet = new Planet(1, "Unknown Planet", new int[] { 40, 40, 80 });
+
+                    var timeController = OfflineTrackTimeController.Instance;
+                    timeController.DeleteTime(generatedTrack.Name);
+                    
                     tcs.TrySetResult(generatedTrack);
                 }
             };

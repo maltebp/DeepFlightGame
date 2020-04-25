@@ -26,7 +26,7 @@ namespace DeepFlight.src.gui.planetbox {
 
         public long Time {
             set {
-                if( value == 0) {
+                if( value <= 0 ) {
                     text_Time.Text = "No Record";
                 }
                 else {

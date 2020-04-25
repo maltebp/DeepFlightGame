@@ -1,16 +1,15 @@
 ﻿
-
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
+using Microsoft.Xna.Framework;
 
-class Settings {
+public class Settings {
 
 
     public static float SHIP_RESISTANCE = 0.90f;
     public static float SHIP_ACCELERATION = 150f;
     public static float SHIP_ROTATION_VELOCITY = (float) Math.PI;
+
+    public static readonly string OFFLINE_TRACK_TIMES_FILENAME = "tracktimes.bin";
         
     public static readonly string OFFLINE_TRACKS_FOLDER = "offlinetracks";
 

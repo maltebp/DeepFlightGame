@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 // Central controller class of the application
 // Switches between different scenes
-public class ApplicationController : Game {
+public class Application : Game {
 
     private Renderer renderer;
     private GraphicsDeviceManager graphics;
@@ -28,7 +28,7 @@ public class ApplicationController : Game {
     public delegate void UpdateEventHandler(double deltaTime);
     public static event UpdateEventHandler UpdateEvent;
 
-    public ApplicationController() {
+    public Application() {
         graphics = new GraphicsDeviceManager(this);
     }   
 
@@ -96,15 +96,18 @@ public class ApplicationController : Game {
 
 
     private void OnKeyInput(KeyEventArgs e) {
-        if( e.Action == KeyAction.PRESSED) {
-            if( e.Key == Keys.F1) {
-                DebugOverlay.Instance.Hidden = !DebugOverlay.Instance.Hidden;
-                return; // Consume event
+        // Prevent key input if the game is minimized
+        if( IsActive ) {
+            if (e.Action == KeyAction.PRESSED) {
+                if (e.Key == Keys.F1) {
+                    DebugOverlay.Instance.Hidden = !DebugOverlay.Instance.Hidden;
+                    return; // Consume event
+                }
             }
-        }
 
-        // Forward key event to scene
-        currentScene.KeyInput(e);
+            // Forward key event to scene
+            currentScene.KeyInput(e);
+        }
     }
 
     private void OnCharInput(CharEventArgs e) {

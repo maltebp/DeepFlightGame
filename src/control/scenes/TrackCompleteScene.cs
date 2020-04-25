@@ -1,4 +1,5 @@
-﻿using DeepFlight.gui;
+﻿using DeepFlight.control.offlinetracktime;
+using DeepFlight.gui;
 using DeepFlight.network;
 using DeepFlight.network.exceptions;
 using DeepFlight.rendering;
@@ -108,7 +109,16 @@ namespace DeepFlight.scenes {
 
 
         private void CheckLocalRecord() {
-            DisplayResult("New personal record!");
+            var timeController = OfflineTrackTimeController.Instance;
+            var newRecord = timeController.UpdateTrackTime(track.Name, (long) time.TotalMilliseconds);
+
+            if( newRecord) {
+                DisplayResult("New personal record!");
+            }
+            else {
+                DisplayResult("You've done better :(");
+            }
+
         }
 
 

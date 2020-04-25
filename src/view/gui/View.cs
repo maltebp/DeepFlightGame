@@ -137,8 +137,8 @@ namespace DeepFlight {
         protected virtual void OnChildRemoved(View removedChild) { }
 
         public void Initialize() {
-            ApplicationController.DrawEvent += Draw;
-            ApplicationController.UpdateEvent += Update;
+            Application.DrawEvent += Draw;
+            Application.UpdateEvent += Update;
             OnInitialize();
             foreach (var child in Children)
                 child.Initialize();
@@ -148,8 +148,8 @@ namespace DeepFlight {
 
 
         public void Terminate() {
-            ApplicationController.DrawEvent -= Draw;
-            ApplicationController.UpdateEvent -= Update;
+            Application.DrawEvent -= Draw;
+            Application.UpdateEvent -= Update;
             OnTerminate();
             foreach (var child in Children)
                 child.Terminate();

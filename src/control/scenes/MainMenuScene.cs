@@ -5,21 +5,13 @@ using DeepFlight.user;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeepFlight.scenes {
     class MainMenuScene : Scene {
 
-
         private Camera ui = new Camera();
-        private TextureView background;
         private SimpleMenuView menu;
 
-        private LoadingTextView loader;
 
         protected override void OnInitialize() {
 
