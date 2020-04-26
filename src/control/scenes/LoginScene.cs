@@ -1,4 +1,6 @@
 ﻿using DeepFlight.gui;
+using DeepFlight.network;
+using DeepFlight.network.exceptions;
 using DeepFlight.rendering;
 using DeepFlight.src.gui;
 using DeepFlight.src.gui.debugoverlay;
@@ -8,6 +10,7 @@ using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 
 namespace DeepFlight.scenes {
 
@@ -101,10 +104,7 @@ namespace DeepFlight.scenes {
             return false;
         }
 
-        private void ShowError(string error) {
-            errorText.Text = "Error: " + error;
-            errorText.Hidden = false;
-        }
+        
 
 
         private void AttemptLogin() {
@@ -117,39 +117,73 @@ namespace DeepFlight.scenes {
             else {
                 AuthenticateUser(textinput_Username.Text, textinput_Password.Text);
             }
-        }   
-
-
-
-        private void AuthenticateUser(string username, string password) {
-            ShowLoadingScreen();
-            loading = true;
         }
 
 
-        // TODO: Remove this once authentication has been implemented
-        private bool loading = false;
-        private double loadTimer = 1.5;
-        protected override void OnUpdate(double deltaTime) {
-            if (loading) {
-                loadTimer -= deltaTime;
-                if (loadTimer < 0) {
-                    User.LocalUser.Guest = false;
+        
+
+
+
+        /// <summary>
+        /// Authenticates the credentials at the servers, and retrieve
+        /// the user information
+        /// </summary>
+        private async void AuthenticateUser(string username, string password) {
+            errorText.Hidden = true;
+            menu.Hidden = true;
+            loader.Hidden = false;
+
+         
+            try {
+                string token;
+                
+                // Get authentication token
+                try {
+                    loader.Text = "Authenticating credentials";
+                    var userApi = new UserAPIConnector();
+                    token = await userApi.AuthenticateUser(username, password);
+                }
+                catch(AuthenticationException e) {
+                    ShowError("Username and/or password incorrect");
+                    return;
+                }
+
+                // Login to game server
+                try {
+                    loader.Text = "Fetching user information";
+                    User.LocalUser = await new GameAPIConnector().AuthenticateUser(token);
                     RequestSceneSwitch(new MainMenuScene());
                 }
+                catch (AuthenticationException e) {
+                    ShowError("Something went wrong on the server");
+                    Trace.TraceError(string.Format("\nServer didn't accept the correct token '{0}' during login. Exception: {1}", token, e));
+                }
             }
+            catch(ConnectionException e) {
+                ShowError("Cannot connect to server");
+            }
+            catch (ServerException e) {
+                ShowError("Something went wrong on the server");
+            }
+
+
         }
 
         // Log user in as guest, and switch to main menu
         private void LoginAsGuest() {
-            User.LocalUser.Guest = true;
+            var user = new User();
+            user.Username = "Guest";
+            user.Guest = true;
+            User.LocalUser = user;
             RequestSceneSwitch(new MainMenuScene());
         }
 
-        private void ShowLoadingScreen() {
-            errorText.Hidden = true;
-            menu.Hidden = true;
-            loader.Hidden = false;
+
+        private void ShowError(string error) {
+            errorText.Text = "Error: " + error;
+            errorText.Hidden = false;
+            menu.Hidden = false;
+            loader.Hidden = true;
         }
     }
 

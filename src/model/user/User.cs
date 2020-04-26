@@ -11,17 +11,10 @@ namespace DeepFlight.user {
         /// The User object representing the local user
         /// playing the game
         /// </summary>
-        private static User localUser = null;
-        public static User LocalUser {
-            get {
-                if (localUser == null)
-                    localUser = new User();
-                return localUser;
-            }
-        }
+        public static User LocalUser { get; set; }
 
         // Whether this user is a guest
-        public bool Guest { get; set; } = true;
+        public bool Guest { get; set; } = false;
         public string Username { get; set; } = "Unknown User";
         public double UniversalRating { get; set;  } = 0;
         public int UniversalRank { get; set; }
@@ -30,7 +23,7 @@ namespace DeepFlight.user {
         /// Clears the local user object back to null
         /// </summary>
         public static void ResetLocalUser() {
-            localUser = null;
+            LocalUser = null;
         }
 
     }
