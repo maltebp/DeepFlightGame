@@ -143,6 +143,7 @@ namespace DeepFlight.scenes {
         private async void Restart() {
             ship.X = track.StartX;
             ship.Y = track.StartY;
+            ship.RotationVelocity = 0;
             ship.Rotation = (float) track.StartRotation;//(float)((2*Math.PI)-track.StartRotation);
             Console.WriteLine("Starting rotation: " +track.StartRotation);
             
@@ -293,13 +294,20 @@ namespace DeepFlight.scenes {
             }
 
             if (shipCollision) {
-                Restart();
+                ShipCrashed();
                 return;
             }
 
             
 
             UpdateTimeText();
+        }
+
+
+
+
+        private void ShipCrashed() {
+            Restart();
         }
 
 
