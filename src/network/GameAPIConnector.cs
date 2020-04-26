@@ -50,22 +50,24 @@ namespace DeepFlight.network {
 
 
         public Task<Round> GetPreviousRound() {
-            throw new System.NotImplementedException();
+            return Task.Run(() => {
+                return (Round) null;
+            });
         }
 
 
-        public Task<List<UserRating>> GetRoundRatings(Round round, int count) {
+        public Task<List<UserRanking>> GetRoundRatings(Round round, int count) {
             return Task.Run(() => {
                 // TODO: Implement correct api!!
 
-                List<UserRating> ratings = new List<UserRating>();
-                ratings.Add(new UserRating() { name = "s123456", rating = 3.30 });
-                ratings.Add(new UserRating() { name = "s185139", rating = 3.12 });
-                ratings.Add(new UserRating() { name = "s234902", rating = 2.90 });
-                ratings.Add(new UserRating() { name = "s249358", rating = 2.54 });
-                ratings.Add(new UserRating() { name = "s234009", rating = 2.40 });
-                ratings.Add(new UserRating() { name = "s124639", rating = 2.35 });
-                ratings.Add(new UserRating() { name = "s143964", rating = 1.99 });
+                List<UserRanking> ratings = new List<UserRanking>();
+                ratings.Add(new UserRanking() { name = "s123456", rating = 3.30 });
+                ratings.Add(new UserRanking() { name = "s185139", rating = 3.12 });
+                ratings.Add(new UserRanking() { name = "s234902", rating = 2.90 });
+                ratings.Add(new UserRanking() { name = "s249358", rating = 2.54 });
+                ratings.Add(new UserRanking() { name = "s234009", rating = 2.40 });
+                ratings.Add(new UserRanking() { name = "s124639", rating = 2.35 });
+                ratings.Add(new UserRanking() { name = "s143964", rating = 1.99 });
 
                 Thread.Sleep(2000);
                 return ratings;
@@ -97,18 +99,18 @@ namespace DeepFlight.network {
         }
 
 
-        public Task<List<UserRating>> GetUniversalRatings(int count) {
+        public Task<List<UserRanking>> GetUniversalRatings(int count) {
             return Task.Run(() => {
                 // TODO: Implement correct api!!
 
-                List<UserRating> ratings = new List<UserRating>();
-                ratings.Add(new UserRating() { name = "s185139", rating = 3.59 });
-                ratings.Add(new UserRating() { name = "s123456", rating = 3.12 });
-                ratings.Add(new UserRating() { name = "s249358", rating = 2.80 });
-                ratings.Add(new UserRating() { name = "s234902", rating = 2.23 });
-                ratings.Add(new UserRating() { name = "s124639", rating = 1.50 });
-                ratings.Add(new UserRating() { name = "s143964", rating = 1.26 });
-                ratings.Add(new UserRating() { name = "s234009", rating = 1.24 });
+                List<UserRanking> ratings = new List<UserRanking>();
+                ratings.Add(new UserRanking() { name = "s185139", rating = 3.59 });
+                ratings.Add(new UserRanking() { name = "s123456", rating = 3.12 });
+                ratings.Add(new UserRanking() { name = "s249358", rating = 2.80 });
+                ratings.Add(new UserRanking() { name = "s234902", rating = 2.23 });
+                ratings.Add(new UserRanking() { name = "s124639", rating = 1.50 });
+                ratings.Add(new UserRanking() { name = "s143964", rating = 1.26 });
+                ratings.Add(new UserRanking() { name = "s234009", rating = 1.24 });
 
                 Thread.Sleep(2000);
                 return ratings;
@@ -136,12 +138,16 @@ namespace DeepFlight.network {
             });
         }
 
-        public Task<double> GetUserUniversalRating(User user) {
-            throw new NotImplementedException();
+        public Task<UserRanking> GetUserUniversalRanking(User user) {
+            return Task.Run(() => {
+                return new UserRanking() { name = "testuser", rank = 101, rating = 1.99};
+            });
         }
 
-        public Task<double> GetUserRoundRating(User user, Round round) {
-            throw new NotImplementedException();
+        public Task<UserRanking> GetUserRoundRanking(User user, Round round) {
+            return Task.Run(() => {
+                return new UserRanking() { name = "testuser", rank = 120, rating = 1.23 };
+            });
         }
     }
 }

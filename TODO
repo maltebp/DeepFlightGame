@@ -5,7 +5,7 @@
         ✔ Offline Track Selection
         ✔ Main Menu
         ✔ Online Track Selection (+ loading)
-        ☐ Ranking
+        ✔ Ranking
 
     ✔ Setup Build
         ✔ Linux
@@ -23,7 +23,7 @@
 
     ✔ Implement time tracking for offline trackks
 
-    ☐ Border Box
+    ✔ Border Box
     Box with just a border
 
     ☐ Cancel awaited tasks  
@@ -41,8 +41,6 @@
 
     ☐ Implement SecureString for login password
 
-   
- 
     ☐ Make sure GameScene (or Track at least) is garbage collected
     
    

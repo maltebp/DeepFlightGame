@@ -54,9 +54,9 @@ namespace DeepFlight.scenes {
                 AddChild(text_Guest);
             }
             else {
-                // TODO: Implement correct information
-                text_UserName = new TextView(ui, "<USERNAME>", size: 34, x: menuX, y: height * 0.20);
+                text_UserName = new TextView(ui, User.LocalUser.Username, size: 34, x: menuX, y: height * 0.20);
                 text_Rank = new TextView(ui, "Not ranked", size: 24, x: menuX, y: height * 0.27);
+                if (User.LocalUser.UniversalRank != 0) text_Rank.Text = "#" + User.LocalUser.UniversalRank; 
                 AddChildren(text_UserName, text_Rank);
             }
 

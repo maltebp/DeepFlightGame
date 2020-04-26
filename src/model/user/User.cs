@@ -22,8 +22,9 @@ namespace DeepFlight.user {
 
         // Whether this user is a guest
         public bool Guest { get; set; } = true;
-        public string Username { get; set; } = null;
-        public int Rating { get; set;  } = 0;
+        public string Username { get; set; } = "Unknown User";
+        public double UniversalRating { get; set;  } = 0;
+        public int UniversalRank { get; set; }
 
         /// <summary>
         /// Clears the local user object back to null

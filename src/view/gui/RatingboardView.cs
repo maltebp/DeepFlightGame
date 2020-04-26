@@ -13,7 +13,13 @@ namespace DeepFlight.view.gui {
     /// </summary>
     class RatingboardView : View {
 
-        private TextView title;
+        private TextView
+            text_Title,
+            text_UserRankLabel,
+            text_UserRankValue,
+            text_UserRatingLabel,
+            text_UserRatingValue;
+
         private BorderView border;
         private Row[] rows = new Row[5];
 
@@ -23,9 +29,18 @@ namespace DeepFlight.view.gui {
             border.BackgroundColor = new Color(Color.Black, 0.25f);
             AddChild(border);
 
-            title = new TextView(camera, titleLabel, size: 24, x: x, y: y - height * 0.60);
-            AddChild(title);
+            text_Title = new TextView(camera, titleLabel, size: 24, x: x, y: y - height * 0.60);
+            AddChild(text_Title);
 
+            text_UserRankLabel = new TextView(camera, "Your Rank:", size: 24, x: x-width * 0.25, y: y+height*0.62);
+            text_UserRankValue = new TextView(camera, "- - -", size: 24, x: x-width * 0.25, y: y + height * 0.75);
+            AddChildren(text_UserRankLabel, text_UserRankValue);
+
+            text_UserRatingLabel = new TextView(camera, "Your Rating:", size: 24, x: x + width * 0.25, y: y + height * 0.62);
+            text_UserRatingValue = new TextView(camera, "- - -", size: 24, x: x + width * 0.25, y: y + height * 0.75);
+            AddChildren(text_UserRatingLabel, text_UserRatingValue);
+
+            // Setup Header and Rows
             var margin = 0.07f;// Top bottom margin
             var rowSpacing = (height * (1-margin*2)) / 5f;
             var rowY = y - height * (0.5-margin);
@@ -41,11 +56,21 @@ namespace DeepFlight.view.gui {
         }
 
 
-        public void UpdateRatings(List<UserRating> ratings) {
-            for( int i=0; i < ratings.Count && i < 5; i++) {
-                rows[i].cells[1].Text = ratings[i].name;
-                rows[i].cells[2].Text = string.Format("{0:N2}", ratings[i].rating);
+        public void UpdateRankings(List<UserRanking> rankings) {
+            for( int i=0; i < rankings.Count && i < 5; i++) {
+                rows[i].cells[1].Text = rankings[i].name;
+                rows[i].cells[2].Text = string.Format("{0:N2}", rankings[i].rating);
             }
+        }
+
+        public void UpdateUserRanking(UserRanking ranking) {
+            text_UserRankValue.Text = "#" + ranking.rank;
+            text_UserRatingValue.Text = string.Format("{0:N2}", ranking.rating);
+        }
+
+        public void HideUserRanking() {
+            text_UserRatingValue.Hidden = true;
+            text_UserRankValue.Hidden = true;
         }
 
 

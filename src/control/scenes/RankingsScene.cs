@@ -2,6 +2,7 @@
 using DeepFlight.network;
 using DeepFlight.network.exceptions;
 using DeepFlight.rendering;
+using DeepFlight.user;
 using DeepFlight.utility.KeyboardController;
 using DeepFlight.view.gui;
 using Microsoft.Xna.Framework;
@@ -72,8 +73,20 @@ namespace DeepFlight.scenes {
 
             try {
                 var gameApi = new GameAPIConnector();
-                ratingboard_Universal.UpdateRatings(await gameApi.GetUniversalRatings(5));
-                ratingboard_LastRound.UpdateRatings(await gameApi.GetRoundRatings(null, 5));
+
+                var lastRound = await gameApi.GetPreviousRound();
+
+                ratingboard_Universal.UpdateRankings(await gameApi.GetUniversalRatings(5));
+                ratingboard_LastRound.UpdateRankings(await gameApi.GetRoundRatings(lastRound, 5));
+
+                if( User.LocalUser.Guest) {
+                    ratingboard_Universal.HideUserRanking();
+                    ratingboard_LastRound.HideUserRanking();
+                }
+                else {
+                    ratingboard_Universal.UpdateUserRanking(await gameApi.GetUserUniversalRanking(User.LocalUser));
+                    ratingboard_LastRound.UpdateUserRanking(await gameApi.GetUserRoundRanking(User.LocalUser, lastRound));
+                }
             }
             catch (ConnectionException e) {
                 DisplayError("The universe seems to be offline right now :(");

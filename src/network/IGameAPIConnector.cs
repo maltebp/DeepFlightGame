@@ -76,7 +76,7 @@ namespace DeepFlight.network {
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<List<UserRating>> GetUniversalRatings(int count);
+        Task<List<UserRanking>> GetUniversalRatings(int count);
 
 
 
@@ -89,7 +89,7 @@ namespace DeepFlight.network {
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<double> GetUserUniversalRating(User user);
+        Task<UserRanking> GetUserUniversalRanking(User user);
 
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace DeepFlight.network {
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<List<UserRating>> GetRoundRatings(Round round, int count);
+        Task<List<UserRanking>> GetRoundRatings(Round round, int count);
 
 
 
@@ -114,7 +114,7 @@ namespace DeepFlight.network {
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<double> GetUserRoundRating(User user, Round round);
+        Task<UserRanking> GetUserRoundRanking(User user, Round round);
 
 
         /// <summary>
@@ -139,8 +139,9 @@ namespace DeepFlight.network {
         public long time;
     }
 
-    public struct UserRating {
+    public struct UserRanking {
         public string name;
+        public int rank;
         public double rating;
     }
 }
