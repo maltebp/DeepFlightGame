@@ -179,7 +179,7 @@ namespace DeepFlight {
                 // Render the background
                 if (Camera != null && background != null) {
                     background.X = GetCenterX();
-                    background.Y = GetCenterY();
+                    background.Y = GetCenterY()-1;
                     background.Width = Width;
                     background.Height = Height;
                     renderer.Draw(Camera, background);

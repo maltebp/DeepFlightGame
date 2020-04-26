@@ -12,8 +12,10 @@ public abstract class Scene : View {
     public bool RequestedExit { get; private set; } = false;
 
     public Scene() : base(camera: new Camera(layer: 1f)){
-        Width = (float) ScreenController.BaseWidth;
-        Height = (float)ScreenController.BaseHeight;
+        Width = (float) ScreenController.BaseWidth+4; 
+        Height = (float)ScreenController.BaseHeight+4;
+        // Note on extra width and height:
+        // Had some trouble with background not filling entire space
     }
 
     protected void RequestSceneSwitch(Scene scene) {
