@@ -18,6 +18,7 @@ namespace DeepFlight.user {
         public string Username { get; set; } = "Unknown User";
         public double UniversalRating { get; set;  } = 0;
         public int UniversalRank { get; set; }
+        public string Token { get; set; }
 
         /// <summary>
         /// Clears the local user object back to null

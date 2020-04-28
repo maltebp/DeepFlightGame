@@ -120,10 +120,6 @@ namespace DeepFlight.scenes {
         }
 
 
-        
-
-
-
         /// <summary>
         /// Authenticates the credentials at the servers, and retrieve
         /// the user information
@@ -133,7 +129,6 @@ namespace DeepFlight.scenes {
             menu.Hidden = true;
             loader.Hidden = false;
 
-         
             try {
                 string token;
                 
@@ -151,7 +146,7 @@ namespace DeepFlight.scenes {
                 // Login to game server
                 try {
                     loader.Text = "Fetching user information";
-                    User.LocalUser = await new GameAPIConnector().AuthenticateUser(token);
+                    User.LocalUser = await new GameAPIConnector().GetUserPrivate(username, token);
                     RequestSceneSwitch(new MainMenuScene());
                 }
                 catch (AuthenticationException e) {
@@ -165,9 +160,8 @@ namespace DeepFlight.scenes {
             catch (ServerException e) {
                 ShowError("Something went wrong on the server");
             }
-
-
         }
+
 
         // Log user in as guest, and switch to main menu
         private void LoginAsGuest() {

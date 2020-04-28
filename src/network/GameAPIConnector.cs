@@ -1,7 +1,6 @@
 ﻿using DeepFlight.network.exceptions;
 using DeepFlight.user;
 using DeepFlight.track;
-using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -9,12 +8,13 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace DeepFlight.network {
 
     public class GameAPIConnector : IGameAPIConnector {
 
-        private static readonly string URL = "http://maltebp.dk:10000/gameapi";
+        private static readonly string URL = "http://localhost:10000/gameapi";
 
         private RestClient client;
 
@@ -164,17 +164,41 @@ namespace DeepFlight.network {
         /// <exception cref="AuthenticationException">Credentials were not correct</exception>
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        public Task<User> AuthenticateUser(string token) {
+        public Task<User> GetUserPrivate(String username, string token) {
             return Task.Run( () => {
 
-                Thread.Sleep(1000);
+                var request = new RestRequest($"user/{username}/private", DataFormat.Json);
+                request.AddHeader("Authorization", $"Bearer {token}");
+                var response = client.Get(request);
 
-                var testUser = new User();
-                testUser.Username = "Test User";
-                testUser.UniversalRank = 11;
-                testUser.UniversalRating = 1.37;
+                // Check connection error
+                if (response.ErrorException != null)
+                    throw new ConnectionException(client.BaseUrl.ToString());
 
-                return testUser;
+                // Check token is correct
+                if( response.StatusCode == HttpStatusCode.Unauthorized ) {
+                    throw new AuthenticationException("Token is unauthorized");
+                }
+
+                // Check for other unhandled status codes
+                if (response.StatusCode != HttpStatusCode.OK) {
+                    Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
+                    throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
+                }
+
+                Console.WriteLine("Got user: " + response.Content);
+                dynamic userData = JsonConvert.DeserializeObject(response.Content);
+
+                dynamic jsonResponse = JsonConvert.DeserializeObject(response.Content);
+                token = jsonResponse.jwt; // This matches the object name in the json response
+
+                var user = new User();
+                user.Username = userData.username;
+                user.UniversalRank = userData.rank;
+                user.UniversalRating = userData.rating;
+                user.Token = token;
+
+                return user;
             });
         }
     }
