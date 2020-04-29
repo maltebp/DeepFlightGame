@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DeepFlight.scenes {
@@ -46,13 +47,16 @@ namespace DeepFlight.scenes {
 
         private int blocksDrawn = 0;
 
+        private bool crashed = true;
+
+
         private DebugInfoLine 
             infoLine_ShipPos,
             infoLine_ShipVel,
             infoLine_ShipRes,
             infoLine_ShipAcc,
             infoLine_CollisionEnabled,
-            infoLine_BlocksDrawn,
+            infoLine_ChunksDrawn,
             infoLine_CameraZoom;
 
         
@@ -138,7 +142,7 @@ namespace DeepFlight.scenes {
             infoLine_CollisionEnabled = DebugOverlay.Info.AddInfoLine("Coll. On (C)", "?", (infoLine) => {
                 infoLine.Info = collisionEnabled.ToString();
             });
-            infoLine_BlocksDrawn = DebugOverlay.Info.AddInfoLine("Blocks Drawn", "?", (infoLine) => {
+            infoLine_ChunksDrawn = DebugOverlay.Info.AddInfoLine("Chunks Drawn", "?", (infoLine) => {
                 infoLine.Info = "" + blocksDrawn;
             });
 
@@ -156,7 +160,7 @@ namespace DeepFlight.scenes {
             DebugOverlay.Info.RemoveInfoLine(infoLine_ShipVel);
             DebugOverlay.Info.RemoveInfoLine(infoLine_ShipRes);
             DebugOverlay.Info.RemoveInfoLine(infoLine_CollisionEnabled);
-            DebugOverlay.Info.RemoveInfoLine(infoLine_BlocksDrawn);
+            DebugOverlay.Info.RemoveInfoLine(infoLine_ChunksDrawn);
             DebugOverlay.Info.RemoveInfoLine(infoLine_CameraZoom);
         }
 
@@ -165,8 +169,7 @@ namespace DeepFlight.scenes {
             ship.X = track.StartX;
             ship.Y = track.StartY;
             ship.RotationVelocity = 0;
-            ship.Rotation = (float) track.StartRotation;//(float)((2*Math.PI)-track.StartRotation);
-            Console.WriteLine("Starting rotation: " +track.StartRotation);
+            ship.Rotation = (float) track.StartRotation;
             
             ship.AccelerationX = 0;
             ship.AccelerationY = 0;
@@ -174,6 +177,8 @@ namespace DeepFlight.scenes {
             ship.VelocityY = 0;
             stopWatch.Reset();
             shipPaused = true;
+            crashed = false;
+            ship.Hidden = false;
 
             // Reset checkpoints
             foreach( var checkpoint in track.Checkpoints) {
@@ -298,47 +303,50 @@ namespace DeepFlight.scenes {
         protected override void OnUpdate(double deltaTime) {
 
             // Check ship collision
-            //TODO: Fix collisions
-            //var shipCollision = false;
-            //if (collisionEnabled) {
-            //    track.ForBlocksInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, (block, x, y) => {
-            //        if (block.Type == BlockType.BORDER)
-            //            if (block.CollidesWith(ship))
-            //                shipCollision = true;
-            //    });
-            //}
-            
+            if( !crashed) {
+                var shipCollision = false;
+                if (collisionEnabled) {
+                    track.ForChunkInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, chunk => {
+                        foreach (var collisionBlock in chunk.CollisionBlocks) {
+                            if (collisionBlock.CollidesWith(ship))
+                                shipCollision = true;
+                        }
+                    });
+                }
 
-            // Check checkpoint collision
-            var allCheckpointsReached = true;
-            foreach (var checkpoint in track.Checkpoints) {
-                if (checkpoint.Reached) continue;
+                // Check checkpoint collision
+                var allCheckpointsReached = true;
+                foreach (var checkpoint in track.Checkpoints) {
+                    if (checkpoint.Reached) continue;
 
-                if (checkpoint.CollidesWith(ship))
-                    checkpoint.Reached = true;
-                else
-                    allCheckpointsReached = false;
+                    if (checkpoint.CollidesWith(ship))
+                        checkpoint.Reached = true;
+                    else
+                        allCheckpointsReached = false;
+                }
+
+                if (allCheckpointsReached) {
+                    TrackFinished();
+                    return;
+                }
+
+                if (shipCollision) {
+                    ShipCrashed();
+                    return;
+                }
+
+                UpdateTimeText();
             }
-
-            if (allCheckpointsReached) {
-                TrackFinished();
-                return;
-            }
-
-            //if (shipCollision) {
-            //    ShipCrashed();
-            //    return;
-            //}
-
-            
-
-            UpdateTimeText();
         }
 
 
 
 
-        private void ShipCrashed() {
+        private async void ShipCrashed() {
+            crashed = true;
+            shipPaused = true;
+            ship.Hidden = true;
+            await Task.Run(() => Thread.Sleep(2000));
             Restart();
         }
 
@@ -356,12 +364,6 @@ namespace DeepFlight.scenes {
             border_Rendering.Y = ship.Y;
 
             blocksDrawn = renderer.DrawTrack(gameCamera, track);
-
-            //track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
-            //    if( block.Type == BlockType.SPACE )
-            //        renderer.Draw(gameCamera, block);
-            //});
-
         }
 
 

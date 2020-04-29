@@ -190,61 +190,56 @@ public class Renderer {
            Matrix.CreateRotationZ(camera.Rotation) *
            Matrix.CreateTranslation(graphics.PreferredBackBufferWidth/2, graphics.PreferredBackBufferHeight / 2, 0);
 
-        // TODO: Test if these can be left out
         trackBatch.Begin(
-               //blendState: BlendState.NonPremultiplied,
-               //samplerState: SamplerState.PointClamp, // Turn of anti-alias
+               samplerState: SamplerState.PointClamp, // Turn of anti-alias
                transformMatrix: transformation,
                sortMode: SpriteSortMode.BackToFront
         );
 
-        var textureCenterOffset = new Vector2(Textures.SQUARE.Width / 2, Textures.SQUARE.Height / 2);
+        // Calculate wall color
+        var planetColor = track.Planet.Color;
+        var wallDarkenColor = Settings.TRACK_COLOR_ADJUST_WALL;
+        var wallColor = new Color(planetColor.R - wallDarkenColor, planetColor.G - wallDarkenColor, planetColor.B - wallDarkenColor);
 
+        // Draw background color
         trackBatch.Draw(
                 Textures.SQUARE,
                 // NOTE: Using rectangle to define drawing position (drawing bounds),
                 // it will draw from the center of the bounds.
                 destinationRectangle: new Rectangle((int) camera.X, (int) camera.Y, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
-                color: (track.Planet.Color * Settings.TRACK_COLOR_ADJUST_WALL),
-                origin: textureCenterOffset
+                color: wallColor,
+                origin: new Vector2(Textures.SQUARE.Width / 2, Textures.SQUARE.Height / 2)
         );
 
-        var blockCount = 0;
-
-        var chunkMap = track.ChunkMap;
-
         var renderRadius = Settings.TRACK_RENDER_DISTANCE / 2;
-        
-        int minX = Chunk.ToChunkCoordinate((int) camera.X - renderRadius);
-        int maxX = Chunk.ToChunkCoordinate((int) camera.X + renderRadius);
-        int minY = Chunk.ToChunkCoordinate((int) camera.Y - renderRadius);
-        int maxY = Chunk.ToChunkCoordinate((int) camera.Y + renderRadius);
 
+        // Calculate track color
+        var brigtenColor = Settings.TRACK_COLOR_ADJUST_TRACK;
+        var brightenColor = planetColor * 0.50f;
+        brightenColor.A = 255;
+        var trackColor = new Color(150 + brightenColor.R, 150 + brightenColor.G, 150 + brightenColor.B);
 
-        for (int x = minX; x <= maxX; x++) {
-            if (chunkMap.ContainsKey(x)) {
-                var row = chunkMap[x];
-                for (int y = minY; y <= maxY; y++) {
-                    if (row.ContainsKey(y)) {
-                        var blocks = row[y].Blocks;
-                        for (int i = 0; i < blocks.Length; i++) {
-                            trackBatch.Draw(
-                                   Textures.SQUARE,
-                                   // NOTE: Using rectangle to define drawing position (drawing bounds),
-                                   // it will draw from the center of the bounds.
-                                   destinationRectangle: new Rectangle(blocks[i].x, blocks[i].y, 1, 1),
-                                   color: Color.White,
-                                   origin: textureCenterOffset
-                            );
-                            blockCount++;
-                        }
-                    }
-                }
-            }
-        }
+        // Draw each chunk
+        var chunkCount = 0;
+        track.ForChunkInRange(
+            (int) (camera.X-renderRadius),
+            (int) (camera.X+renderRadius),
+            (int) (camera.Y-renderRadius),
+            (int) (camera.Y+renderRadius),
+            chunk => {
+                trackBatch.Draw(
+                        chunk.Texture,
+                        // NOTE: Using rectangle to define drawing position (drawing bounds),
+                        // it will draw from the center of the bounds.
+                        destinationRectangle: new Rectangle(chunk.X * Chunk.SIZE, chunk.Y * Chunk.SIZE, Chunk.SIZE, Chunk.SIZE),
+                        color: trackColor,
+                        origin: new Vector2(-0.5f, 0.5f)
+                );
+                chunkCount++;
+        });
 
         trackBatch.End();
-        return blockCount;
+        return chunkCount;
     }
 
 

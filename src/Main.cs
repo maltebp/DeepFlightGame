@@ -8,8 +8,10 @@ using System.IO;
 public static class Program {
 
 
+
     [STAThread]
     static void Main() {
+
 
         // Setup logging
         Directory.CreateDirectory("logs");

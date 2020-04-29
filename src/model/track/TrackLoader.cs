@@ -36,7 +36,6 @@ namespace DeepFlight.generation {
                 track = LoadTrackFile(offlineTracksFolder + "aerth" + FILE_EXTENSION);
                 track.ID = 0;
                 track.Name = "AGRC-313";
-                track.Seed = 0;
                 track.Planet = new Planet(1, "Aerth", new int[] { 49, 102, 44 });
                 track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
@@ -44,7 +43,6 @@ namespace DeepFlight.generation {
                 track = LoadTrackFile(offlineTracksFolder + "smar" + FILE_EXTENSION);
                 track.ID = 0;
                 track.Name = "IAUI-636";
-                track.Seed = 0;
                 track.Planet = new Planet(1, "Smar", new int[] { 150, 30, 9 });
                 track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
@@ -52,7 +50,6 @@ namespace DeepFlight.generation {
                 track = LoadTrackFile(offlineTracksFolder + "turnsa" + FILE_EXTENSION);
                 track.ID = 0;
                 track.Name = "NSIY-432";
-                track.Seed = 0;
                 track.Planet = new Planet(1, "Turnsa", new int[] { 120, 120, 90 });
                 track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
@@ -99,7 +96,6 @@ namespace DeepFlight.generation {
                     var generatedTrack = LoadGeneratedTrack(trackFolderPath);
                     generatedTrack.ID = 0;
                     generatedTrack.Name = "Unknown Cave";
-                    generatedTrack.Seed = DateTime.Now.Millisecond;
                     generatedTrack.Planet = new Planet(1, "Unknown Planet", Settings.COLOR_PRIMARY * 1.25f);
 
                     var timeController = OfflineTrackTimeController.Instance;
