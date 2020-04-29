@@ -127,6 +127,8 @@ public static class TrackDeserializer {
                 var planetColor = track.Planet.Color;
                 var trackColor = new Color(planetColor.R+brigtenColor, planetColor.G+brigtenColor, planetColor.B+brigtenColor);
 
+                var trackAssembler = new TrackAssembler();
+
                 // Deserialize Blocks
                 while (true) {
                     int blockX = reader.ReadInt32();
@@ -137,11 +139,11 @@ public static class TrackDeserializer {
                         break;
 
                     // Console.WriteLine("Read block: x={0}, y={1}, type={2}", blockX, blockY, blockType);
-
-                    track.SetBlock((BlockType)blockType, blockX, blockY);
-                    track.GetBlock(blockX, blockY).Color = trackColor;
+                    trackAssembler.AddBlock(blockX, blockY, (BlockType) blockType);
                 }
-                 
+
+                trackAssembler.Assemble(track);
+
                 // Deserialize Checkpoints
                 LinkedList<Checkpoint> checkpoints = new LinkedList<Checkpoint>();
                 int checkPointIndex = 0;
@@ -159,4 +161,44 @@ public static class TrackDeserializer {
         Console.WriteLine("Deserialization of Block data for Track '{0}' took {1:N3} seconds", track.Name, stopwatch.Elapsed.TotalSeconds);
     }
 
+
+    private class TrackAssembler {
+
+
+        private Dictionary<int, Dictionary<int, Chunk>> chunkMap = new Dictionary<int, Dictionary<int, Chunk>>();
+        private List<Chunk> chunks = new List<Chunk>();
+
+        public void AddBlock(int x, int y, BlockType type) {
+            GetChunk(x, y).AddBlock(x, y, type);
+        }
+
+
+        private Chunk GetChunk(int x, int y) {
+            int chunkX = Chunk.ToChunkCoordinate(x);
+            int chunkY = Chunk.ToChunkCoordinate(y);
+
+            if( !chunkMap.ContainsKey(chunkX) ) {
+                chunkMap.Add(chunkX, new Dictionary<int, Chunk>());
+            }
+            var row = chunkMap[chunkX];
+
+            if( !row.ContainsKey(chunkY) ) {
+                row.Add(chunkY, new Chunk(chunkX, chunkY));
+            }
+
+            return row[chunkY];
+        }
+
+        public void Assemble(Track track) {
+
+            // Sequentialize the chunks
+            foreach( var row in chunkMap.Values) {
+                foreach( var chunk in row.Values) {
+                    chunk.Sequentialize();
+                }
+            }
+
+            track.ChunkMap = chunkMap;
+        }
+    }
 }

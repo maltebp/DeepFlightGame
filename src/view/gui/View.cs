@@ -144,7 +144,7 @@ namespace DeepFlight {
 
         public void RemoveChild(View child) {
             if (!Children.Contains(child))
-                throw new ArgumentException("View is not child of parent!");
+                throw new ArgumentException($"'{child.GetType().Name}' is not child view of parent '{this.GetType().Name}'!");
 
             Children.Remove(child);
             child.Parent = null;

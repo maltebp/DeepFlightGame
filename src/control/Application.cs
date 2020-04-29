@@ -30,6 +30,7 @@ public class Application : Game {
 
     public Application() {
         graphics = new GraphicsDeviceManager(this);
+        IsFixedTimeStep = false;
     }   
 
     // Is being run first

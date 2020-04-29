@@ -5,6 +5,7 @@ using DeepFlight.rendering;
 using DeepFlight.src.gui.debugoverlay;
 using DeepFlight.track;
 using DeepFlight.utility.KeyboardController;
+using DeepFlight.view.gui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -30,6 +31,9 @@ namespace DeepFlight.scenes {
         private TextureView timeTextBox;
         private TextView countdownText;
         private TextureView countdownTextBox;
+        private BorderView border_Screen;
+        private BorderView border_Rendering;
+
         private Stopwatch stopWatch = new Stopwatch();
 
         private int startCountdown_TickRate = 1000; // ms 
@@ -40,12 +44,16 @@ namespace DeepFlight.scenes {
 
         private bool onlineTrack = false;
 
+        private int blocksDrawn = 0;
+
         private DebugInfoLine 
             infoLine_ShipPos,
             infoLine_ShipVel,
             infoLine_ShipRes,
             infoLine_ShipAcc,
-            infoLine_CollisionEnabled;
+            infoLine_CollisionEnabled,
+            infoLine_BlocksDrawn,
+            infoLine_CameraZoom;
 
         
 
@@ -69,10 +77,10 @@ namespace DeepFlight.scenes {
             uiCamera.X = width / 2;
 
             // Create background
-            Color wallColor = (track.Planet.Color * Settings.TRACK_COLOR_ADJUST_WALL);
+            //Color wallColor = ;
             
-            wallColor.A = 255;
-            BackgroundColor = wallColor;
+            //wallColor.A = 255;
+            //BackgroundColor = wallColor;
 
             ship = new Ship(gameCamera);
             AddChild(ship);
@@ -92,6 +100,10 @@ namespace DeepFlight.scenes {
             countdownTextBox.Hidden = true;
             AddChildren(countdownTextBox);
             countdownTextBox.AddChild(countdownText);
+
+            border_Screen = new BorderView(gameCamera, color: Color.Red, borderWidth: 1, width: width/7, height: height/7 );
+            border_Rendering = new BorderView(gameCamera, color: Color.Blue, borderWidth: 1, width: Settings.TRACK_RENDER_DISTANCE, height:  Settings.TRACK_RENDER_DISTANCE );
+            AddChildren(border_Screen, border_Rendering);
 
             // Add checkpoints drawables
             var checkpoints = track.Checkpoints;
@@ -126,6 +138,13 @@ namespace DeepFlight.scenes {
             infoLine_CollisionEnabled = DebugOverlay.Info.AddInfoLine("Coll. On (C)", "?", (infoLine) => {
                 infoLine.Info = collisionEnabled.ToString();
             });
+            infoLine_BlocksDrawn = DebugOverlay.Info.AddInfoLine("Blocks Drawn", "?", (infoLine) => {
+                infoLine.Info = "" + blocksDrawn;
+            });
+
+            infoLine_CameraZoom = DebugOverlay.Info.AddInfoLine("Zoom", "?", (infoLine) => {
+                infoLine.Info = string.Format("{0:N2}", gameCamera.Zoom);
+            });
 
 
             Restart();
@@ -137,6 +156,8 @@ namespace DeepFlight.scenes {
             DebugOverlay.Info.RemoveInfoLine(infoLine_ShipVel);
             DebugOverlay.Info.RemoveInfoLine(infoLine_ShipRes);
             DebugOverlay.Info.RemoveInfoLine(infoLine_CollisionEnabled);
+            DebugOverlay.Info.RemoveInfoLine(infoLine_BlocksDrawn);
+            DebugOverlay.Info.RemoveInfoLine(infoLine_CameraZoom);
         }
 
 
@@ -234,6 +255,15 @@ namespace DeepFlight.scenes {
                         return true;
                     }
                 }
+
+                if( e.Key == Keys.X) {
+                    gameCamera.Zoom *= 0.95f;
+                    return true;
+                }
+                if( e.Key == Keys.Z) {
+                    gameCamera.Zoom *= 1.05f;
+                    return true;
+                }
             }
 
             if( e.Action == KeyAction.RELEASED) {
@@ -248,6 +278,7 @@ namespace DeepFlight.scenes {
                     ship.RotationVelocity = 0;
                 }
             }
+
 
 
 
@@ -267,14 +298,15 @@ namespace DeepFlight.scenes {
         protected override void OnUpdate(double deltaTime) {
 
             // Check ship collision
-            var shipCollision = false;
-            if (collisionEnabled) {
-                track.ForBlocksInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, (block, x, y) => {
-                    if (block.Type == BlockType.BORDER)
-                        if (block.CollidesWith(ship))
-                            shipCollision = true;
-                });
-            }
+            //TODO: Fix collisions
+            //var shipCollision = false;
+            //if (collisionEnabled) {
+            //    track.ForBlocksInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, (block, x, y) => {
+            //        if (block.Type == BlockType.BORDER)
+            //            if (block.CollidesWith(ship))
+            //                shipCollision = true;
+            //    });
+            //}
             
 
             // Check checkpoint collision
@@ -293,10 +325,10 @@ namespace DeepFlight.scenes {
                 return;
             }
 
-            if (shipCollision) {
-                ShipCrashed();
-                return;
-            }
+            //if (shipCollision) {
+            //    ShipCrashed();
+            //    return;
+            //}
 
             
 
@@ -318,11 +350,17 @@ namespace DeepFlight.scenes {
         protected override void OnDraw(Renderer renderer) {
             gameCamera.X = ship.X;
             gameCamera.Y = ship.Y;
+            border_Screen.X = ship.X;
+            border_Screen.Y = ship.Y;
+            border_Rendering.X = ship.X;
+            border_Rendering.Y = ship.Y;
 
-            track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
-                if( block.Type == BlockType.SPACE )
-                    renderer.Draw(gameCamera, block);
-            });
+            blocksDrawn = renderer.DrawTrack(gameCamera, track);
+
+            //track.ForBlocksInRange((int)(-100 + gameCamera.X), (int)(-100 + gameCamera.Y), (int)(100 + gameCamera.X), (int)(100 + gameCamera.Y), (block, x, y) => {
+            //    if( block.Type == BlockType.SPACE )
+            //        renderer.Draw(gameCamera, block);
+            //});
 
         }
 

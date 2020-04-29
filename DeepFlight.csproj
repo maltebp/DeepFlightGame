@@ -114,7 +114,6 @@
     <Compile Include="src\control\scenes\TrackLoadingScene.cs" />
     <Compile Include="src\Settings.cs" />
     <Compile Include="src\model\track\Checkpoint.cs" />
-    <Compile Include="src\model\track\Generator.cs" />
     <Compile Include="src\model\track\Planet.cs" />
     <Compile Include="src\model\track\Round.cs" />
     <Compile Include="src\model\track\Track.cs" />

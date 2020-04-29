@@ -17,9 +17,12 @@ static class Textures {
     public static Texture2D BACKGROUND { get; private set; }
 
 
+    private static GraphicsDevice graphics;
+
     // Load the textures
     public static void LoadTextures(GraphicsDevice graphics, ContentManager content) {
-        
+        Textures.graphics = graphics;
+
         // SHIP
         SHIP = content.Load<Texture2D>("Content/Images/Ship");
 
@@ -42,5 +45,9 @@ static class Textures {
         PIXEL_CIRCLE_64 = content.Load<Texture2D>("Content/Shapes/PixelCircle_64");
 
         PLANET_64 = content.Load<Texture2D>("Content/Images/Planet_64");
+    }
+
+    public static Texture2D CreateTexture(int width, int height) {
+        return new Texture2D(graphics, width, height);
     }
 }

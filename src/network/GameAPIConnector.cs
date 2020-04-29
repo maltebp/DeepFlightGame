@@ -14,7 +14,7 @@ namespace DeepFlight.network {
 
     public class GameAPIConnector : IGameAPIConnector {
 
-        private static readonly string URL = "http://localhost:10000/gameapi";
+        private static readonly string URL = "http://maltebp.dk:10000/gameapi";
 
         private RestClient client;
 

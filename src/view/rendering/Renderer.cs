@@ -10,6 +10,7 @@ using System;
 public class Renderer {
 
     private SpriteBatch spriteBatch;
+    private SpriteBatch trackBatch;
     private bool drawing = false;
     private GraphicsDeviceManager graphics;
 
@@ -17,6 +18,7 @@ public class Renderer {
     public Renderer(GraphicsDeviceManager graphics) {
         this.graphics = graphics;
         spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+        trackBatch = new SpriteBatch(graphics.GraphicsDevice);
     }
 
     /// <summary>
@@ -174,6 +176,75 @@ public class Renderer {
 
         // TODO: Remove this
         first = false;
+    }
+
+
+    public int DrawTrack(Camera camera, Track track) {
+
+        InitializeDraw();
+
+        var transformation = 
+           Matrix.CreateTranslation((float) -camera.X, (float) -camera.Y, 0) *
+           Matrix.CreateScale((float) ScreenController.ScreenScale) *
+           Matrix.CreateScale(camera.Zoom) *
+           Matrix.CreateRotationZ(camera.Rotation) *
+           Matrix.CreateTranslation(graphics.PreferredBackBufferWidth/2, graphics.PreferredBackBufferHeight / 2, 0);
+
+        // TODO: Test if these can be left out
+        trackBatch.Begin(
+               //blendState: BlendState.NonPremultiplied,
+               //samplerState: SamplerState.PointClamp, // Turn of anti-alias
+               transformMatrix: transformation,
+               sortMode: SpriteSortMode.BackToFront
+        );
+
+        var textureCenterOffset = new Vector2(Textures.SQUARE.Width / 2, Textures.SQUARE.Height / 2);
+
+        trackBatch.Draw(
+                Textures.SQUARE,
+                // NOTE: Using rectangle to define drawing position (drawing bounds),
+                // it will draw from the center of the bounds.
+                destinationRectangle: new Rectangle((int) camera.X, (int) camera.Y, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                color: (track.Planet.Color * Settings.TRACK_COLOR_ADJUST_WALL),
+                origin: textureCenterOffset
+        );
+
+        var blockCount = 0;
+
+        var chunkMap = track.ChunkMap;
+
+        var renderRadius = Settings.TRACK_RENDER_DISTANCE / 2;
+        
+        int minX = Chunk.ToChunkCoordinate((int) camera.X - renderRadius);
+        int maxX = Chunk.ToChunkCoordinate((int) camera.X + renderRadius);
+        int minY = Chunk.ToChunkCoordinate((int) camera.Y - renderRadius);
+        int maxY = Chunk.ToChunkCoordinate((int) camera.Y + renderRadius);
+
+
+        for (int x = minX; x <= maxX; x++) {
+            if (chunkMap.ContainsKey(x)) {
+                var row = chunkMap[x];
+                for (int y = minY; y <= maxY; y++) {
+                    if (row.ContainsKey(y)) {
+                        var blocks = row[y].Blocks;
+                        for (int i = 0; i < blocks.Length; i++) {
+                            trackBatch.Draw(
+                                   Textures.SQUARE,
+                                   // NOTE: Using rectangle to define drawing position (drawing bounds),
+                                   // it will draw from the center of the bounds.
+                                   destinationRectangle: new Rectangle(blocks[i].x, blocks[i].y, 1, 1),
+                                   color: Color.White,
+                                   origin: textureCenterOffset
+                            );
+                            blockCount++;
+                        }
+                    }
+                }
+            }
+        }
+
+        trackBatch.End();
+        return blockCount;
     }
 
 

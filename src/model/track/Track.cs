@@ -1,8 +1,10 @@
 ﻿using DeepFlight.track;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 
 public delegate void BlockCallback(Block type, int x, int y);
 
@@ -31,77 +33,81 @@ public class Track {
 
     public Checkpoint[] Checkpoints { get; set; } = new Checkpoint[0];
 
-    private LinkedList<Chunk> chunks = new LinkedList<Chunk>();
+
+    public Dictionary<int, Dictionary<int, Chunk>> ChunkMap { get; set; }
+
+
+    //private LinkedList<Chunk> chunks = new LinkedList<Chunk>();
 
     public int BlockCount { get; private set; }
 
     // Min and max coordinates registered for a block
-    public int MinX { get; private set; }
-    public int MinY { get; private set; }
-    public int MaxX { get; private set; }
-    public int MaxY { get; private set; }
+    //public int MinX { get; private set; }
+    //public int MinY { get; private set; }
+    //public int MaxX { get; private set; }
+    //public int MaxY { get; private set; }
 
-    public void SetBlock(BlockType block, int x, int y) {
-        int chunkX = ToChunkCoordinate(x);
-        int chunkY = ToChunkCoordinate(y);
-        Chunk chunk = GetChunk(chunkX, chunkY);
-        if (chunk == null) {
-            chunk = new Chunk(chunkX, chunkY);
-            chunks.AddLast(chunk);
-        }
+    //public void SetBlock(BlockType block, int x, int y) {
+    //    int chunkX = ToChunkCoordinate(x);
+    //    int chunkY = ToChunkCoordinate(y);
+    //    Chunk chunk = GetChunk(chunkX, chunkY);
+    //    if (chunk == null) {
+    //        chunk = new Chunk(chunkX, chunkY);
+    //        chunks.AddLast(chunk);
+    //    }
 
-        bool newBlock = chunk.SetBlock(block, x, y);
-        if (newBlock)
-            BlockCount++;
+    //    bool newBlock = chunk.SetBlock(block, x, y);
+    //    if (newBlock)
+    //        BlockCount++;
 
-        // Update min-max coordinates
-        if (x > MaxX) MaxX = x;
-        if (x < MinX) MinX = x;
-        if (y > MaxY) MaxY = y;
-        if (y < MinY) MinY = y;
-    }
+    //    // Update min-max coordinates
+    //    if (x > MaxX) MaxX = x;
+    //    if (x < MinX) MinX = x;
+    //    if (y > MaxY) MaxY = y;
+    //    if (y < MinY) MinY = y;
+    //}
 
-    public Block GetBlock(int x, int y) {
-        int chunkX = ToChunkCoordinate(x);
-        int chunkY = ToChunkCoordinate(y);
-        Chunk chunk = GetChunk(chunkX, chunkY);
-        if (chunk == null) return null;
-        return chunk.GetBlock(x, y);
-    }
+    //public Block GetBlock(int x, int y) {
+    //    int chunkX = ToChunkCoordinate(x);
+    //    int chunkY = ToChunkCoordinate(y);
+    //    Chunk chunk = GetChunk(chunkX, chunkY);
+    //    if (chunk == null) return null;
+    //    return chunk.GetBlock(x, y);
+    //}
 
-    public void ForBlocksInRange(int minX, int minY, int maxX, int maxY, BlockCallback callback) {
-        int maxChunkX = ToChunkCoordinate(maxX);
-        int maxChunkY = ToChunkCoordinate(maxY);
-        int minChunkX = ToChunkCoordinate(minX);
-        int minChunkY = ToChunkCoordinate(minY);
+    //public void ForBlocksInRange(int minX, int minY, int maxX, int maxY, BlockCallback callback) {
+    //    int maxChunkX = ToChunkCoordinate(maxX);
+    //    int maxChunkY = ToChunkCoordinate(maxY);
+    //    int minChunkX = ToChunkCoordinate(minX);
+    //    int minChunkY = ToChunkCoordinate(minY);
 
-        foreach (Chunk chunk in chunks) {
-            if (chunk.X >= minChunkX && chunk.Y >= minChunkY && chunk.Y <= maxChunkY && chunk.X <= maxChunkX) {
-                chunk.ForEachBlock(callback);
-            }
-        }
+    //    foreach (Chunk chunk in chunks) {
+    //        if (chunk.X >= minChunkX && chunk.Y >= minChunkY && chunk.Y <= maxChunkY && chunk.X <= maxChunkX) {
+    //            chunk.ForEachBlock(callback);
+    //        }
+    //    }
 
-    }
+    //}
 
-    public void ForAllBlocks(BlockCallback callback) {
-        ForBlocksInRange(MinX, MinY, MaxX, MaxY, callback);
-    }
+    //public void ForAllBlocks(BlockCallback callback) {
+    //    ForBlocksInRange(MinX, MinY, MaxX, MaxY, callback);
+    //}
 
-    public int GetChunkCount() {
-        return chunks.Count;
-    }
+    //public int GetChunkCount() {
+    //    return chunks.Count;
+    //}
 
-    /** Get chunk which contains Block with coordinates */
-    public Chunk GetChunk(int x, int y) {
-        foreach (Chunk chunk in chunks)
-            if (chunk.X == x && chunk.Y == y)
-                return chunk;
-        return null;
-    }
+    ///** Get chunk which contains Block with coordinates */
+    //public Chunk GetChunk(int x, int y) {
+    //    foreach (Chunk chunk in chunks)
+    //        if (chunk.X == x && chunk.Y == y)
+    //            return chunk;
+    //    return null;
+    //}
 
-    public static int ToChunkCoordinate(int coordinate) {
-        return coordinate < 0 ? (coordinate / (Chunk.SIZE * Cell.SIZE)) - 1 : (coordinate / (Chunk.SIZE * Cell.SIZE));
-    }
+    //public static int ToChunkCoordinate(int coordinate) {
+    //    return coordinate < 0 ? (coordinate / (Chunk.SIZE * Cell.SIZE)) - 1 : (coordinate / (Chunk.SIZE * Cell.SIZE));
+    //}
 
 
     public override string ToString() {
@@ -126,9 +132,18 @@ public class Track {
 
 
 public class Chunk {
-    public static readonly int SIZE = 10;
+    public static readonly int SIZE = Settings.TRACK_CHUNK_SIZE;
     public int X { get; private set; }
     public int Y { get; private set; }
+
+    private Block[] sequentialBlocks;
+    public Block[] Blocks { get => sequentialBlocks; }
+
+    public List<Block> bufferedBlocks = new List<Block>();
+
+    public bool Ready { get; private set; }
+
+    public Texture2D Texture { get; private set; }
 
     public Chunk(int x, int y) {
         X = x;
@@ -136,117 +151,168 @@ public class Chunk {
     }
 
 
-    private Cell[,] cells = new Cell[SIZE, SIZE];
-
-    // Returns true if a new block was created (was null before) or false if a block was overwritten
-    public bool SetBlock(BlockType block, int x, int y) {
-        int cellX = ToCellIndexInChunk(x);
-        int cellY = ToCellIndexInChunk(y);
-        if (cells[cellY, cellX] == null)
-            cells[cellY, cellX] = new Cell(Cell.ToCellIndex(x), Cell.ToCellIndex(y));
-        return cells[cellY, cellX].SetBlock(block, x, y);
+    public void AddBlock(int x, int y, BlockType type) {
+        bufferedBlocks.Add(new Block(x,y,type));
+        Ready = false; 
     }
 
-    public Block GetBlock(int x, int y) {
-        int cellX = ToCellIndexInChunk(x);
-        int cellY = ToCellIndexInChunk(y);
-        if (cells[cellY, cellX] == null) return null;
-        return cells[cellY, cellX].GetBlock(x, y);
+    public void Sequentialize() {
+
+        //// SQUARE (custom texture)
+        //var texture = Textures.CreateTexture(Chunk.SIZE, Chunk.SIZE);
+        //var data = new Color[Chunk.SIZE * Chunk.SIZE];
+
+        //for (int i = 0; i < Chunk.SIZE * Chunk.SIZE; i++)
+        //    data[i] = Color.Transparent;
+
+        //foreach (var block in bufferedBlocks) {
+        //    int normalizedX = Math.Abs(block.x) % SIZE;
+        //    int normalizedY = Math.Abs(block.y) % SIZE;
+        //    data[normalizedX + normalizedY * SIZE] = Color.White;
+        //}
+
+        //texture.SetData(data);
+        //Texture = texture;
+
+
+
+        sequentialBlocks = bufferedBlocks.ToArray();
+        Ready = true;
     }
 
-    public void ForEachBlock(BlockCallback callback) {
-        foreach (Cell cell in cells) {
-            if (cell != null)
-                cell.ForEachBlock(callback);
-        }
+
+    public static int ToChunkCoordinate(int coordinate) {
+        return coordinate < 0 ? (coordinate / Chunk.SIZE) - 1 : (coordinate / Chunk.SIZE);
     }
 
 
+    //private Cell[,] cells = new Cell[SIZE, SIZE];
 
-    public int ToCellCoordinate(int coordinate) {
-        return (coordinate / Cell.SIZE);
-    }
+    //// Returns true if a new block was created (was null before) or false if a block was overwritten
+    //public bool SetBlock(BlockType block, int x, int y) {
+    //    int cellX = ToCellIndexInChunk(x);
+    //    int cellY = ToCellIndexInChunk(y);
+    //    if (cells[cellY, cellX] == null)
+    //        cells[cellY, cellX] = new Cell(Cell.ToCellIndex(x), Cell.ToCellIndex(y));
+    //    return cells[cellY, cellX].SetBlock(block, x, y);
+    //}
 
-    public static int ToCellIndexInChunk(int coordinate) {
-        return (Math.Abs(coordinate) % (SIZE * Cell.SIZE)) / Cell.SIZE;
-    }
+    //public Block GetBlock(int x, int y) {
+    //    int cellX = ToCellIndexInChunk(x);
+    //    int cellY = ToCellIndexInChunk(y);
+    //    if (cells[cellY, cellX] == null) return null;
+    //    return cells[cellY, cellX].GetBlock(x, y);
+    //}
+
+    //public void ForEachBlock(BlockCallback callback) {
+    //    foreach (Cell cell in cells) {
+    //        if (cell != null)
+    //            cell.ForEachBlock(callback);
+    //    }
+    //}
+
+
+
+    //public int ToCellCoordinate(int coordinate) {
+    //    return (coordinate / Cell.SIZE);
+    //}
+
+    //public static int ToCellIndexInChunk(int coordinate) {
+    //    return (Math.Abs(coordinate) % (SIZE * Cell.SIZE)) / Cell.SIZE;
+    //}
 
 
 }
 
 
-public class Cell {
-    public static readonly int SIZE = 10;
+public struct Block {
+    public readonly int x;
+    public readonly int y;
+    public readonly BlockType type;
 
-    // The cells index in the total map (not relative to its parent chunk).
-    private int indexX;
-    private int indexY;
-
-    public Cell(int x, int y) {
-        indexX = x;
-        indexY = y;
-    }
-
-    private Block[,] blocks = new Block[SIZE, SIZE];
-
-
-    // Returns true if a new block was created (the block was null before), or false it a block was overwritten
-    public bool SetBlock(BlockType block, int x, int y) {
-        if (blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)] == null) {
-            blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)] = new Block(x, y, block);
-            return true;
-        }
-        blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)].Type = block;
-        return false;
-    }
-
-    public Block GetBlock(int x, int y) {
-        return blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)];
-    }
-
-    public void ForEachBlock(BlockCallback callback) {
-
-        int cellOffsetX = indexX < 0 ? (indexX + 1) * SIZE : indexX * SIZE;
-        int cellOffsetY = indexY < 0 ? (indexY + 1) * SIZE : indexY * SIZE;
-
-
-        /* Block indexes are away from 0. If the cell's range is
-         * [-10, -19] then block index 0 is -10 and index 10 is -19*/
-        int directionX = indexX < 0 ? -1 : 1;
-        int directionY = indexY < 0 ? -1 : 1;
-
-        for (int y = 0; y < blocks.GetLength(0); y++) {
-            for (int x = 0; x < blocks.GetLength(1); x++) {
-                if (blocks[y, x] != null) {
-                    callback(blocks[y, x], cellOffsetX + x * directionX, cellOffsetY + y * directionY);
-                }
-            }
-        }
-    }
-
-    public static int ToBlockIndexInCell(int coordinate) {
-        return Math.Abs(coordinate) % SIZE;
-    }
-
-    public static int ToCellIndex(int coordinate) {
-        return coordinate < 0 ? coordinate / SIZE - 1 : coordinate / SIZE;
-    }
-
-}
-
-
-public class Block : TextureView {
-    public BlockType Type { get; set; }
-
-    public Block(int x, int y, BlockType type) : base(null, Textures.SQUARE, Color.White, x, y, 1, 1) {
-        AddCollider(new RectCollider(this));
-        this.Type = type;
+    public Block(int x, int y, BlockType type) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
     }
 
     public override string ToString() {
-        return String.Format("Block( x: {0}, y: {1}, type: {2})", X, Y, Type);
+        return String.Format("Block( x: {0}, y: {1}, type: {2})", x, y, type);
     }
 }
+
+//public class Cell {
+//    public static readonly int SIZE = 10;
+
+//    // The cells index in the total map (not relative to its parent chunk).
+//    private int indexX;
+//    private int indexY;
+
+//    public Cell(int x, int y) {
+//        indexX = x;
+//        indexY = y;
+//    }
+
+//    private Block[,] blocks = new Block[SIZE, SIZE];
+
+
+//    // Returns true if a new block was created (the block was null before), or false it a block was overwritten
+//    public bool SetBlock(BlockType block, int x, int y) {
+//        if (blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)] == null) {
+//            blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)] = new Block(x, y, block);
+//            return true;
+//        }
+//        blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)].Type = block;
+//        return false;
+//    }
+
+//    public Block GetBlock(int x, int y) {
+//        return blocks[ToBlockIndexInCell(y), ToBlockIndexInCell(x)];
+//    }
+
+//    public void ForEachBlock(BlockCallback callback) {
+
+//        int cellOffsetX = indexX < 0 ? (indexX + 1) * SIZE : indexX * SIZE;
+//        int cellOffsetY = indexY < 0 ? (indexY + 1) * SIZE : indexY * SIZE;
+
+
+//        /* Block indexes are away from 0. If the cell's range is
+//         * [-10, -19] then block index 0 is -10 and index 10 is -19*/
+//        int directionX = indexX < 0 ? -1 : 1;
+//        int directionY = indexY < 0 ? -1 : 1;
+
+//        for (int y = 0; y < blocks.GetLength(0); y++) {
+//            for (int x = 0; x < blocks.GetLength(1); x++) {
+//                if (blocks[y, x] != null) {
+//                    callback(blocks[y, x], cellOffsetX + x * directionX, cellOffsetY + y * directionY);
+//                }
+//            }
+//        }
+//    }
+
+//    public static int ToBlockIndexInCell(int coordinate) {
+//        return Math.Abs(coordinate) % SIZE;
+//    }
+
+//    public static int ToCellIndex(int coordinate) {
+//        return coordinate < 0 ? coordinate / SIZE - 1 : coordinate / SIZE;
+//    }
+
+//}
+
+
+//public class Block : TextureView {
+//    public BlockType Type { get; set; }
+
+//    public Block(int x, int y, BlockType type) : base(null, Textures.SQUARE, Color.White, x, y, 1, 1) {
+//        AddCollider(new RectCollider(this));
+//        this.Type = type;
+//    }
+
+//    public override string ToString() {
+//        return String.Format("Block( x: {0}, y: {1}, type: {2})", X, Y, Type);
+//    }
+//}
 
 public enum BlockType : byte {
     NONE,

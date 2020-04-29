@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework;
 public class Settings {
 
 
+    public static readonly int TRACK_RENDER_DISTANCE = 200;
+    public static readonly int TRACK_CHUNK_SIZE = 50;
+
     public static float SHIP_RESISTANCE = 0.90f;
     public static float SHIP_ACCELERATION = 150f;
     public static float SHIP_ROTATION_VELOCITY = (float) Math.PI;
