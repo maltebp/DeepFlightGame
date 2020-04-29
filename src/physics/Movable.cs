@@ -2,6 +2,7 @@
 
  
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 public abstract class Movable : Collidable {
 
@@ -12,6 +13,8 @@ public abstract class Movable : Collidable {
     public float Resistance { get; set; } = 1f; // 1 = no resistance
     public float MaxVelocity { get; set; } = 0f;
     public float RotationVelocity = 0f;
+
+    public float Velocity { get => Math.Abs(VelocityX) + Math.Abs(VelocityY); }
 
     public Movable() : base(0,0) { }
 

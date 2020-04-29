@@ -49,6 +49,8 @@ namespace DeepFlight.scenes {
 
         private bool crashed = true;
 
+        private float targetZoom = 7f;
+
 
         private DebugInfoLine 
             infoLine_ShipPos,
@@ -107,7 +109,7 @@ namespace DeepFlight.scenes {
 
             border_Screen = new BorderView(gameCamera, color: Color.Red, borderWidth: 1, width: width/7, height: height/7 );
             border_Rendering = new BorderView(gameCamera, color: Color.Blue, borderWidth: 1, width: Settings.TRACK_RENDER_DISTANCE, height:  Settings.TRACK_RENDER_DISTANCE );
-            AddChildren(border_Screen, border_Rendering);
+            //AddChildren(border_Screen, border_Rendering);
 
             // Add checkpoints drawables
             var checkpoints = track.Checkpoints;
@@ -179,6 +181,10 @@ namespace DeepFlight.scenes {
             shipPaused = true;
             crashed = false;
             ship.Hidden = false;
+
+            // Smooth zoom motion on start (just because its pretty)
+            gameCamera.Zoom = DEFAULT_ZOOM-0.5f;
+            targetZoom = DEFAULT_ZOOM;
 
             // Reset checkpoints
             foreach( var checkpoint in track.Checkpoints) {
@@ -306,7 +312,7 @@ namespace DeepFlight.scenes {
             if( !crashed) {
                 var shipCollision = false;
                 if (collisionEnabled) {
-                    track.ForChunkInRange((int)ship.X - 20, (int)ship.Y - 20, (int)ship.X + 20, (int)ship.Y + 20, chunk => {
+                    track.ForChunkInRange((int)ship.X - 20, (int)ship.X + 20, (int)ship.Y - 20, (int)ship.Y + 20, chunk => {
                         foreach (var collisionBlock in chunk.CollisionBlocks) {
                             if (collisionBlock.CollidesWith(ship))
                                 shipCollision = true;
@@ -336,10 +342,16 @@ namespace DeepFlight.scenes {
                 }
 
                 UpdateTimeText();
+                UpdateCameraZoom();
             }
         }
 
 
+
+        private void UpdateCameraZoom() {
+            targetZoom = 7 - ship.Velocity / 300;
+            gameCamera.Zoom += (targetZoom - gameCamera.Zoom)*0.05f;
+        }
 
 
         private async void ShipCrashed() {
