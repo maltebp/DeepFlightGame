@@ -15,7 +15,6 @@ using System;
 namespace DeepFlight.scenes {
     class TrackCompleteScene : Scene {
 
-
         private Camera uiCamera = new Camera();
         private TextureView background;
         private SimpleMenuView menu;

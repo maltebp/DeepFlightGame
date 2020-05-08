@@ -53,18 +53,13 @@ namespace DeepFlight.src.scenes {
             LoadTrack();
         }
 
-
-        protected override void OnUpdate(double deltaTime) {
-            Mover.Move(spinningPlanet, deltaTime);
-        }
-
-
         // Perform the actual loading
         private async void LoadTrack() {
             if( track == null ) {
                 track = await TrackLoader.GenerateLocalTrack();
             }
             if( online) {
+                // TODO: Add try catch here
                 var gameApi = new GameAPIConnector();
                 var blockData = await gameApi.GetTrackBlockData(track);
                 track.BlockData = blockData;

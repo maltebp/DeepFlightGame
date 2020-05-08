@@ -1,20 +1,17 @@
 ﻿
 using DeepFlight.control.offlinetracktime;
 using DeepFlight.network;
+using DeepFlight.user;
 using Microsoft.Xna.Framework;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 public static class Program {
 
-
-
     [STAThread]
     static void Main() {
-
-        //testRatings();
-        //Thread.Sleep(10000);
 
         // Setup logging
         Directory.CreateDirectory("logs");
@@ -31,11 +28,12 @@ public static class Program {
             game.Run();
         }
         catch (Exception e) {
-            //Console.WriteLine("Exception occure: " + e.Message);
+            // Catch any uncaught exceptions, and log it
             Trace.TraceError("\nFatal error: " + e);
             error = true;
         }
 
+        // Log whether or not we terminated with errors
         if (error)
             Trace.TraceInformation("Program terminated with errors");
         else
@@ -44,13 +42,5 @@ public static class Program {
         // Apparently process is not killed automatically
         // due to MonoGame
         Process.GetCurrentProcess().Kill();
-    }
-
-    static async void testRatings() {
-
-        // TODO: Remove this
-        var api = new GameAPIConnector();
-        var round = await api.GetPreviousRound();
-        
     }
 }

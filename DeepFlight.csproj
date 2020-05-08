@@ -93,12 +93,10 @@
     <Compile Include="src\network\exceptions\ConnectionException.cs" />
     <Compile Include="src\network\exceptions\UnknownTrackException.cs" />
     <Compile Include="src\network\GameAPIConnector.cs" />
-    <Compile Include="src\network\IGameAPIConnector.cs" />
     <Compile Include="src\network\exceptions\ServerException.cs" />
     <Compile Include="src\network\UserAPIConnector.cs" />
     <Compile Include="src\physics\Collider.cs" />
     <Compile Include="src\physics\Movable.cs" />
-    <Compile Include="src\physics\Mover.cs" />
     <Compile Include="src\view\rendering\Camera.cs" />
     <Compile Include="src\view\rendering\Font.cs" />
     <Compile Include="src\view\rendering\Renderer.cs" />
@@ -122,7 +120,6 @@
     <Compile Include="src\model\user\User.cs" />
     <Compile Include="src\utility\CharLists.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
-    <Compile Include="src\utility\InputController.cs" />
     <Compile Include="src\utility\KeyboardController.cs" />
     <Compile Include="src\utility\MathExtension.cs" />
     <Compile Include="src\utility\Point.cs" />

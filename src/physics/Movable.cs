@@ -20,24 +20,28 @@ public abstract class Movable : Collidable {
 
     public Movable(float width, float height) : base(width, height) { }
 
-
     /// <summary>
-    /// Deep copy constructor
-    /// WARNING: Colliders are NOT copied!
+    /// Resets the movables movements, by setting all acceleration and velocity to 0
     /// </summary>
-    public Movable(Movable original) : base(original) {
-        VelocityX = original.VelocityX;
-        VelocityY = original.VelocityY;
-        AccelerationX = original.AccelerationX;
-        AccelerationY = original.AccelerationY;
-        Resistance = original.Resistance;
-        MaxVelocity = original.MaxVelocity;
-    }
-
     public void ResetMovement() {
         VelocityX = 0;
         VelocityY = 0;
         AccelerationX = 0;
         AccelerationY = 0;
+    }
+
+    /// <summary>
+    /// Updates the movable by moving, accelerate and rotate it
+    /// </summary>
+    /// <param name="deltaTime"> Delta time to determine how much to update it </param>
+    public void UpdateMovement(double deltaTime) {
+        VelocityX += (AccelerationX - Resistance* VelocityX)*(float) deltaTime;
+        VelocityY += (AccelerationY - Resistance* VelocityY)*(float) deltaTime;
+
+        Rotation += (float) (RotationVelocity* deltaTime);
+
+        // Update position
+        X += VelocityX* deltaTime;
+        Y += VelocityY* deltaTime;
     }
 }

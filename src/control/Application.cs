@@ -8,6 +8,7 @@ using DeepFlight.scenes;
 using DeepFlight.src.gui.debugoverlay;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
+using DeepFlight.utility;
 
 
 // Central controller class of the application

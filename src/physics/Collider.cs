@@ -11,13 +11,6 @@ public abstract class Collidable : Entity {
 
     protected Collidable(float width, float height) : base(width, height) { }
 
-    /// <summary>
-    /// Deep copy constructor.
-    /// WARNING: Colliders are not copied.
-    /// </summary>
-    public Collidable(Collidable original) : base(original) {
-        // TODO: WARNING!!! Colliders are not copied
-    }
 
     protected void AddCollider(Collider collider) {
         colliders.AddLast(collider);
@@ -42,12 +35,14 @@ public abstract class Collidable : Entity {
     
 }
 
-// TODO: Remove this
-//public interface Collidable {
-//    bool CollidesWith(Collidable collidable);
-//    List<Collider> GetColliders();
-//}
 
+/// <summary>
+/// A Collider defines an area with which you can collide. In general it supplies a method
+/// which returns a set of "collision points" for other colliders to use, to see if they
+/// collide with this, and a method to see if the it collides with any points.
+/// 
+/// Thus the following holds: ColliderA.CollidesWith(ColliderB) != ColliderB.CollidesWith(ColliderA)
+/// </summary>
 public abstract class Collider {
 
     protected Entity entity;
@@ -57,10 +52,18 @@ public abstract class Collider {
     }
 
     
+    /// <summary>
+    /// Tests whether this Collider collides with any of the the points
+    /// from the parameter Collider
+    /// </summary>
+    /// <param name="collider"></param>
+    /// <returns></returns>
     public bool CollidesWith(Collider collider) {
+        // Check if collision is even possible (i.e. they are way too far from each other)
         var center = new Point(entity.GetCenterX(), entity.GetCenterY());
         if (!collider.IsCollisionPossible(center, FilterDistance()))
-            return false;
+            return false;   
+        // Do the actual collision check
         return CollidesWithPoints(collider.GetCollisionPoints());
     }
 
@@ -135,13 +138,19 @@ public class CircleCollider : Collider {
 }
 
 
-
-
 // Collider which detects collision within rectangular boundary
 public class RectCollider : Collider {
 
     public RectCollider(Entity entity) : base(entity) { }
 
+
+    // Points are:
+    //
+    //  p0------p2 
+    //   |      |
+    //   |      |
+    //  p1------p3
+    //
     public override Point[] GetCollisionPoints() {
         var centerX = entity.GetCenterX();
         var centerY = entity.GetCenterY();
@@ -180,6 +189,9 @@ public class RectCollider : Collider {
 }
 
 
+/// <summary>
+/// Collider describing a triangular area.
+/// </summary>
 public class TriangleCollider : Collider {
 
     public TriangleCollider(Entity entity) : base(entity) { }
@@ -204,9 +216,10 @@ public class TriangleCollider : Collider {
     }
 
     protected override bool CollidesWithPoints(params Point[] points) {
-
         // TODO: Implement triangle collision detection
         // Source: https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
+        // Note: It's rather non-trivial to implement, and it's strictly not necessary (as it isn't used), so
+        // this is left as not-implemented
         throw new Exception("Don't call ColllidesWith on a Triangle collider - not implemented yet!");
     }
 

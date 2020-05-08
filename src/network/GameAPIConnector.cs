@@ -13,8 +13,9 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace DeepFlight.network {
 
-    public class GameAPIConnector : IGameAPIConnector {
+    public class GameAPIConnector {
 
+        private static readonly string TIME_UPDATE_KEY = "verysecurekey1234";
         private static readonly string URL = "http://localhost:10000/gameapi";
         private RestClient client;
 
@@ -25,6 +26,14 @@ namespace DeepFlight.network {
             client = new RestClient(URL);
         }
 
+
+
+        /// <summary>
+        /// Get the current Round, including Track metadata, but not round ratings
+        /// </summary>
+        /// 
+        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
+        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
         public Task<Round> GetCurrentRound() {
             return Task.Run(() => {
 
@@ -36,7 +45,7 @@ namespace DeepFlight.network {
                     throw new ConnectionException(client.BaseUrl.ToString());
 
                 // Check if round exists
-                if (response.StatusCode != HttpStatusCode.NotFound) {
+                if (response.StatusCode == HttpStatusCode.NotFound) {
                     return null;
                 }
 
@@ -51,6 +60,15 @@ namespace DeepFlight.network {
         }
 
 
+
+
+        /// <summary>
+        /// Get the previous Round, including Track metadata for that round, but not 
+        /// round ratings
+        /// </summary>
+        /// 
+        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
+        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
         public Task<Round> GetPreviousRound() {
             return Task.Run(() => {
 
@@ -90,13 +108,16 @@ namespace DeepFlight.network {
             try {
                 // The rankings json property may not exist, so we surround it
                 // with a try catch statement
-                List<UserRanking> rankings = new List<UserRanking>();
-                int rank = 1;
-                foreach (dynamic rankingJson in json.rankings) {
-                    Console.WriteLine(rankingJson);
-                    rankings.Add(new UserRanking() { name = rankingJson.username, rank = rank, rating = rankingJson.rating });
-                    rank++;
+                if( json.rankings != null) {
+                    List<UserRanking> rankings = new List<UserRanking>();
+                    int rank = 1;
+                    foreach (dynamic rankingJson in json.rankings) {
+                        Console.WriteLine(rankingJson);
+                        rankings.Add(new UserRanking() { name = rankingJson.username, rank = rank, rating = rankingJson.rating });
+                        rank++;
+                    }
                 }
+                
             }catch (RuntimeBinderException e) { }
             
             // Get the tracks for the given round
@@ -114,31 +135,19 @@ namespace DeepFlight.network {
             return round;
         }
 
-        public Task<byte[]> GetTrackBlockData(Track track) {
-            return Task.Run(() => {
-                var request = new RestRequest("track/" +track.Id + "/blockdata");
-
-                Console.WriteLine("\nClient timeout: " + client.Timeout);
-                Console.WriteLine("Request timeout: " + request.Timeout);
-
-                var response = client.Get(request);
-
-                // Check connection error
-                if (response.ErrorException != null)
-                    throw new ConnectionException(client.BaseUrl.ToString());
-
-                // Check for other unhandled status codes
-                if (response.StatusCode != HttpStatusCode.OK) {
-                    var e = new ServerException("Unhandled HTTP status code when fetching track data: " + response.StatusCode);
-                    Trace.TraceError("\nServer side error during login: " + e);
-                    throw e;
-                }
-
-                return response.RawBytes;
-            });
-        }
 
 
+
+
+
+        /// <summary>
+        /// Get the Universal Rating of highest rated users
+        /// </summary>
+        /// <param name="numberOfRatings"> Maximum number of ratings to get </param>
+        /// <returns> A list of UserRating structs sorted from best to worts rating</returns>
+        /// 
+        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
+        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
         public Task<List<UserRanking>> GetUniversalRankings(int count) {
             return Task.Run(() => {
                 var request = new RestRequest($"rankings/universal");
@@ -212,6 +221,42 @@ namespace DeepFlight.network {
         }
 
 
+
+        /// <summary>
+        /// Returns the block data of a given Track. Data will not be added automatically
+        /// to the Track but returned.
+        /// </summary>
+        /// <param name="track">The Track to find the block data for (uses only ID)</param>
+        /// <returns>The block data as a sequential array of bytes</returns>
+        /// 
+        /// <exception cref="UnknownTrackException"> Couldn't find track within API </exception>
+        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
+        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
+        public Task<byte[]> GetTrackBlockData(Track track) {
+            return Task.Run(() => {
+                var request = new RestRequest("track/" + track.Id + "/trackdata");
+
+                Console.WriteLine("\nClient timeout: " + client.Timeout);
+                Console.WriteLine("Request timeout: " + request.Timeout);
+
+                var response = client.Get(request);
+
+                // Check connection error
+                if (response.ErrorException != null)
+                    throw new ConnectionException(client.BaseUrl.ToString());
+
+                // Check for other unhandled status codes
+                if (response.StatusCode != HttpStatusCode.OK) {
+                    var e = new ServerException("Unhandled HTTP status code when fetching track data: " + response.StatusCode);
+                    Trace.TraceError("\nServer side error during login: " + e);
+                    throw e;
+                }
+
+                return response.RawBytes;
+            });
+        }
+
+
         public Task<Planet> GetPlanet(string planetId) {
             return Task.Run(() => { return GetPlanetSynchronous(planetId);  });
         }
@@ -239,11 +284,44 @@ namespace DeepFlight.network {
         }
 
 
+
+        /// <summary>
+        /// Updates the Users track time on a given Track
+        /// </summary>
+        /// <param name="user"> The User to upload the time for </param>
+        /// <param name="track"> The Track to upload the time for </param>
+        /// <returns> True if the new Time was better than existing (and thus the time was updated) </returns>
+        /// 
+        /// <exception cref="UnknownUserException"> Couldn't find user within API </exception>
+        /// <exception cref="UnknownTrackException"> Couldn't find track within API </exception>
+        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
+        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
         public Task<bool> UpdateUserTrackTime(User user, Track track, ulong newTime) {
             return Task.Run(() => {
-                // TODO: Implement track time updating here!
-                Thread.Sleep(2000);
-                return true;
+
+                var request = new RestRequest($"track/{track.Id}/times/{user.Username}", DataFormat.Json);
+                request.AddHeader("Authorization", $"Bearer {user.Token}");
+                request.AddJsonBody(new { updateKey = TIME_UPDATE_KEY, time = newTime });
+                var response = client.Post(request);
+
+                // Check connection error
+                if (response.ErrorException != null)
+                    throw new ConnectionException(client.BaseUrl.ToString());
+
+                // Check token is correct
+                if (response.StatusCode == HttpStatusCode.Unauthorized) {
+                    throw new AuthenticationException("Update request was unauthorized: " + response.Content);
+                }
+
+                // Check for other unhandled status codes
+                if (response.StatusCode != HttpStatusCode.OK) {
+                    Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
+                    throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
+                }
+
+                dynamic responseJson = JsonConvert.DeserializeObject(response.Content);
+                bool newRecord = responseJson.newRecord;
+                return newRecord;
             });
         }
 
@@ -294,5 +372,16 @@ namespace DeepFlight.network {
                 return user;
             });
         }
+    }
+
+    public struct UserTrackTime {
+        public string name;
+        public long time;
+    }
+
+    public struct UserRanking {
+        public string name;
+        public int rank;
+        public double rating;
     }
 }

@@ -3,6 +3,10 @@
 
 using System;
 
+/// <summary>
+/// The Camera describes a origin of a perspective, from which Entities may be
+/// drawn relative to
+/// </summary>
 public class Camera {
 
     public double X { get; set; } = 0;

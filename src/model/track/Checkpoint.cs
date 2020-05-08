@@ -22,8 +22,8 @@ namespace DeepFlight.track {
             Y = y;
             Index = index;
             Color = color;
-            Width = Settings.GAME_CHECKPOINT_SIZE;
-            Height = Settings.GAME_CHECKPOINT_SIZE;
+            Width = Settings.CHECKPOINT_SIZE;
+            Height = Settings.CHECKPOINT_SIZE;
             RotationVelocity = 0.4f;
 
             // Add a slightly scaled down collider
@@ -31,7 +31,7 @@ namespace DeepFlight.track {
         }
 
         protected override void OnUpdate(double deltaTime) {
-            Mover.Move(this, deltaTime);
+            UpdateMovement(deltaTime);
         }
 
     }

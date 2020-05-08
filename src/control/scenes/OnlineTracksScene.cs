@@ -55,12 +55,13 @@ namespace DeepFlight.scenes {
             loader.Hidden = true;
             AddChild(loader);
 
-            if( User.LocalUser.Guest) {
-                DisplayError("Sorry, you cannot play the online tracks as a guest!");
-            }
-            else {
-                LoadTracks();
-            }
+            LoadTracks();
+            //if ( User.LocalUser.Guest) {
+            //    DisplayError("Sorry, you cannot play the online tracks as a guest!");
+            //}
+            //else {
+                
+            //}
             
         }
 

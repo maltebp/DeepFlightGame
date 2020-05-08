@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 /// <summary>
 /// Defines a Font in a series of different sizes
@@ -12,9 +14,18 @@ using System.Collections.Generic;
 /// </summary>
 public class Font {
 
-    private const string FONT_FOLDER = "Content/Fonts/";
+    private const string FONT_FOLDER = "Content/Fonts";
     private const int MAX_SIZE = 124;
     private const int MIN_SIZE = 8;
+
+    public string FontFolder {
+        get {
+            // Fetching the permanent assembly execution path (for this assembly that is)
+            string executionPath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            return new Uri(new Uri(executionPath), ".").LocalPath + FONT_FOLDER;
+        }
+    }
+
 
     public string   Name { get; private set; }
     public bool     Bold { get; }
@@ -83,18 +94,23 @@ public class Font {
             throw new ContentLoadException(string.Format("Font '{0}' has already been loaded", Name));
 
         LinkedList<int> loadedSizes = new LinkedList<int>();
-        
+
+        string folder = $"{FontFolder}/{Name}";
+        string[] fontFiles = Directory.GetFiles(folder).Select(Path.GetFileName).ToArray();
+
         // Example: Contents/Fonts/Roboto/Robot_Bold_Italic_12
         string path = FONT_FOLDER + "/" + Name + "/" + Name + (Bold ? "_Bold" : "") + (Italic ? "_Italic" : "");
 
         // Iterate over font sizes in steps of 2
-        for (int i = MIN_SIZE; i <= MAX_SIZE; i += 2) {
+        foreach(var file in fontFiles) {
+            var size = Int32.Parse(file.Replace($"{Name}_", "").Replace(".xnb", ""));
             try {
-                SpriteFont font = content.Load<SpriteFont>(path + "_" + i);
-                fontMap[i] = font;
-                loadedSizes.AddLast(i);
+                SpriteFont font = content.Load<SpriteFont>($"{FONT_FOLDER}/{Name}/{Name}_{size}");
+                fontMap[size] = font;
+                loadedSizes.AddLast(size);
             }
             catch (ContentLoadException e) { }
+
         }
 
         if (loadedSizes.Count == 0)
