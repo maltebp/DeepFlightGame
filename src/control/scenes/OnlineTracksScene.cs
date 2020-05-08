@@ -7,6 +7,7 @@ using DeepFlight.rendering;
 using DeepFlight.src.gui;
 using DeepFlight.src.scenes;
 using DeepFlight.track;
+using DeepFlight.user;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -54,7 +55,13 @@ namespace DeepFlight.scenes {
             loader.Hidden = true;
             AddChild(loader);
 
-            LoadTracks();
+            if( User.LocalUser.Guest) {
+                DisplayError("Sorry, you cannot play the online tracks as a guest!");
+            }
+            else {
+                LoadTracks();
+            }
+            
         }
 
 
@@ -84,7 +91,7 @@ namespace DeepFlight.scenes {
                 return;
             }
 
-
+            // Check if a round even exists
             if( round == null ) {
                 DisplayError("No round is active at the moment - come back later!");
                 return;

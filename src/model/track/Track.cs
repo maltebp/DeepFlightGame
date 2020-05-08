@@ -26,6 +26,9 @@ public class Track {
     public long BestTimeGlobal { get; set; }
     public long BestTimeUser { get; set; }
 
+    // The local time record on the Track
+    public long OfflineTime { get; set; } = 0;
+
     public bool BlockDataDeserialized { get; set; }
 
     public bool Generated { get; set; } = false; 

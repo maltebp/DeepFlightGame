@@ -1,6 +1,8 @@
 ﻿using DeepFlight.gui;
 using DeepFlight.src.gui.planetbox;
+using DeepFlight.user;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace DeepFlight.src.gui {
 
@@ -42,7 +44,6 @@ namespace DeepFlight.src.gui {
             time_PersonalBest = new TimeLabelView(camera, "Personal Best:", 0, 0, Font.DEFAULT, 0, Color.White);
             AddChild(time_PersonalBest);
 
-
             Track = track;
             UpdateTrackInfo();
             UpdateLayout();
@@ -50,12 +51,34 @@ namespace DeepFlight.src.gui {
 
 
         private void UpdateTrackInfo() {
+
+            // Update information
             FocusColor = track.Planet.Color;
             text_TrackName.Text = track.Name;
             text_PlanetName.Text = track.Planet.Name;
 
-            if (time_GlobalBest != null) time_GlobalBest.Time = track.BestTimeGlobal;
-            time_PersonalBest.Time = track.BestTimeUser;
+            // Update Global time
+            if( time_GlobalBest != null ) {
+                time_GlobalBest.Time = 0;
+                if( track.Times.Count > 0 ) {
+                    time_GlobalBest.Time = track.Times.First().time;
+                }
+            }
+
+            time_PersonalBest.Time = 0;
+            // Update User's best
+            if ( User.LocalUser.Guest) {
+                time_PersonalBest.Time = track.OfflineTime;
+            }
+            else {
+                foreach (var trackTime in track.Times) {
+                    if (trackTime.username == User.LocalUser.Username) {
+                        time_PersonalBest.Time = trackTime.time;
+                    }
+                }
+            }
+            
+
         }
 
 

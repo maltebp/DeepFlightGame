@@ -39,21 +39,6 @@ namespace DeepFlight.network {
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
         Task<byte[]> GetTrackBlockData(Track track);
 
-
-        /// <summary>
-        /// Gets the User's best track time on a given Track
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="track"></param>
-        /// <returns> The User's best time on the given Track in milliseconds, or 0 if no time has been registered </returns>
-        /// 
-        /// <exception cref="UnknownUserException"> Couldn't find user within API </exception>
-        /// <exception cref="UnknownTrackException"> Couldn't find track within API </exception>
-        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
-        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<ulong> GetUserTrackTime(User user, Track track);
-
-
         /// <summary>
         /// Updates the Users track time on a given Track
         /// </summary>
@@ -77,48 +62,7 @@ namespace DeepFlight.network {
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
         Task<List<UserRanking>> GetUniversalRankings(int count);
-
-
-
-
-        /// <summary>
-        /// Gets the Universal rating for the user
-        /// </summary>
-        /// <param name="user">User to find rating for</param>
-        /// <returns>The rating of the user</returns>
-        /// 
-        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
-        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<UserRanking> GetUserUniversalRanking(User user);
-
-        /// <summary>
-        /// Gets the rating for the given user for the given round
-        /// </summary>
-        /// <param name="user">User to find rating for</param>
-        /// <param name="round">Round to find rating for</param>
-        /// <returns>The rating of the user</returns>
-        /// 
-        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
-        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<UserRanking> GetUserRoundRanking(User user, Round round);
-
-
-        /// <summary>
-        /// Get the track times for the given Track sorted from best time to worst.
-        /// </summary>
-        /// <param name="count"> Number of maximum times to get </param>
-        /// <returns> List of USerTrackTime structs withs sernames paired with their track time sorted from best to worst.
-        /// Size if between 0 and 'count' </returns>
-        ///
-        /// <exception cref="UnknownTrackException"> Track doesn't exist </exception>
-        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
-        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<List<UserTrackTime>> GetTrackTimes(Track track, int count);
-
-
-
     }
-
 
     public struct UserTrackTime {
         public string name;

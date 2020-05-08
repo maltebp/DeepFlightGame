@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 
 public static class Program {
 
@@ -16,7 +15,6 @@ public static class Program {
 
         //testRatings();
         //Thread.Sleep(10000);
-
 
         // Setup logging
         Directory.CreateDirectory("logs");

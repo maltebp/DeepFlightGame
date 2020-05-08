@@ -37,21 +37,21 @@ namespace DeepFlight.generation {
                 track.Id = "";
                 track.Name = "AGRC-313";
                 track.Planet = new Planet("1", "Aerth", new int[] { 49, 102, 44 });
-                track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
+                track.OfflineTime = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 track = LoadTrackFile(offlineTracksFolder + "smar" + FILE_EXTENSION);
                 track.Id = "";
                 track.Name = "IAUI-636";
                 track.Planet = new Planet("2", "Smar", new int[] { 150, 30, 9 });
-                track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
+                track.OfflineTime = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 track = LoadTrackFile(offlineTracksFolder + "turnsa" + FILE_EXTENSION);
                 track.Id = "";
                 track.Name = "NSIY-432";
                 track.Planet = new Planet("3", "Turnsa", new int[] { 120, 120, 90 });
-                track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
+                track.OfflineTime = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 Console.WriteLine("Loaded offline tracks: ");

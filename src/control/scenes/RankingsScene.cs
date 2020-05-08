@@ -95,7 +95,13 @@ namespace DeepFlight.scenes {
                     ratingboard_Universal.HideUserRanking();
                 }
                 else {
-                    ratingboard_Universal.UpdateUserRanking(await gameApi.GetUserUniversalRanking(User.LocalUser));
+                    // Show user's ranking
+                    foreach (var ranking in universalRankings) {
+                        if (ranking.name == User.LocalUser.Username) {
+                            ratingboard_Universal.UpdateUserRanking(ranking);
+                            break;
+                        }
+                    }
                 }
 
                 // Previous Round rankings
@@ -118,7 +124,13 @@ namespace DeepFlight.scenes {
                             ratingboard_LastRound.HideUserRanking();
                         }
                         else {
-                            ratingboard_LastRound.UpdateUserRanking(await gameApi.GetUserRoundRanking(User.LocalUser, lastRound));
+                            // Display the user's ranking
+                            foreach(var ranking in lastRound.Rankings) {
+                                if( ranking.name == User.LocalUser.Username) {
+                                    ratingboard_LastRound.UpdateUserRanking(ranking);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

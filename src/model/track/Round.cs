@@ -21,5 +21,14 @@ namespace DeepFlight.track {
             return string.Format("Round( number={0}, tracks=[{1}] )", RoundNumber, string.Join(",", Tracks));
         }
 
+        public UserRanking GetUserRanking(string username) {
+            if (Rankings == null) return new UserRanking() { name = "", rating = 0, rank = 0 };
+            foreach (var userRanking in Rankings) {
+                if (userRanking.name == username)
+                    return userRanking;
+            }
+            return new UserRanking() { name="", rating=0, rank=0};
+        }
+
     }
 }
