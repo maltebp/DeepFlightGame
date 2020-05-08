@@ -1,9 +1,11 @@
 ﻿
 using DeepFlight.control.offlinetracktime;
+using DeepFlight.network;
 using Microsoft.Xna.Framework;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 public static class Program {
 
@@ -11,6 +13,9 @@ public static class Program {
 
     [STAThread]
     static void Main() {
+
+        //testRatings();
+        //Thread.Sleep(10000);
 
 
         // Setup logging
@@ -41,5 +46,13 @@ public static class Program {
         // Apparently process is not killed automatically
         // due to MonoGame
         Process.GetCurrentProcess().Kill();
+    }
+
+    static async void testRatings() {
+
+        // TODO: Remove this
+        var api = new GameAPIConnector();
+        var round = await api.GetPreviousRound();
+        
     }
 }

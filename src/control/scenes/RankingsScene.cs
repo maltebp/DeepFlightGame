@@ -22,6 +22,8 @@ namespace DeepFlight.scenes {
 
         private TextView text_Error;
 
+        private TextView text_RoundRankingsMessage;
+
         private LoadingTextView loader; 
 
         private RatingboardView 
@@ -49,10 +51,14 @@ namespace DeepFlight.scenes {
             text_Error.Hidden = true;
             AddChild(text_Error);
 
-
-            ratingboard_Universal = new RatingboardView(camera_UI, "Universal Ratings (Top 5)", -width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
-            ratingboard_LastRound = new RatingboardView(camera_UI, "Last Round Ratings (Top 5)", width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
+            ratingboard_Universal = new RatingboardView(camera_UI, "Universal Rankings (Top 5)", -width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
+            ratingboard_LastRound = new RatingboardView(camera_UI, "Previous Round Ratings (Top 5)", width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
             AddChildren(ratingboard_Universal, ratingboard_LastRound);
+
+            // Text for displaying message regarding round ranking
+            text_RoundRankingsMessage = new TextView(camera_UI, "", x: ratingboard_LastRound.X, y: ratingboard_LastRound.Y);
+            text_RoundRankingsMessage.Hidden = true;
+            AddChild(text_RoundRankingsMessage);
 
             loader = new LoadingTextView(camera_UI, y: height*0.5);
             AddChild(loader);
@@ -65,42 +71,64 @@ namespace DeepFlight.scenes {
         /*
          * Contant the GameAPI for the current ratings */
         public async void LoadRatings() {
+
+            // Start loading
             ratingboard_Universal.Hidden = true;
             ratingboard_LastRound.Hidden = true;
-
             loader.Hidden = false;
             loader.Text = "Checking who's the very best";
 
             try {
+                // Fetch rankings from GameAPI
                 var gameApi = new GameAPIConnector();
-
+                var universalRankings = await gameApi.GetUniversalRankings(5);
                 var lastRound = await gameApi.GetPreviousRound();
 
-                ratingboard_Universal.UpdateRankings(await gameApi.GetUniversalRatings(5));
-                ratingboard_LastRound.UpdateRankings(await gameApi.GetRoundRatings(lastRound, 5));
+                // Hide and shows stuff
+                loader.Hidden = true;
+                ratingboard_Universal.Hidden = false;
+                ratingboard_LastRound.Hidden = false;
 
+                // Universal ranking
+                ratingboard_Universal.UpdateRankings(universalRankings);
                 if( User.LocalUser.Guest) {
                     ratingboard_Universal.HideUserRanking();
-                    ratingboard_LastRound.HideUserRanking();
                 }
                 else {
                     ratingboard_Universal.UpdateUserRanking(await gameApi.GetUserUniversalRanking(User.LocalUser));
-                    ratingboard_LastRound.UpdateUserRanking(await gameApi.GetUserRoundRanking(User.LocalUser, lastRound));
+                }
+
+                // Previous Round rankings
+                if (lastRound == null) {
+                    text_RoundRankingsMessage.Text = "No previous round exists";
+                    text_RoundRankingsMessage.Hidden = false;
+                    ratingboard_LastRound.HideRankings();
+                }
+                else {
+                    ratingboard_LastRound.Title = $"Round #{lastRound.RoundNumber} rankings";
+                    if (lastRound.Rankings == null) {
+                        text_RoundRankingsMessage.Text = $"Round hasn't been ranked yet";
+                        text_RoundRankingsMessage.Hidden = false;
+                        ratingboard_LastRound.HideRankings();
+                    }
+                    else {
+                        // Rankings are available, so we update them
+                        ratingboard_LastRound.UpdateRankings(lastRound.Rankings);
+                        if (User.LocalUser.Guest) {
+                            ratingboard_LastRound.HideUserRanking();
+                        }
+                        else {
+                            ratingboard_LastRound.UpdateUserRanking(await gameApi.GetUserRoundRanking(User.LocalUser, lastRound));
+                        }
+                    }
                 }
             }
             catch (ConnectionException e) {
                 DisplayError("The universe seems to be offline right now :(");
-                return;
             }
             catch (ServerException e) {
                 DisplayError("An unknown mishap seems to have occured :(");
-                return;
             }
-
-            loader.Hidden = true;
-            ratingboard_Universal.Hidden = false;
-            ratingboard_LastRound.Hidden = false;
-
         }
 
 

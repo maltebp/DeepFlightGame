@@ -31,7 +31,7 @@ public class Renderer {
             if (spriteBatch == null)
                 throw new NullReferenceException("Sprite batch is null");
             drawing = true;
-            graphics.GraphicsDevice.Clear(Settings.CLEAR_COLOR);
+            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.Stencil, Color.Transparent, 0, 0);
 
             spriteBatch.Begin(
                 sortMode: SpriteSortMode.BackToFront,
@@ -181,7 +181,27 @@ public class Renderer {
 
     public int DrawTrack(Camera camera, Track track) {
 
+
+
         InitializeDraw();
+
+        
+
+        var s1 = new DepthStencilState {
+            StencilEnable = true,
+            StencilFunction = CompareFunction.Always,
+            StencilPass = StencilOperation.Replace,
+            ReferenceStencil = 1,
+            DepthBufferEnable = false,
+        };
+
+        var s2 = new DepthStencilState {
+            StencilEnable = true,
+            StencilFunction = CompareFunction.LessEqual,
+            StencilPass = StencilOperation.Keep,
+            ReferenceStencil = 1,
+            DepthBufferEnable = false,
+        };
 
         var transformation = 
            Matrix.CreateTranslation((float) -camera.X, (float) -camera.Y, 0) *
@@ -190,10 +210,23 @@ public class Renderer {
            Matrix.CreateRotationZ(camera.Rotation) *
            Matrix.CreateTranslation(graphics.PreferredBackBufferWidth/2, graphics.PreferredBackBufferHeight / 2, 0);
 
+        var m = Matrix.CreateOrthographicOffCenter(0,
+            graphics.GraphicsDevice.PresentationParameters.BackBufferWidth,
+            graphics.GraphicsDevice.PresentationParameters.BackBufferHeight,
+            0, 0, 1
+        );
+        var a = new AlphaTestEffect(graphics.GraphicsDevice) {
+            Projection = m,
+            AlphaFunction = CompareFunction.GreaterEqual,
+            ReferenceAlpha = 0
+    };
+
         trackBatch.Begin(
                samplerState: SamplerState.PointClamp, // Turn of anti-alias
-               transformMatrix: transformation,
-               sortMode: SpriteSortMode.BackToFront
+               //transformMatrix: transformation,
+               sortMode: SpriteSortMode.Immediate,
+               effect: a,
+               depthStencilState: s1
         );
 
         // Calculate wall color
@@ -201,15 +234,15 @@ public class Renderer {
         var wallDarkenColor = Settings.TRACK_COLOR_ADJUST_WALL;
         var wallColor = new Color(planetColor.R - wallDarkenColor, planetColor.G - wallDarkenColor, planetColor.B - wallDarkenColor);
 
-        // Draw background color
-        trackBatch.Draw(
-                Textures.SQUARE,
-                // NOTE: Using rectangle to define drawing position (drawing bounds),
-                // it will draw from the center of the bounds.
-                destinationRectangle: new Rectangle((int) camera.X, (int) camera.Y, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
-                color: wallColor,
-                origin: new Vector2(Textures.SQUARE.Width / 2, Textures.SQUARE.Height / 2)
-        );
+        //// Draw background color
+        //trackBatch.Draw(
+        //        Textures.SQUARE,
+        //        // NOTE: Using rectangle to define drawing position (drawing bounds),
+        //        // it will draw from the center of the bounds.
+        //        destinationRectangle: new Rectangle((int) camera.X, (int) camera.Y, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+        //        color: wallColor,
+        //        origin: new Vector2(Textures.SQUARE.Width / 2, Textures.SQUARE.Height / 2)
+        //);
 
         var renderRadius = Settings.TRACK_RENDER_DISTANCE / 2;
 
@@ -232,13 +265,18 @@ public class Renderer {
                         // NOTE: Using rectangle to define drawing position (drawing bounds),
                         // it will draw from the center of the bounds.
                         destinationRectangle: new Rectangle(chunk.X * Chunk.SIZE, chunk.Y * Chunk.SIZE, Chunk.SIZE, Chunk.SIZE),
-                        color: trackColor,
+                        color: Color.White,
                         origin: new Vector2(-0.5f, 0.5f)
                 );
                 chunkCount++;
         });
 
         trackBatch.End();
+
+        trackBatch.Begin(sortMode: SpriteSortMode.Immediate, depthStencilState: s2, effect: a);
+        trackBatch.Draw(Textures.MOON, new Rectangle(0, 0, 1000, 1000), Color.White);
+        trackBatch.End();
+
         return chunkCount;
     }
 

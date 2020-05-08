@@ -7,6 +7,7 @@ using System;
 using DeepFlight.scenes;
 using DeepFlight.src.gui.debugoverlay;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 
 
 // Central controller class of the application
@@ -29,7 +30,9 @@ public class Application : Game {
     public static event UpdateEventHandler UpdateEvent;
 
     public Application() {
-        graphics = new GraphicsDeviceManager(this);
+        graphics = new GraphicsDeviceManager(this) {
+            PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8
+        };
         IsFixedTimeStep = false;
     }   
 

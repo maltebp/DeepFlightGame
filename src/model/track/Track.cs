@@ -11,7 +11,7 @@ public delegate void BlockCallback(Block type, int x, int y);
 
 public class Track {
 
-    public long     ID { get; set; }
+    public string     Id { get; set; }
     public string   Name { get; set; }
     public int      Length { get; set; }
     public uint      BlockDataSize { get; set; }
@@ -20,6 +20,8 @@ public class Track {
     public int      StartX { get; set; }
     public int      StartY { get; set; }
     public double StartRotation { get; set; }
+
+    public List<Time> Times { get; set; }
 
     public long BestTimeGlobal { get; set; }
     public long BestTimeUser { get; set; }
@@ -39,8 +41,8 @@ public class Track {
         return
             "Track( " +
                 "name=" + Name + ", "+    
-                "id=" + ID + ", "+    
-                "planet=" + Planet.Name + " (id=" + Planet.ID + "), " +
+                "id=" + Id + ", "+    
+                "planet=" + Planet.Name + " (id=" + Planet.Id + "), " +
                 "length=" + Length + ", " +
                 "startPos=(" + StartX + "," + StartY + "), " +
                 "startRot=" + string.Format("{0:N2}", StartRotation) + ", " +
@@ -69,6 +71,11 @@ public class Track {
         }
     }
 
+
+    public struct Time {
+        public string username;
+        public int time; // Time in milliseconds
+    }
 }
 
 

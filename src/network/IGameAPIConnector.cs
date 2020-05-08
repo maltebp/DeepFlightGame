@@ -76,7 +76,7 @@ namespace DeepFlight.network {
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<List<UserRanking>> GetUniversalRatings(int count);
+        Task<List<UserRanking>> GetUniversalRankings(int count);
 
 
 
@@ -90,20 +90,6 @@ namespace DeepFlight.network {
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
         Task<UserRanking> GetUserUniversalRanking(User user);
-
-
-        /// <summary>
-        /// Get the Rating of the highest rated Users on the given Round
-        /// </summary>
-        /// <param name="numberOfRatings"> Maximum number of ratings to get </param>
-        /// <returns> A list of UserRating structs sorted from best to worst,
-        ///            or an empty list if the Round hasn't been rated yet</returns>
-        /// 
-        /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
-        /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        Task<List<UserRanking>> GetRoundRatings(Round round, int count);
-
-
 
         /// <summary>
         /// Gets the rating for the given user for the given round

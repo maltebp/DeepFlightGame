@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace DeepFlight.network {
 
     public class GameAPIConnector : IGameAPIConnector {
 
-        private static readonly string URL = "http://maltebp.dk:10000/gameapi";
+        private static readonly string URL = "http://localhost:10000/gameapi";
 
         private RestClient client;
 
@@ -23,8 +24,6 @@ namespace DeepFlight.network {
             // base information for future requests
             client = new RestClient(URL);
         }
-
-
 
         public Task<Round> GetCurrentRound() {
             return Task.Run(() => {
@@ -36,49 +35,88 @@ namespace DeepFlight.network {
                 if (response.ErrorException != null)
                     throw new ConnectionException(client.BaseUrl.ToString());
 
+                // Check if round exists
+                if (response.StatusCode != HttpStatusCode.NotFound) {
+                    return null;
+                }
+
                 // Check for other unhandled status codes
                 if (response.StatusCode != HttpStatusCode.OK) {
                     Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
                     throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
                 }
 
-                var round = JsonConvert.DeserializeObject<Round>(response.Content);
-
-                return round;
+                return RoundFromJSON(JsonConvert.DeserializeObject(response.Content));
             });
         }
-
 
 
         public Task<Round> GetPreviousRound() {
             return Task.Run(() => {
-                return (Round) null;
+
+                var request = new RestRequest("round/previous", DataFormat.Json);
+                var response = client.Get(request);
+
+                // Check connection error
+                if (response.ErrorException != null)
+                    throw new ConnectionException(client.BaseUrl.ToString());
+
+                // Check if round exists
+                if( response.StatusCode != HttpStatusCode.NotFound) {
+                    return null;
+                }
+
+                // Check for other unhandled status codes
+                if (response.StatusCode != HttpStatusCode.OK) {
+                    Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
+                    throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
+                }
+
+                return RoundFromJSON(JsonConvert.DeserializeObject(response.Content));
             });
         }
 
 
-        public Task<List<UserRanking>> GetRoundRatings(Round round, int count) {
-            return Task.Run(() => {
-                // TODO: Implement correct api!!
+        // Builds a Round object from a JSON, by getting the tracks from the API
+        private Round RoundFromJSON(dynamic json) {
+            Round round = new Round();
 
-                List<UserRanking> ratings = new List<UserRanking>();
-                ratings.Add(new UserRanking() { name = "s123456", rating = 3.30 });
-                ratings.Add(new UserRanking() { name = "s185139", rating = 3.12 });
-                ratings.Add(new UserRanking() { name = "s234902", rating = 2.90 });
-                ratings.Add(new UserRanking() { name = "s249358", rating = 2.54 });
-                ratings.Add(new UserRanking() { name = "s234009", rating = 2.40 });
-                ratings.Add(new UserRanking() { name = "s124639", rating = 2.35 });
-                ratings.Add(new UserRanking() { name = "s143964", rating = 1.99 });
+            round.Id = json.id;
+            round.RoundNumber = json.roundNumber;
+            round.StartDate = json.startDate;
+            round.EndDate = json.endDate;
 
-                Thread.Sleep(2000);
-                return ratings;
-            });
+            // Create ranking
+            try {
+                // The rankings json property may not exist, so we surround it
+                // with a try catch statement
+                List<UserRanking> rankings = new List<UserRanking>();
+                int rank = 1;
+                foreach (dynamic rankingJson in json.rankings) {
+                    Console.WriteLine(rankingJson);
+                    rankings.Add(new UserRanking() { name = rankingJson.username, rank = rank, rating = rankingJson.rating });
+                    rank++;
+                }
+            }catch (RuntimeBinderException e) { }
+            
+            // Get the tracks for the given round
+            List<Track> tracks = new List<Track>();
+            foreach (string trackId in json.trackIds) {
+                try {
+                    tracks.Add(GetTrackSynchronous(trackId));
+                } catch (UnknownTrackException e) {
+                    // Since the track should exist, we convert it to a ServerException
+                    throw new ServerException($"Couldn't find the Round's Track with id '{trackId}' which should exist."); 
+                }
+            }
+
+            round.Tracks = tracks;
+            return round;
         }
-
 
         public Task<byte[]> GetTrackBlockData(Track track) {
             return Task.Run(() => {
-                var request = new RestRequest("track/" +track.ID + "/blockdata");
+                var request = new RestRequest("track/" +track.Id + "/blockdata");
 
                 Console.WriteLine("\nClient timeout: " + client.Timeout);
                 Console.WriteLine("Request timeout: " + request.Timeout);
@@ -101,22 +139,103 @@ namespace DeepFlight.network {
         }
 
 
-        public Task<List<UserRanking>> GetUniversalRatings(int count) {
+        public Task<List<UserRanking>> GetUniversalRankings(int count) {
             return Task.Run(() => {
-                // TODO: Implement correct api!!
+                var request = new RestRequest($"rankings/universal");
+                var response = client.Get(request);
 
-                List<UserRanking> ratings = new List<UserRanking>();
-                ratings.Add(new UserRanking() { name = "s185139", rating = 3.59 });
-                ratings.Add(new UserRanking() { name = "s123456", rating = 3.12 });
-                ratings.Add(new UserRanking() { name = "s249358", rating = 2.80 });
-                ratings.Add(new UserRanking() { name = "s234902", rating = 2.23 });
-                ratings.Add(new UserRanking() { name = "s124639", rating = 1.50 });
-                ratings.Add(new UserRanking() { name = "s143964", rating = 1.26 });
-                ratings.Add(new UserRanking() { name = "s234009", rating = 1.24 });
+                // Check connection error
+                if (response.ErrorException != null)
+                    throw new ConnectionException(client.BaseUrl.ToString());
 
-                Thread.Sleep(2000);
-                return ratings;
+                // Check for other unhandled status codes
+                if (response.StatusCode != HttpStatusCode.OK) {
+                    Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
+                    throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
+                }
+
+                // Deserialize Rankings
+                dynamic rankingsJson = JsonConvert.DeserializeObject(response.Content);
+                List<UserRanking> rankings = new List<UserRanking>();
+                int rank = 1;
+                foreach (dynamic ranking in rankingsJson) {
+                    if (rank > count) break;
+                    rankings.Add(new UserRanking() { name = ranking.username, rank = rank, rating = ranking.rating });
+                    rank++;
+                }
+
+                return rankings;
             });
+        }
+
+
+
+        public Track GetTrackSynchronous(string trackId) {
+
+            var request = new RestRequest($"track/{trackId}");
+            var response = client.Get(request);
+
+            // Check connection error
+            if (response.ErrorException != null)
+                throw new ConnectionException(client.BaseUrl.ToString());
+
+            // Check if resource was found
+            if( response.StatusCode == HttpStatusCode.NotFound) {
+                throw new UnknownTrackException($"Couldn't find Track with id '{trackId}'");
+            }
+
+            // Check for other unhandled status codes
+            if (response.StatusCode != HttpStatusCode.OK) {
+                Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
+                throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
+            }
+
+            dynamic trackJson = JsonConvert.DeserializeObject(response.Content);
+
+            var track = new Track();
+            track.Id = trackJson.id;
+            track.Name = trackJson.name;
+            
+            // Build Times object
+            //Dictionary<string, int> timesMap = trackJson.times;
+            List<Track.Time> timesList = new List<Track.Time>();
+            foreach( var userTime in trackJson.times) {
+                timesList.Add(new Track.Time() { username = userTime.username, time = userTime.time });
+            }
+            track.Times = timesList;
+
+            // Get Track Planet
+            string planetId = trackJson.planetId;
+            track.Planet = GetPlanetSynchronous(planetId);
+
+            return track;
+        }
+
+
+        public Task<Planet> GetPlanet(string planetId) {
+            return Task.Run(() => { return GetPlanetSynchronous(planetId);  });
+        }
+
+        public Planet GetPlanetSynchronous(string planetId) {
+            var request = new RestRequest($"planet/{planetId}");
+            var response = client.Get(request);
+
+            // Check connection error
+            if (response.ErrorException != null)
+                throw new ConnectionException(client.BaseUrl.ToString());
+
+            // Check if resource was found
+            if (response.StatusCode == HttpStatusCode.NotFound) {
+                throw new UnknownTrackException($"Couldn't find Planet with id '{planetId}'");
+            }
+
+            // Check for other unhandled status codes
+            if (response.StatusCode != HttpStatusCode.OK) {
+                Console.WriteLine("Unhandled status code when fetching current round: " + response.StatusCode);
+                throw new ServerException("Unhandled HTTP status code: " + response.StatusCode);
+            }
+
+            return JsonConvert.DeserializeObject<Planet>(response.Content);
         }
 
 

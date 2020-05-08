@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeepFlight.network;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +10,12 @@ namespace DeepFlight.track {
 
         // TODO: Add start and end date
 
-
-        public int RoundNumber { get; }
-        public List<Track> Tracks { get; }
-
-
-        public Round(int roundNumber, List<Track> tracks) {
-            RoundNumber = roundNumber;
-            Tracks = tracks;
-        }
-
+        public string Id { get; set; }
+        public int RoundNumber { get; set; }
+        public List<Track> Tracks { get; set; }
+        public long StartDate { get; set;  }
+        public long EndDate { get; set;  }
+        public List<UserRanking> Rankings { get; set; }
 
         public override string ToString() {
             return string.Format("Round( number={0}, tracks=[{1}] )", RoundNumber, string.Join(",", Tracks));

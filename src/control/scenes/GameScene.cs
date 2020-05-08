@@ -349,7 +349,7 @@ namespace DeepFlight.scenes {
 
 
         private void UpdateCameraZoom() {
-            targetZoom = 7 - ship.Velocity / 300;
+            targetZoom = 7 - ship.Velocity / 100;
             gameCamera.Zoom += (targetZoom - gameCamera.Zoom)*0.05f;
         }
 

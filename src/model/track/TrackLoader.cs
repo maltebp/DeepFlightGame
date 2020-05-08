@@ -34,23 +34,23 @@ namespace DeepFlight.generation {
                 var tracks = new LinkedList<Track>();
 
                 track = LoadTrackFile(offlineTracksFolder + "aerth" + FILE_EXTENSION);
-                track.ID = 0;
+                track.Id = "";
                 track.Name = "AGRC-313";
-                track.Planet = new Planet(1, "Aerth", new int[] { 49, 102, 44 });
+                track.Planet = new Planet("1", "Aerth", new int[] { 49, 102, 44 });
                 track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 track = LoadTrackFile(offlineTracksFolder + "smar" + FILE_EXTENSION);
-                track.ID = 0;
+                track.Id = "";
                 track.Name = "IAUI-636";
-                track.Planet = new Planet(1, "Smar", new int[] { 150, 30, 9 });
+                track.Planet = new Planet("2", "Smar", new int[] { 150, 30, 9 });
                 track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
                 track = LoadTrackFile(offlineTracksFolder + "turnsa" + FILE_EXTENSION);
-                track.ID = 0;
+                track.Id = "";
                 track.Name = "NSIY-432";
-                track.Planet = new Planet(1, "Turnsa", new int[] { 120, 120, 90 });
+                track.Planet = new Planet("3", "Turnsa", new int[] { 120, 120, 90 });
                 track.BestTimeUser = trackTimeController.GetTrackTime(track.Name);
                 tracks.AddLast(track);
 
@@ -94,9 +94,9 @@ namespace DeepFlight.generation {
                 }
                 else {
                     var generatedTrack = LoadGeneratedTrack(trackFolderPath);
-                    generatedTrack.ID = 0;
+                    generatedTrack.Id = "";
                     generatedTrack.Name = "Unknown Cave";
-                    generatedTrack.Planet = new Planet(1, "Unknown Planet", Settings.COLOR_PRIMARY * 1.25f);
+                    generatedTrack.Planet = new Planet("0", "Unknown Planet", Settings.COLOR_PRIMARY * 1.25f);
 
                     var timeController = OfflineTrackTimeController.Instance;
                     timeController.DeleteTime(generatedTrack.Name);

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DeepFlight.track {
     public class Planet {
 
-        public long ID { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public Color Color { get; set; }
 
@@ -19,14 +19,14 @@ namespace DeepFlight.track {
         /* Custom JSON constructor because color
            is in the "color" : [1,2,3] format*/
         [JsonConstructor]
-        public Planet(long id, string name, int[] color) {
-            ID = id;
+        public Planet(string id, string name, int[] color) {
+            Id = id;
             Name = name;
             Color = new Color(color[0], color[1], color[2]);
         }
 
-        public Planet(long id, string name, Color color) {
-            ID = id;
+        public Planet(string id, string name, Color color) {
+            Id = id;
             Name = name;
             Color = color;
         }
@@ -34,7 +34,7 @@ namespace DeepFlight.track {
         public override string ToString() {
             return
                 "Planet( " +
-                    "id=" + ID + ", " +
+                    "id=" + Id + ", " +
                     "name=" + Name + ", " +
                     "color=" + "(" + Color.R + "," + Color.G + "," + Color.B + ")" + 
                 " )";

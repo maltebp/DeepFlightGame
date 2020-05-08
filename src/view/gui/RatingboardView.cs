@@ -23,7 +23,14 @@ namespace DeepFlight.view.gui {
         private BorderView border;
         private Row[] rows = new Row[5];
 
+        public string Title {
+            get => text_Title.Text;
+            set => text_Title.Text = value;
+        }
+
         public RatingboardView(Camera camera, string titleLabel, double x, double y, float width, float height) : base(camera) {
+            X = x;
+            Y = y;
 
             border = new BorderView(camera, borderWidth: 5f, x: x, y: y, width: width, height: height);
             border.BackgroundColor = new Color(Color.Black, 0.25f);
@@ -70,9 +77,18 @@ namespace DeepFlight.view.gui {
 
         public void HideUserRanking() {
             text_UserRatingValue.Hidden = true;
+            text_UserRatingLabel.Hidden = true;
             text_UserRankValue.Hidden = true;
+            text_UserRankLabel.Hidden = true;
         }
 
+
+        public void HideRankings() {
+            HideUserRanking();
+            foreach( var row in rows) {
+                row.Hidden = true;
+            }
+        }
 
 
         private class Row : View {

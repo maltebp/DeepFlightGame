@@ -72,8 +72,7 @@ namespace DeepFlight.scenes {
         private async void LoadTracks() {
             loader.Hidden = false;
 
-            // Load current round
-
+            // Load current round from GameAPI
             try {
                 var gameApi = new GameAPIConnector();
                 round = await gameApi.GetCurrentRound();
@@ -85,6 +84,13 @@ namespace DeepFlight.scenes {
                 return;
             }
 
+
+            if( round == null ) {
+                DisplayError("No round is active at the moment - come back later!");
+                return;
+            }
+
+            // Create Track Info views (the planets)
             int count = 0;
             foreach (var track in round.Tracks) {
                 TrackInfoView planet = new TrackInfoView(camera_UI, track, true);
