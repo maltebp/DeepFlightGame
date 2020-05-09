@@ -24,6 +24,7 @@ namespace DeepFlight.scenes {
 
         private MenuView menu_Tracks;
         private TextView text_Error;
+        private TextView text_TimeLeft;
         private LoadingTextView loader;
 
         private Round round;
@@ -40,6 +41,11 @@ namespace DeepFlight.scenes {
             text_SceneTitle.Hidden = true;
             AddChild(text_SceneTitle);
 
+
+            text_TimeLeft = new TextView(camera_UI, "", x: width * 0.5, y: height*0.28);
+            text_TimeLeft.Hidden = false;
+            AddChild(text_TimeLeft);
+
             // Menu which contains the different Tracks
             menu_Tracks = new MenuView(orientation: MenuView.MenuOrientation.HORIZONTAL);
             menu_Tracks.Hidden = true;
@@ -49,6 +55,7 @@ namespace DeepFlight.scenes {
             text_Error = new TextView(camera_UI, "", Font.DEFAULT, 24, Color.White, width*0.5, height * 0.5);
             text_Error.Hidden = true;
             AddChild(text_Error);
+
 
             // Loader 
             loader = new LoadingTextView(camera_UI, "Loading tracks for current round", Font.DEFAULT, 24, Color.White, width*0.5, height*0.5);
@@ -114,9 +121,26 @@ namespace DeepFlight.scenes {
             menu_Tracks.Hidden = false;
             menu_Tracks.Focused = true;
 
+            text_TimeLeft.Hidden = false;
             text_SceneTitle.Hidden = false;
             text_SceneTitle.Text = string.Format("Round #{0} Tracks", round.RoundNumber);
         }
+
+
+        protected override void OnUpdate(double deltaTime) {
+            if( round != null) {
+                var remainingTimeMs = round.EndDate - DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                if (remainingTimeMs < 0) remainingTimeMs = 0;
+                var remainingTime = TimeSpan.FromMilliseconds(remainingTimeMs);
+                var timeString = "";
+                timeString += remainingTime.Hours.ToString("00:");
+                timeString += remainingTime.Minutes.ToString("00:");
+                timeString += remainingTime.Seconds.ToString("00");
+                text_TimeLeft.Text = "Time left: " + timeString;
+
+            }       
+        }
+
 
         private void DisplayError(string errorMessage) {
             text_Error.Text = "Error: " + errorMessage;
