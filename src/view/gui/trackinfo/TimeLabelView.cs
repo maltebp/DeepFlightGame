@@ -76,7 +76,7 @@ namespace DeepFlight.src.gui.planetbox {
 
         // Update label and time position
         protected void UpdateLayout() {
-            text_Label.Size = fontSize * 0.8;
+            text_Label.Size = fontSize * 0.7;
             text_Label.Y = Y - fontSize/25;
             text_Label.X = X;
 

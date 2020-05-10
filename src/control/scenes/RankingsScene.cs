@@ -81,7 +81,7 @@ namespace DeepFlight.scenes {
             try {
                 // Fetch rankings from GameAPI
                 var gameApi = new GameAPIConnector();
-                var universalRankings = await gameApi.GetUniversalRankings(5);
+                var universalRankings = await gameApi.GetUniversalRankings();
                 var lastRound = await gameApi.GetPreviousRound();
 
                 // Hide and shows stuff

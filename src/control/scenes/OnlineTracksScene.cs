@@ -107,10 +107,14 @@ namespace DeepFlight.scenes {
             // Create Track Info views (the planets)
             int count = 0;
             foreach (var track in round.Tracks) {
+                Console.WriteLine($"Track Times for '{track.Name}':");
+                foreach(var time in track.Times) {
+                    Console.WriteLine($"\t{time.username}: {time.time}");
+                }
                 TrackInfoView planet = new TrackInfoView(camera_UI, track, true);
                 planet.FocusColor = track.Planet.Color;
                 planet.X = ScreenController.BaseWidth * (count + 1) * 0.20;
-                planet.Y = ScreenController.BaseHeight * 0.50;
+                planet.Y = ScreenController.BaseHeight * 0.55;
                 menu_Tracks.AddMenuOption(planet, () => RequestSceneSwitch(new TrackLoadingScene(track, true)));
                 count++;
             }

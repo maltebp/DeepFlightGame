@@ -31,9 +31,7 @@ public class Application : Game {
     public static event UpdateEventHandler UpdateEvent;
 
     public Application() {
-        graphics = new GraphicsDeviceManager(this) {
-            PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8
-        };
+        graphics = new GraphicsDeviceManager(this);
         IsFixedTimeStep = false;
     }   
 

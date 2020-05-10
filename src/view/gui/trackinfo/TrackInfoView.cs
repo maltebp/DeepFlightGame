@@ -95,14 +95,14 @@ namespace DeepFlight.src.gui {
             if (text_PlanetName != null) {
                 text_PlanetName.Y = topY + scaledSize * 0.15;
                 text_PlanetName.X = centerX;
-                text_PlanetName.Size = 20 * focusScale; // Font Size
+                text_PlanetName.Size = 19 * focusScale; // Font Size
                 text_PlanetName.Color = fontColor;
             }
 
             if (text_TrackName != null) {
                 text_TrackName.Y = topY + scaledSize * 0.35;
                 text_TrackName.X = centerX;
-                text_TrackName.Size = 28 * focusScale; // Font 
+                text_TrackName.Size = 26 * focusScale; // Font 
                 text_TrackName.Color = fontColor;
             }
 

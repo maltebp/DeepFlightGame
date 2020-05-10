@@ -10,7 +10,8 @@ using System.Threading;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.CSharp.RuntimeBinder;
-
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace DeepFlight.network {
 
@@ -81,7 +82,7 @@ namespace DeepFlight.network {
                     throw new ConnectionException(client.BaseUrl.ToString());
 
                 // Check if round exists
-                if( response.StatusCode != HttpStatusCode.NotFound) {
+                if( response.StatusCode == HttpStatusCode.NotFound) {
                     return null;
                 }
 
@@ -111,12 +112,18 @@ namespace DeepFlight.network {
                 // with a try catch statement
                 if( json.rankings != null) {
                     List<UserRanking> rankings = new List<UserRanking>();
-                    int rank = 1;
-                    foreach (dynamic rankingJson in json.rankings) {
-                        Console.WriteLine(rankingJson);
-                        rankings.Add(new UserRanking() { name = rankingJson.username, rank = rank, rating = rankingJson.rating });
-                        rank++;
+                    foreach (dynamic rankingJson in (JObject) json.rankings) {
+                        rankings.Add(new UserRanking() { name = rankingJson.Key, rank = 0, rating = (double) rankingJson.Value });
                     }
+                    int rank = 1;
+                    var rankedList = new List<UserRanking>();
+                    foreach ( var ranking in rankings.OrderByDescending(ranking => ranking.rating).ToList()) {
+                        var rankedRanking = ranking;
+                        rankedRanking.rank = rank++;
+                        rankedList.Add(rankedRanking);
+                    }
+                    round.Rankings = rankedList;
+
                 }
                 
             }catch (RuntimeBinderException e) { }
@@ -149,7 +156,7 @@ namespace DeepFlight.network {
         /// 
         /// <exception cref="ConnectionException"> Connector can't connect to server </exception>
         /// <exception cref="ServerException"> Some unknown error occurs on the server </exception>
-        public Task<List<UserRanking>> GetUniversalRankings(int count) {
+        public Task<List<UserRanking>> GetUniversalRankings() {
             return Task.Run(() => {
                 var request = new RestRequest($"rankings/universal");
                 var response = client.Get(request);
@@ -169,7 +176,6 @@ namespace DeepFlight.network {
                 List<UserRanking> rankings = new List<UserRanking>();
                 int rank = 1;
                 foreach (dynamic ranking in rankingsJson) {
-                    if (rank > count) break;
                     rankings.Add(new UserRanking() { name = ranking.username, rank = rank, rating = ranking.rating });
                     rank++;
                 }
@@ -192,7 +198,7 @@ namespace DeepFlight.network {
             // Check if resource was found
             if( response.StatusCode == HttpStatusCode.NotFound) {
                 throw new UnknownTrackException($"Couldn't find Track with id '{trackId}'");
-            }
+            }   
 
             // Check for other unhandled status codes
             if (response.StatusCode != HttpStatusCode.OK) {
@@ -205,13 +211,15 @@ namespace DeepFlight.network {
             var track = new Track();
             track.Id = trackJson.id;
             track.Name = trackJson.name;
-            
+
             // Build Times object
             //Dictionary<string, int> timesMap = trackJson.times;
+            Console.WriteLine("Track times: " + trackJson.times);
             List<Track.Time> timesList = new List<Track.Time>();
-            foreach( var userTime in trackJson.times) {
-                timesList.Add(new Track.Time() { username = userTime.username, time = userTime.time });
+            foreach ( var userTime in (JObject) trackJson.times) {
+                timesList.Add(new Track.Time() { username = userTime.Key, time = (int) userTime.Value });
             }
+            timesList = timesList.OrderBy(time => time.time).ToList();
             track.Times = timesList;
 
             // Get Track Planet

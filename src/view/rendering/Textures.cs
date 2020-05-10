@@ -46,9 +46,6 @@ static class Textures {
         PIXEL_CIRCLE_64 = content.Load<Texture2D>("Content/Shapes/PixelCircle_64");
 
         PLANET_64 = content.Load<Texture2D>("Content/Images/Planet_64");
-
-        MOON = content.Load<Texture2D>("Content/Images/Moon");
-
     }
 
     public static Texture2D CreateTexture(int width, int height) {

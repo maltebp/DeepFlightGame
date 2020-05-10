@@ -123,7 +123,7 @@ namespace DeepFlight.scenes {
 
 
         private void DisplayError(string error) {
-            DisplayResult("Error: ");
+            DisplayResult("Error: "+error);
         }
 
         private void DisplayResult(string result) {
