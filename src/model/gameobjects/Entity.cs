@@ -10,7 +10,6 @@ public class Entity  {
     public virtual double X { get; set; } = 0;
     public virtual double Y { get; set; } = 0;
     
-
     public virtual float Width { get; set; } = 1f;
     public virtual float Height { get; set; } = 1f;
 

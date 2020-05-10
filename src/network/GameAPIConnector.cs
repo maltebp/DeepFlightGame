@@ -11,12 +11,13 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.CSharp.RuntimeBinder;
 
+
 namespace DeepFlight.network {
 
     public class GameAPIConnector {
 
         private static readonly string TIME_UPDATE_KEY = "verysecurekey1234";
-        private static readonly string URL = "http://localhost:10000/gameapi";
+        private static readonly string URL = Settings.GAME_API_URL; 
         private RestClient client;
 
 
@@ -359,9 +360,6 @@ namespace DeepFlight.network {
 
                 Console.WriteLine("Got user: " + response.Content);
                 dynamic userData = JsonConvert.DeserializeObject(response.Content);
-
-                dynamic jsonResponse = JsonConvert.DeserializeObject(response.Content);
-                token = jsonResponse.jwt; // This matches the object name in the json response
 
                 var user = new User();
                 user.Username = userData.username;

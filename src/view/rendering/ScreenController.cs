@@ -41,6 +41,11 @@ namespace DeepFlight.rendering {
         private static bool initialized = false;
         public static bool Initialized { get => initialized;  }
 
+        /// <summary>
+        /// Initializes the Screen Controller, by checking if the User's current screen
+        /// resolution, and testing which resolutions may be used.  
+        /// </summary>
+        /// <param name="graphics"></param>
         public static void Initialize(GraphicsDeviceManager graphics) {
             ScreenController.graphics = graphics;
             double screenWidth = graphics.GraphicsDevice.DisplayMode.Width;
@@ -84,6 +89,7 @@ namespace DeepFlight.rendering {
             Console.WriteLine("\n");
         }
 
+        
         public static void SetResolution(Resolution resolution) {
             foreach (var res in availableResolutions) {
                 if (resolution == res) {
@@ -104,6 +110,10 @@ namespace DeepFlight.rendering {
     
     }
 
+
+    /// <summary>
+    /// Contains information about a Resolution
+    /// </summary>
     public struct Resolution {
         public int Width { get; }
         public int Height { get; }

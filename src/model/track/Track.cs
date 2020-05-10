@@ -13,30 +13,23 @@ public class Track {
 
     public string     Id { get; set; }
     public string   Name { get; set; }
-    public int      Length { get; set; }
-    public uint      BlockDataSize { get; set; }
-    public byte[]   BlockData { get; set; }
-
-    public int      StartX { get; set; }
-    public int      StartY { get; set; }
-    public double StartRotation { get; set; }
-
+    public Planet Planet { get; set; }
     public List<Time> Times { get; set; }
-
-    public long BestTimeGlobal { get; set; }
-    public long BestTimeUser { get; set; }
 
     // The local time record on the Track
     public long OfflineTime { get; set; } = 0;
 
+    // The Raw (unserialized) Track information
+    public byte[]   BlockData { get; set; }
+
+    // Whether or not the BlockDataDeserialized
     public bool BlockDataDeserialized { get; set; }
 
-    public bool Generated { get; set; } = false; 
-
-    public Planet Planet { get; set; }
-
-    public Checkpoint[] Checkpoints { get; set; } = new Checkpoint[0];
-
+    // Data obtained from deserializing BlockData
+    public int StartX { get; set; }
+    public int StartY { get; set; }
+    public double StartRotation { get; set; }
+    public Checkpoint[] Checkpoints { get; set; }
     public Dictionary<int, Dictionary<int, Chunk>> ChunkMap { get; set; }
 
 
@@ -46,10 +39,8 @@ public class Track {
                 "name=" + Name + ", "+    
                 "id=" + Id + ", "+    
                 "planet=" + Planet.Name + " (id=" + Planet.Id + "), " +
-                "length=" + Length + ", " +
                 "startPos=(" + StartX + "," + StartY + "), " +
                 "startRot=" + string.Format("{0:N2}", StartRotation) + ", " +
-                "size=" + string.Format("{0:N3}",BlockDataSize/1000000.0) + "mb, " +
                 "processed=" + BlockDataDeserialized +
             " )"
         ;
@@ -73,7 +64,6 @@ public class Track {
             }
         }
     }
-
 
     public struct Time {
         public string username;
@@ -167,6 +157,10 @@ public struct Block {
 }
 
 
+/// <summary>
+/// Block with a collider (so it's collidable).
+/// Used to the track blocks, for wall collision detection
+/// </summary>
 public class CollisionBlock : Collidable {
     public CollisionBlock(int x, int y) : base(1f, 1f) {
         this.X = x;

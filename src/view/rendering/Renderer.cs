@@ -6,7 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 
-// Responsible for rendering stuff (sort of a Camera controller)
+/// <summary>
+/// Renders textures and text on the screen, using the View class.
+/// 
+/// Supports rendering of TextView and TextureView, as well as an
+/// optimized rendering of the Track.
+/// </summary>
 public class Renderer {
 
     private SpriteBatch spriteBatch;
@@ -42,7 +47,9 @@ public class Renderer {
     }
 
 
-    Entity transformed = new Entity();
+    /// <summary>
+    /// Draw a TextureView to the screen, using the given camera.
+    /// </summary>
     public void Draw(Camera camera, TextureView drawable) {
         if (drawable == null)
             throw new ArgumentNullException("TextureView is null");
@@ -53,6 +60,7 @@ public class Renderer {
         InitializeDraw();
 
         // Transform the drawables dimensions and coordinates to camera space
+        Entity transformed = new Entity();
         transformed.Inherit(drawable);
         camera.Transform(
             transformed,
@@ -90,9 +98,10 @@ public class Renderer {
     }
 
 
-    static bool first = true;
 
-    // TEXT
+    /// <summary>
+    /// Draw a TextView to the screen using the given Camera
+    /// </summary>
     public void Draw(Camera camera, TextView drawable) {
         if (drawable == null)
             throw new ArgumentNullException("TextView is null");
@@ -133,21 +142,6 @@ public class Renderer {
         double expectedWidth = drawable.Width * fontScale;
         double scalingError = expectedWidth / bestFontDimensions.X;
 
-
-        //// TODO: REmove this
-        //if (first) {
-        //    Console.WriteLine("\n\nDrawing Text!");
-        //    Console.WriteLine("Font scale: "  + fontScale);
-        //    Console.WriteLine("Scaled size: " + scaledSize);
-        //    Console.WriteLine("Best font size: " + bestFont.Size);
-        //    Console.WriteLine("Expected width: " + expectedWidth);
-        //    Console.WriteLine("Best Font width: " + bestFontWidth);
-        //    Console.WriteLine("Scaling error: "  + widthScalingError);
-        //    Console.WriteLine("Final scale: " + finalScale);
-        //    Console.WriteLine("Base: " + drawable);
-        //    Console.WriteLine("Transformed: " + transformed);
-        //}
-
         // Draw the text 
         spriteBatch.DrawString(
             bestFont.Sprite,
@@ -173,16 +167,19 @@ public class Renderer {
 
             camera.Layer+drawable.DepthOffset // Layer depth Not sure what this means
         );
-
-        // TODO: Remove this
-        first = false;
     }
 
 
+
+    /// <summary>
+    /// Optimized Rendering of the Track object.
+    /// </summary>
     public int DrawTrack(Camera camera, Track track) {
 
         InitializeDraw();
 
+        // We use a Transformation Matrix, instead of transforming it manually
+        // since this is faster (calculations are done on the GPU)
         var transformation = 
            Matrix.CreateTranslation((float) -camera.X, (float) -camera.Y, 0) *
            Matrix.CreateScale((float) ScreenController.ScreenScale) *
@@ -190,6 +187,7 @@ public class Renderer {
            Matrix.CreateRotationZ(camera.Rotation) *
            Matrix.CreateTranslation(graphics.PreferredBackBufferWidth/2, graphics.PreferredBackBufferHeight / 2, 0);
 
+        // We use a custom sprite batch (not the generic spriteBatch)
         trackBatch.Begin(
                samplerState: SamplerState.PointClamp, // Turn of anti-alias
                transformMatrix: transformation,
@@ -211,7 +209,8 @@ public class Renderer {
                 origin: new Vector2(Textures.SQUARE.Width / 2, Textures.SQUARE.Height / 2)
         );
 
-        var renderRadius = Settings.TRACK_RENDER_DISTANCE / 2;
+        // How many blocks to render in each direction
+        var renderRadius = Settings.TRACK_RENDER_DISTANCE;
 
         // Calculate track color
         var brigtenColor = Settings.TRACK_COLOR_ADJUST_TRACK;
@@ -239,7 +238,8 @@ public class Renderer {
         });
 
         trackBatch.End();
-
+        
+        // Chunk count is returned to maintain a statistic
         return chunkCount;
     }
 

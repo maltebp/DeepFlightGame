@@ -10,6 +10,12 @@ using System.Threading.Tasks;
 
 
 namespace DeepFlight {
+
+    /// <summary>
+    /// General base class for UI elements. The view is what is drawn and updated to the
+    /// screen in each game loop.
+    /// It may contain child views, which may also be drawn
+    /// </summary>
     public abstract class View : Movable {
 
         public Camera Camera { get; set; }
@@ -112,14 +118,19 @@ namespace DeepFlight {
             }
         }
 
+
+
         public View(Camera camera = null) {
             Camera = camera;
         }
 
 
+
         public void AddChildren(params View[] children) {
             foreach (var child in children) AddChild(child);
         }
+
+
 
         public void AddChild(View child) {
             if (Children.Contains(child) )
@@ -142,6 +153,8 @@ namespace DeepFlight {
         }
         protected virtual void OnChildAdded(View addedChild) { }
 
+
+
         public void RemoveChild(View child) {
             if (!Children.Contains(child))
                 throw new ArgumentException($"'{child.GetType().Name}' is not child view of parent '{this.GetType().Name}'!");
@@ -151,6 +164,8 @@ namespace DeepFlight {
             OnChildRemoved(child);
         }
         protected virtual void OnChildRemoved(View removedChild) { }
+
+
 
         public void Initialize() {
             Application.DrawEvent += Draw;
@@ -163,6 +178,7 @@ namespace DeepFlight {
         protected virtual void OnInitialize() { }
 
 
+
         public void Terminate() {
             Application.DrawEvent -= Draw;
             Application.UpdateEvent -= Update;
@@ -171,6 +187,7 @@ namespace DeepFlight {
                 child.Terminate();
         }
         protected virtual void OnTerminate() { }
+
 
 
         public void Draw(Renderer renderer) {
@@ -190,6 +207,7 @@ namespace DeepFlight {
         protected virtual void OnDraw(Renderer renderer) { }
 
 
+
         public void Update(double deltaTime) {
             if (!Hidden) {
                 OnUpdate(deltaTime);
@@ -198,6 +216,12 @@ namespace DeepFlight {
         protected virtual void OnUpdate(double deltaTime) { }
         
 
+
+        /// <summary>
+        /// Signals to to the View that a key has been input, and it now has a chance to handle
+        /// it. However, first, it'll notify its child views.
+        /// </summary>
+        /// <param name="e"></param>
         public void KeyInput(KeyEventArgs e) {
             if (!Focused || Hidden || e.Handled) return;
 
@@ -213,6 +237,7 @@ namespace DeepFlight {
         protected virtual bool OnKeyInput(KeyEventArgs e) { return false; }
 
         
+
         public void CharInput(CharEventArgs e) {
             if (!Focused || Hidden || e.Handled) return;
 

@@ -1,10 +1,11 @@
-﻿
-
-
-using DeepFlight;
+﻿using DeepFlight;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
+/// <summary>
+/// Displays a texture (image)
+/// </summary>
 public class TextureView : View {
 
     public Texture2D Texture { get; set; } = null;

@@ -3,6 +3,9 @@ using DeepFlight;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+/// <summary>
+/// View to display a single line of text
+/// </summary>
 public class TextView : View {
 
     private Font font = Font.DEFAULT;
@@ -39,8 +42,8 @@ public class TextView : View {
         UpdateSize();
     }
 
-    private void UpdateSize() { 
 
+    private void UpdateSize() { 
         if( Text != null && Text.Length > 0){
             Width = Font.MeasureString(Text, size).X;
         }
@@ -49,6 +52,7 @@ public class TextView : View {
         }
 
         // Height should always be the same (regardless of which characters)
+        // So we just use some random characters here
         Height = Font.MeasureString("|LAJ*", size).Y;
     }
 
@@ -56,9 +60,6 @@ public class TextView : View {
     protected override void OnDraw(Renderer renderer) {
         renderer.Draw(Camera, this);
     }
-
-
-
 
     public override string ToString() {
         return string.Format(
