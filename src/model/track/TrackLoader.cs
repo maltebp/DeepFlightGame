@@ -80,19 +80,21 @@ namespace DeepFlight.generation {
 
             // Setup the generation Process
             var process = new Process();
-            process.StartInfo.FileName = generatorPath;
+            process.StartInfo.FileName = @generatorPath;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.Arguments = string.Format("{0} {1} {2} {3} {4} {5} {6} {7}",
-                trackFolderPath, "randomtrack",  DateTime.Now.Millisecond,
+                $"\"{trackFolderPath}\"", "randomtrack",  DateTime.Now.Millisecond,
                 10, 10, 10, 10, 10
             );
             process.EnableRaisingEvents = true;
             process.Exited += (sender, args) => {
                 if( process.ExitCode != 0) {
+                    Trace.TraceError($"TrackGenerator exited with exitcode {process.ExitCode}");
                     tcs.TrySetResult(null);
                 }
                 else {
+                    Console.WriteLine("Loading track!");
                     var generatedTrack = LoadGeneratedTrack(trackFolderPath);
                     generatedTrack.Id = "";
                     generatedTrack.Name = "Unknown Cave";
@@ -125,12 +127,12 @@ namespace DeepFlight.generation {
             string[] trackFiles = Directory.GetFiles(folderPath, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
 
             if (trackFiles.Length == 0) {
-                Console.WriteLine("Error: No track files found in local track folder after generating new track");
+                Trace.TraceError($"Error: No track files found in local track folder after generating new track in folder '{folderPath}'");
                 return null;
             }
 
             if (trackFiles.Length > 1)
-                Console.WriteLine("WARNING: '{0}' track files in local track folder after generating new track!", trackFiles.Length);
+                Trace.TraceError($"WARNING: '{trackFiles.Length}' track files in local track folder after generating new track!");
 
             return LoadTrackFile(folderPath + trackFiles[0]);            
         }
