@@ -37,18 +37,15 @@ namespace DeepFlight.scenes {
 
         private Stopwatch stopWatch = new Stopwatch();
 
-        private int startCountdown_TickRate = 1000; // ms 
+        private int startCountdown_TickRate = 800; // ms
 
+
+        private bool restarting = false;
         private bool shipPaused = false;
-
         private bool collisionEnabled = true;
-
         private bool onlineTrack = false;
-
         private int blocksDrawn = 0;
-
         private bool crashed = true;
-
         private float targetZoom = 7f;
 
 
@@ -94,7 +91,7 @@ namespace DeepFlight.scenes {
             timeText = new TextView(uiCamera, "0:00:00", Font.DEFAULT, 30, Color.White, width*0.01, height);
             timeText.HOrigin = HorizontalOrigin.LEFT;
             timeText.VOrigin = VerticalOrigin.BOTTOM;
-            timeTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0,0,0,150), 0, height, timeText.Width*1.2f, timeText.Height*1.2f);
+            timeTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0,0,0,150), 0, height+1, timeText.Width*1.2f, timeText.Height*1.2f);
             timeTextBox.HOrigin = HorizontalOrigin.LEFT;
             timeTextBox.VOrigin = VerticalOrigin.BOTTOM;
             AddChildren(timeTextBox);
@@ -102,7 +99,7 @@ namespace DeepFlight.scenes {
 
             countdownText = new TextView(uiCamera, "3...", Font.DEFAULT, 40, Color.White, width / 2, height / 4);
             countdownText.Hidden = true;
-            countdownTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0, 0, 0, 150), countdownText.X, countdownText.Y, countdownText.Width * 1.2f, countdownText.Height * 1.2f);
+            countdownTextBox = new TextureView(uiCamera, Textures.SQUARE, new Color(0, 0, 0, 150), countdownText.X+2, countdownText.Y-5, countdownText.Width * 1.2f, countdownText.Height * 1.1f);
             countdownTextBox.Hidden = true;
             AddChildren(countdownTextBox);
             countdownTextBox.AddChild(countdownText);
@@ -168,45 +165,52 @@ namespace DeepFlight.scenes {
 
 
         private async void Restart() {
-            ship.X = track.StartX;
-            ship.Y = track.StartY;
-            ship.RotationVelocity = 0;
-            ship.Rotation = (float) track.StartRotation;
-            
-            ship.AccelerationX = 0;
-            ship.AccelerationY = 0;
-            ship.VelocityX = 0;
-            ship.VelocityY = 0;
-            stopWatch.Reset();
-            shipPaused = true;
-            crashed = false;
-            ship.Hidden = false;
+            if( !restarting) {
+                restarting = true;
 
-            // Smooth zoom motion on start (just because its pretty)
-            gameCamera.Zoom = DEFAULT_ZOOM-0.5f;
-            targetZoom = DEFAULT_ZOOM;
 
-            // Reset checkpoints
-            foreach( var checkpoint in track.Checkpoints) {
-                checkpoint.Reached = false;
-            }
+                ship.X = track.StartX;
+                ship.Y = track.StartY;
+                ship.RotationVelocity = 0;
+                ship.Rotation = (float)track.StartRotation;
 
-            // Countdown
-            await Task.Delay(startCountdown_TickRate);
-            countdownText.Hidden = false;
-            countdownTextBox.Hidden = false;
-            countdownText.Text = "3...";
-            await Task.Delay(startCountdown_TickRate);
-            countdownText.Text = "2...";
-            await Task.Delay(startCountdown_TickRate);
-            countdownText.Text = "1...";
-            await Task.Delay(startCountdown_TickRate);
-            countdownText.Text = "Go!";
-            stopWatch.Start();
-            shipPaused = false;
-            await Task.Delay(startCountdown_TickRate);
-            countdownText.Hidden = true;
-            countdownTextBox.Hidden = true;
+                ship.AccelerationX = 0;
+                ship.AccelerationY = 0;
+                ship.VelocityX = 0;
+                ship.VelocityY = 0;
+                stopWatch.Reset();
+                shipPaused = true;
+                crashed = false;
+                ship.Hidden = false;
+
+                // Smooth zoom motion on start (just because its pretty)
+                gameCamera.Zoom = DEFAULT_ZOOM - 0.5f;
+                targetZoom = DEFAULT_ZOOM;
+
+                // Reset checkpoints
+                foreach (var checkpoint in track.Checkpoints) {
+                    checkpoint.Reached = false;
+                }
+
+                // Countdown
+                await Task.Delay(startCountdown_TickRate);
+                countdownText.Hidden = false;
+                countdownTextBox.Hidden = false;
+                countdownText.Text = "3...";
+                await Task.Delay(startCountdown_TickRate);
+                countdownText.Text = "2...";
+                await Task.Delay(startCountdown_TickRate);
+                countdownText.Text = "1...";
+                await Task.Delay(startCountdown_TickRate);
+                countdownText.Text = "Go!";
+                stopWatch.Start();
+                shipPaused = false;
+                await Task.Delay(startCountdown_TickRate);
+                countdownText.Hidden = true;
+                countdownTextBox.Hidden = true;
+
+                restarting = false;
+            }            
         }
 
 
@@ -351,6 +355,7 @@ namespace DeepFlight.scenes {
         private void UpdateCameraZoom() {
             targetZoom = 7 - ship.Velocity / 100;
             gameCamera.Zoom += (targetZoom - gameCamera.Zoom)*0.05f;
+            gameCamera.Rotation += (ship.Rotation - gameCamera.Rotation) * 0.05f;
         }
 
 
@@ -358,18 +363,16 @@ namespace DeepFlight.scenes {
             crashed = true;
             shipPaused = true;
             ship.Hidden = true;
-            await Task.Run(() => Thread.Sleep(2000));
+            await Task.Run(() => Thread.Sleep(1500));
             Restart();
         }
 
 
         
-
-
-
         protected override void OnDraw(Renderer renderer) {
-            gameCamera.X = ship.X;
-            gameCamera.Y = ship.Y;
+            // Draw the ship and a 
+            gameCamera.X = ship.X + ship.VelocityX * 0.04;
+            gameCamera.Y = ship.Y + ship.VelocityY * 0.04;
             border_Screen.X = ship.X;
             border_Screen.Y = ship.Y;
             border_Rendering.X = ship.X;
@@ -378,7 +381,5 @@ namespace DeepFlight.scenes {
             blocksDrawn = renderer.DrawTrack(gameCamera, track);
         }
 
-
     }
-
 }

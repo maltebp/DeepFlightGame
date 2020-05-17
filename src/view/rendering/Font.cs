@@ -180,11 +180,6 @@ public class Font {
         return bestFont.Sprite.MeasureString(text) * (float) (size / bestFont.Size);        
     }
 
-
-    //    public static void Load(ContentManager content) {
-    //        Font.LoadAll(content);
-    //    }
-
 }
 
 /// <summary>

@@ -3,7 +3,8 @@ using System;
 using Microsoft.Xna.Framework;
 
 /// <summary>
-/// Static class containing Settings as global variables
+/// Static class containing game wide Settings as global variables.
+/// Allows for easier adjustment of game logic / design this way.
 /// </summary>
 public static class Settings {
 

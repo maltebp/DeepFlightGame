@@ -50,7 +50,7 @@ public class Renderer {
     /// <summary>
     /// Draw a TextureView to the screen, using the given camera.
     /// </summary>
-    public void Draw(Camera camera, TextureView drawable) {
+    public void DrawTexture(Camera camera, TextureView drawable) {
         if (drawable == null)
             throw new ArgumentNullException("TextureView is null");
 
@@ -102,7 +102,7 @@ public class Renderer {
     /// <summary>
     /// Draw a TextView to the screen using the given Camera
     /// </summary>
-    public void Draw(Camera camera, TextView drawable) {
+    public void DrawText(Camera camera, TextView drawable) {
         if (drawable == null)
             throw new ArgumentNullException("TextView is null");
 

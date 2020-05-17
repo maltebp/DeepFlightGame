@@ -58,7 +58,7 @@ public class TextView : View {
 
 
     protected override void OnDraw(Renderer renderer) {
-        renderer.Draw(Camera, this);
+        renderer.DrawText(Camera, this);
     }
 
     public override string ToString() {

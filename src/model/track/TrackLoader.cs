@@ -105,14 +105,12 @@ namespace DeepFlight.generation {
                 }
             };
 
-            // Redirect the TrackGenerator's output
-            process.StartInfo.RedirectStandardOutput = true;
-            process.OutputDataReceived += (s, e) => Console.WriteLine("TrackGenerator:\t" + e.Data);
-            
+            Console.WriteLine("Starting Track Generation Process...");
             process.Start();
+
+            // Increase Process priority (to generate faster)
             process.PriorityBoostEnabled = true;
             process.PriorityClass = ProcessPriorityClass.High;
-            process.BeginOutputReadLine();
 
             return tcs.Task;
         }

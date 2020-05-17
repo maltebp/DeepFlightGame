@@ -23,6 +23,10 @@ namespace DeepFlight {
         public LinkedList<View> Children { get; } = new LinkedList<View>();
 
 
+        /// <summary>
+        /// The background Texture will be drawn before this View or any of this
+        /// View's children are drawn.
+        /// </summary>
         private TextureView background;
         public Color BackgroundColor {
             get {
@@ -38,6 +42,11 @@ namespace DeepFlight {
         }
 
 
+
+        /// <summary>
+        /// The background Texture will be drawn before this View or any of this
+        /// View's children are drawn.
+        /// </summary>
         public Texture2D BackgroundTexture {
             get {
                 if (background == null) return Textures.SQUARE;
@@ -132,6 +141,11 @@ namespace DeepFlight {
 
 
 
+        /// <summary>
+        /// Adds a child to the View. Children are drawn together with the View
+        /// and is hidden if the parent is.
+        /// </summary>
+        /// <param name="child"></param>
         public void AddChild(View child) {
             if (Children.Contains(child) )
                 throw new ArgumentException("View is already child of this parent.");
@@ -179,6 +193,10 @@ namespace DeepFlight {
 
 
 
+        /// <summary>
+        /// Terminates this View, removing it as an action to the Draw and Update
+        /// events. 
+        /// </summary>
         public void Terminate() {
             Application.DrawEvent -= Draw;
             Application.UpdateEvent -= Update;
@@ -199,7 +217,7 @@ namespace DeepFlight {
                     background.Y = GetCenterY()-1;
                     background.Width = Width;
                     background.Height = Height;
-                    renderer.Draw(Camera, background);
+                    renderer.DrawTexture(Camera, background);
                 }
                 OnDraw(renderer);
             }

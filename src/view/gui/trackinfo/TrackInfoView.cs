@@ -67,7 +67,7 @@ namespace DeepFlight.src.gui {
 
             time_PersonalBest.Time = 0;
             // Update User's best
-            if ( User.LocalUser.Guest) {
+            if (time_GlobalBest == null ) {
                 time_PersonalBest.Time = track.OfflineTime;
             }
             else {

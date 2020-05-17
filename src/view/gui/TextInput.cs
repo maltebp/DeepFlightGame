@@ -111,15 +111,15 @@ namespace DeepFlight.gui {
 
 
         protected override void OnDraw(Renderer renderer) {
-            renderer.Draw(Camera, line);
-            renderer.Draw(Camera, Label);
+            renderer.DrawTexture(Camera, line);
+            renderer.DrawText(Camera, Label);
 
             if (Text.Length > 0) {
-                renderer.Draw(Camera, inputText);
+                renderer.DrawText(Camera, inputText);
             }
 
             if( Focused && !duringBlink) {
-                renderer.Draw(Camera, cursor);
+                renderer.DrawTexture(Camera, cursor);
             }  
         }
     }

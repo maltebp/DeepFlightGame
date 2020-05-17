@@ -27,6 +27,6 @@ public class TextureView : View {
     }
 
     protected override void OnDraw(Renderer renderer) {
-        renderer.Draw(Camera, this);
+        renderer.DrawTexture(Camera, this);
     }
 }

@@ -3,13 +3,11 @@ using DeepFlight.network;
 using DeepFlight.network.exceptions;
 using DeepFlight.rendering;
 using DeepFlight.src.gui;
-using DeepFlight.src.gui.debugoverlay;
 using DeepFlight.user;
-using DeepFlight.user;
+using DeepFlight.utility;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Diagnostics;
 
 namespace DeepFlight.scenes {
@@ -45,9 +43,7 @@ namespace DeepFlight.scenes {
             title.Y = height * 0.45;
             AddChild(title);
 
-
             var menuX = -width * 0.25;
-
 
             text_Login = new TextView(ui, "Login", Font.DEFAULT, 38, Color.White, menuX, height * 0.20);
             AddChild(text_Login);
@@ -59,6 +55,7 @@ namespace DeepFlight.scenes {
 
             textinput_Password = new TextInput(ui, "Password", Font.PIXELLARI, 36, Color.White, menuX, height * 0.60, (float)width * 0.30f);
             textinput_Password.PasswordInput = true;
+            textinput_Password.Dictionairy = CharLists.DEFAULT + CharLists.SYMBOLS;
             textinput_Password.MaxLength = 20;
             AddChild(textinput_Password);
 

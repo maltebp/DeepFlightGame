@@ -21,7 +21,7 @@ public static class Program {
 
         Trace.TraceInformation("Program started");
         bool error = false;
-
+            
         try {
             // Runs the Game application
             var game = new Application();
