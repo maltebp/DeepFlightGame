@@ -1,5 +1,6 @@
 ﻿using DeepFlight.gui;
 using DeepFlight.src.gui.planetbox;
+using DeepFlight.src.view.gui;
 using DeepFlight.user;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -22,7 +23,6 @@ namespace DeepFlight.src.gui {
             }
         }
 
-
         private TextView
             text_PlanetName,
             text_TrackName;
@@ -31,15 +31,29 @@ namespace DeepFlight.src.gui {
             time_GlobalBest,
             time_PersonalBest;
 
-        public TrackInfoView(Camera camera, Track track, bool enableGlobalTime) : base(camera, focusColor: track.Planet.Color) {
+        private TrackTimeList timeList;
+
+        private bool displayOnlineInfo = false;
+
+        public TrackInfoView(Camera camera, Track track, double x, double y, bool displayOnlineInfo) : base(camera, focusColor: track.Planet.Color) {
+            this.displayOnlineInfo = displayOnlineInfo;
+            X = x;
+            Y = y;
+
+            FocusColor = track.Planet.Color;
 
             text_PlanetName = new TextView(camera, "", Font.DEFAULT, 1, Color.White, 0, 0);
             text_TrackName = new TextView(camera, "", Font.DEFAULT, 1, Color.White, 0, 0);
             AddChildren(text_PlanetName, text_TrackName);
 
-            if (enableGlobalTime) {
+            if (displayOnlineInfo) {
                 time_GlobalBest = new TimeLabelView(camera, "Global Best:", 0, 0, Font.DEFAULT, 0, Color.White);
                 AddChild(time_GlobalBest);
+
+                timeList = new TrackTimeList(camera, x, y+150, 17, 30, 190);
+                timeList.SetTimes(track.Times);
+                timeList.Hidden = true;
+                AddChild(timeList); 
             }
             time_PersonalBest = new TimeLabelView(camera, "Personal Best:", 0, 0, Font.DEFAULT, 0, Color.White);
             AddChild(time_PersonalBest);
@@ -47,6 +61,18 @@ namespace DeepFlight.src.gui {
             Track = track;
             UpdateTrackInfo();
             UpdateLayout();
+        }
+
+        protected override void OnFocus() {
+            base.OnFocus();
+            if( timeList != null )
+                timeList.Hidden = false;
+        }
+
+        protected override void OnUnfocus() {
+            base.OnUnfocus();
+            if( timeList != null )
+                timeList.Hidden = true;
         }
 
 

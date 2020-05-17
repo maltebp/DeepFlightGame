@@ -82,10 +82,15 @@ namespace DeepFlight.scenes {
                 // Create planet views
                 int count = 0;
                 foreach(var track in offlineTracks) {
-                    TrackInfoView planet = new TrackInfoView(camera_UI, track, false);
+                    TrackInfoView planet = new TrackInfoView(
+                        camera_UI,
+                        track,
+                        ScreenController.BaseWidth * (count + 1) * 0.20,
+                        ScreenController.BaseHeight * 0.50,
+                        false
+                    );
                     planet.FocusColor = track.Planet.Color;
-                    planet.X = ScreenController.BaseWidth * (count + 1) * 0.20;
-                    planet.Y = ScreenController.BaseHeight * 0.50;
+                   
                     menu_Tracks.AddMenuOption(planet, () => RequestSceneSwitch(new TrackLoadingScene(track, false)));
                     count++;
                 }

@@ -355,7 +355,6 @@ namespace DeepFlight.scenes {
         private void UpdateCameraZoom() {
             targetZoom = 7 - ship.Velocity / 100;
             gameCamera.Zoom += (targetZoom - gameCamera.Zoom)*0.05f;
-            gameCamera.Rotation += (ship.Rotation - gameCamera.Rotation) * 0.05f;
         }
 
 
@@ -371,8 +370,8 @@ namespace DeepFlight.scenes {
         
         protected override void OnDraw(Renderer renderer) {
             // Draw the ship and a 
-            gameCamera.X = ship.X + ship.VelocityX * 0.04;
-            gameCamera.Y = ship.Y + ship.VelocityY * 0.04;
+            gameCamera.X = ship.X + ship.VelocityX * 0.03;
+            gameCamera.Y = ship.Y + ship.VelocityY * 0.03;
             border_Screen.X = ship.X;
             border_Screen.Y = ship.Y;
             border_Rendering.X = ship.X;

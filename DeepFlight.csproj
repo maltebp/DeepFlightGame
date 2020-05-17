@@ -87,6 +87,7 @@
     <Compile Include="src\view\gui\TextInput.cs" />
     <Compile Include="src\view\gui\TextureView.cs" />
     <Compile Include="src\view\gui\TextView.cs" />
+    <Compile Include="src\view\gui\trackinfo\TrackTimeList.cs" />
     <Compile Include="src\view\gui\View.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="src\network\exceptions\APIException.cs" />
