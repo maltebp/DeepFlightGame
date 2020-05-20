@@ -1,11 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeepFlight.track {
+
     public class Checkpoint : TextureView {
 
         private bool reached = false;
@@ -14,6 +10,7 @@ namespace DeepFlight.track {
                 reached = value;
         }}
 
+        // Index is the checkpoint number in the given Track
         public int Index { get; }
         
 
@@ -27,10 +24,12 @@ namespace DeepFlight.track {
             RotationVelocity = 0.4f;
 
             // Add a slightly scaled down collider
+            // Used to detect collision with ship
             AddCollider(new CircleCollider(this, 1.1f));
         }
 
         protected override void OnUpdate(double deltaTime) {
+            // The ship rotates
             UpdateMovement(deltaTime);
         }
 

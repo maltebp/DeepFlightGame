@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+
 
 namespace DeepFlight.generation {
     public static class TrackLoader {
 
-        private static readonly string GENERATOR_FILE_NAME  = "TrackGenerator.exe";
+        private static readonly string GENERATOR_FILE_NAME  = "TrackGenerator";
         private static readonly string LOCAL_TRACK_FOLDER   = "localtrack";
         private static readonly string FILE_EXTENSION       = ".dftbd";
        
@@ -25,14 +24,15 @@ namespace DeepFlight.generation {
         public static Task<Track[]> LoadOfflineTracks() {
             return Task.Run(() => {
                 Console.WriteLine("Loading offline tracks...");
+
+                // Build the path to the Track folder execution
                 var offlineTracksFolder = GetExecutionDirectory() + Settings.OFFLINE_TRACKS_FOLDER + "/";
-                string[] trackFiles = Directory.GetFiles(offlineTracksFolder, "*" + FILE_EXTENSION).Select(Path.GetFileName).ToArray();
 
                 var trackTimeController = OfflineTrackTimeController.Instance;
-
                 Track track;
                 var tracks = new LinkedList<Track>();
 
+                // Load each of the tracks
                 track = LoadTrackFile(offlineTracksFolder + "aerth" + FILE_EXTENSION);
                 track.Id = "";
                 track.Name = "AGRC-313";
@@ -64,6 +64,10 @@ namespace DeepFlight.generation {
         }
 
 
+
+        /// <summary>
+        /// Generates a new track using the TrackGenerator program
+        /// </summary>
         public static Task<Track> GenerateLocalTrack() {
             // The async process waiting is inspired from:
             // https://stackoverflow.com/questions/470256/process-waitforexit-asynchronously
@@ -75,16 +79,26 @@ namespace DeepFlight.generation {
             var executionDir = GetExecutionDirectory();
             var trackFolderPath = GetExecutionDirectory() + LOCAL_TRACK_FOLDER + "/";
             var generatorPath = GetExecutionDirectory() + GENERATOR_FILE_NAME;
+
+            // Append .exe to generator path if we're on Windows
+            switch(Environment.OSVersion.Platform) {
+                case PlatformID.Win32NT:
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.WinCE:
+                    generatorPath += ".exe";
+                    break;
+            }
                 
             var tcs = new TaskCompletionSource<Track>();
 
             // Setup the generation Process
             var process = new Process();
-            process.StartInfo.FileName = @generatorPath;
+            process.StartInfo.FileName = generatorPath;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
-            process.StartInfo.Arguments = string.Format("{0} {1} {2} {3} {4} {5} {6} {7}",
-                $"\"{trackFolderPath}\"", "randomtrack",  DateTime.Now.Millisecond,
+            process.StartInfo.Arguments = string.Format("\"{0}\" \"{1}\" {2} {3} {4} {5} {6} {7}",
+                trackFolderPath, "randomtrack",  DateTime.Now.Millisecond,
                 10, 10, 10, 10, 10
             );
             process.EnableRaisingEvents = true;

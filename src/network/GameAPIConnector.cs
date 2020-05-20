@@ -160,7 +160,7 @@ namespace DeepFlight.network {
             return Task.Run(() => {
                 var request = new RestRequest($"rankings/universal");
                 var response = client.Get(request);
-
+            
                 // Check connection error
                 if (response.ErrorException != null)
                     throw new ConnectionException(client.BaseUrl.ToString());

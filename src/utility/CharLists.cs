@@ -2,7 +2,8 @@
 namespace DeepFlight.utility {
     
     /// <summary>
-    /// String lists of character sets
+    /// String lists of character sets (i.e. used to determine allowed input
+    /// characters)
     /// </summary>
     public static class CharLists {
         public static readonly string LOWER_CASE    = "abcdefghijklmnopqrstuvwxyz";

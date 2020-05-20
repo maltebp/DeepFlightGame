@@ -16,7 +16,6 @@ namespace DeepFlight.scenes {
         private Camera camera_UI = new Camera(x: ScreenController.BaseWidth/2, y: ScreenController.BaseHeight/2);
 
         private TextView text_SceneTitle;
-
         private MenuView menu_Tracks;
         private TextView text_Error;
         private LoadingTextView loader;
@@ -53,22 +52,17 @@ namespace DeepFlight.scenes {
         }
 
 
-        protected override bool OnKeyInput(KeyEventArgs e) {
-            if (e.Action == KeyAction.PRESSED) {
-                if (e.Key == Keys.Escape) {
-                    RequestSceneSwitch(new MainMenuScene());
-                    return true;
-                }
-            }
-            return false;
-        }
 
 
+        /// <summary>
+        /// Starts the loading of offline tracks asynchronously, and once complete
+        /// it creates the GUI components to display the Track information.
+        /// </summary>
         private async void LoadTracks() {
+
+            // Load and deserialize tracks from files
             loader.Hidden = false;
-
             offlineTracks = await TrackLoader.LoadOfflineTracks();
-
             loader.Hidden = true;
 
             if( offlineTracks.Length == 0) {
@@ -95,6 +89,8 @@ namespace DeepFlight.scenes {
                     count++;
                 }
             }
+
+            // Add option to generate random track
             TextPlanetBoxView randomPlanet = new TextPlanetBoxView(camera_UI, "Random Track");
             randomPlanet.FocusColor = Color.White;
             randomPlanet.X = ScreenController.BaseWidth * 0.80;
@@ -105,10 +101,23 @@ namespace DeepFlight.scenes {
             menu_Tracks.Focused = true;
         }
 
+
+        // Sets the text of the error message view and displays it          
         private void DisplayError(string errorMessage) {
             text_Error.Text = "Error: " + errorMessage;
             text_Error.Hidden = false;
         }
 
+
+        // Go back to main menu if 'escape' is pressed
+        protected override bool OnKeyInput(KeyEventArgs e) {
+            if (e.Action == KeyAction.PRESSED) {
+                if (e.Key == Keys.Escape) {
+                    RequestSceneSwitch(new MainMenuScene());
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

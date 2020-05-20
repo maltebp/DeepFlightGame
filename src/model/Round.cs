@@ -1,14 +1,9 @@
 ﻿using DeepFlight.network;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeepFlight.track {
+    
     public class Round {
-
-        // TODO: Add start and end date
 
         public string Id { get; set; }
         public int RoundNumber { get; set; }
@@ -31,4 +26,5 @@ namespace DeepFlight.track {
         }
 
     }
+
 }

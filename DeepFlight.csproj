@@ -64,13 +64,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="src\control\Application.cs" />
-    <Compile Include="src\control\offlinetracktime\OfflineTrackTimeController.cs" />
-    <Compile Include="src\control\offlinetracktime\OfflineTrackTimeMap.cs" />
-    <Compile Include="src\control\scenes\MainMenuScene.cs" />
-    <Compile Include="src\model\gameobjects\Entity.cs" />
-    <Compile Include="src\model\gameobjects\Ship.cs" />
-    <Compile Include="src\model\gameobjects\Space.cs" />
+    <Compile Include="src\Application.cs" />
+    <Compile Include="src\trackutility\OfflineTrackTimeController.cs" />
+    <Compile Include="src\trackutility\OfflineTrackTimeMap.cs" />
+    <Compile Include="src\scenes\MainMenuScene.cs" />
+    <Compile Include="src\model\entity\Entity.cs" />
+    <Compile Include="src\model\Ship.cs" />
     <Compile Include="src\network\exceptions\AuthenticationException.cs" />
     <Compile Include="src\network\exceptions\UnknownUserException.cs" />
     <Compile Include="src\view\gui\BorderView.cs" />
@@ -96,29 +95,29 @@
     <Compile Include="src\network\GameAPIConnector.cs" />
     <Compile Include="src\network\exceptions\ServerException.cs" />
     <Compile Include="src\network\UserAPIConnector.cs" />
-    <Compile Include="src\physics\Collider.cs" />
-    <Compile Include="src\physics\Movable.cs" />
+    <Compile Include="src\model\entity\Collidable.cs" />
+    <Compile Include="src\model\entity\Movable.cs" />
     <Compile Include="src\view\rendering\Camera.cs" />
     <Compile Include="src\view\rendering\Font.cs" />
     <Compile Include="src\view\rendering\Renderer.cs" />
     <Compile Include="src\view\rendering\ScreenController.cs" />
     <Compile Include="src\view\rendering\Textures.cs" />
-    <Compile Include="src\control\scenes\GameScene.cs" />
-    <Compile Include="src\control\scenes\LoginScene.cs" />
-    <Compile Include="src\control\scenes\OfflineTracksScene.cs" />
-    <Compile Include="src\control\scenes\OnlineTracksScene.cs" />
-    <Compile Include="src\control\scenes\RankingsScene.cs" />
-    <Compile Include="src\control\scenes\Scene.cs" />
-    <Compile Include="src\control\scenes\TrackCompleteScene.cs" />
-    <Compile Include="src\control\scenes\TrackLoadingScene.cs" />
+    <Compile Include="src\scenes\GameScene.cs" />
+    <Compile Include="src\scenes\LoginScene.cs" />
+    <Compile Include="src\scenes\OfflineTracksScene.cs" />
+    <Compile Include="src\scenes\OnlineTracksScene.cs" />
+    <Compile Include="src\scenes\RankingsScene.cs" />
+    <Compile Include="src\scenes\Scene.cs" />
+    <Compile Include="src\scenes\TrackCompleteScene.cs" />
+    <Compile Include="src\scenes\TrackLoadingScene.cs" />
     <Compile Include="src\Settings.cs" />
-    <Compile Include="src\model\track\Checkpoint.cs" />
-    <Compile Include="src\model\track\Planet.cs" />
-    <Compile Include="src\model\track\Round.cs" />
-    <Compile Include="src\model\track\Track.cs" />
-    <Compile Include="src\model\track\TrackDeserializer.cs" />
-    <Compile Include="src\model\track\TrackLoader.cs" />
-    <Compile Include="src\model\user\User.cs" />
+    <Compile Include="src\model\Checkpoint.cs" />
+    <Compile Include="src\model\Planet.cs" />
+    <Compile Include="src\model\Round.cs" />
+    <Compile Include="src\model\Track.cs" />
+    <Compile Include="src\trackutility\TrackDeserializer.cs" />
+    <Compile Include="src\trackutility\TrackLoader.cs" />
+    <Compile Include="src\model\User.cs" />
     <Compile Include="src\utility\CharLists.cs" />
     <Compile Include="src\utility\FPSCounter.cs" />
     <Compile Include="src\utility\KeyboardController.cs" />
@@ -390,6 +389,9 @@
     </None>
     <None Include="packages.config" />
     <None Include="README.md" />
+    <Content Include="TrackGenerator">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\GameTitle.png" />

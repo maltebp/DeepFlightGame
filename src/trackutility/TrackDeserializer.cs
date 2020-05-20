@@ -8,30 +8,43 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-// Serialize into and deserialize a Track object into a byte array
+/// <summary>
+/// Static class containing helper methods to Deserialize from and Serialize to a Track from the .dftbd format.
+/// </summary>
 public static class TrackDeserializer {
 
+
+    /// <summary>
+    /// Just calls the DeserializeBlockData as a Task, allowing
+    /// to deserialize in an asynchronous manner.
+    /// </summary>
     public static Task DeserializeBlockDataAsync(this Track track) {
         return Task.Run(()=> {
             track.DeserializeBlockData();
         });
     } 
 
+
     /// <summary>
     /// Deserializes the loaded Block data, preparing the Track to
     /// be played / rendered.
+    /// The deserialization happens a manual manner, meaning we use
+    /// a stream to read each set of bytes and map them to the expected
+    /// attributes of the class manually.
     /// </summary>
     public static void DeserializeBlockData(this Track track) {
         if (track.BlockData == null)
             throw new ArgumentNullException("Block data is null for Track ('{0}')", track.Name);
 
         if (track.BlockDataDeserialized) {
-            Console.WriteLine("WARNING: Block data of Track ('{0}') has already been processed!", track.Name);
+            Trace.TraceWarning($"Block data of Track(track.Name) has already been processed!");
             return;
         }
 
+        // Take time because it's interesting to now
         var stopwatch = Stopwatch.StartNew(); 
 
+        // Perform the deserialization
         using (MemoryStream stream = new MemoryStream(track.BlockData)) {
             using (BinaryReader reader = new BinaryReader(stream)) {
 
@@ -40,9 +53,9 @@ public static class TrackDeserializer {
                 track.StartY = reader.ReadInt32();
                 track.StartRotation = reader.ReadDouble();
 
-                var trackAssembler = new TrackAssembler();
+                var trackBuilder = new TrackBuilder();
 
-                // Deserialize Blocks
+                // Deserialize Blocks (this is the bulk of the file)
                 while (true) {
                     int blockX = reader.ReadInt32();
                     int blockY = reader.ReadInt32();
@@ -51,10 +64,15 @@ public static class TrackDeserializer {
                     if (blockX == 0 && blockY == 0 && blockType == 0)
                         break;
 
-                    trackAssembler.AddBlock(blockX, blockY, (BlockType) blockType);
+                    if (blockType == 2) {
+                        trackBuilder.AddCollisionBlock(blockX, blockY);
+                    }
+                    else {
+                        trackBuilder.AddBlock(blockX, blockY);
+                    }
                 }
 
-                trackAssembler.Assemble(track);
+                trackBuilder.Build(track);
 
                 // Deserialize Checkpoints
                 LinkedList<Checkpoint> checkpoints = new LinkedList<Checkpoint>();
@@ -63,7 +81,6 @@ public static class TrackDeserializer {
                     Checkpoint checkpoint = new Checkpoint(checkPointIndex++, new Color(track.Planet.Color, 0.5f), reader.ReadInt32(), reader.ReadInt32());
                     checkpoints.AddLast(checkpoint);
                 }
-
                 track.Checkpoints = checkpoints.ToArray();
             }
         }
@@ -73,14 +90,22 @@ public static class TrackDeserializer {
     }
 
 
-    private class TrackAssembler {
-
+    /// <summary>
+    /// Class which provides some helper methods, in order to build the Track
+    /// when we're loading it in.
+    /// </summary>
+    private class TrackBuilder {
 
         private Dictionary<int, Dictionary<int, Chunk>> chunkMap = new Dictionary<int, Dictionary<int, Chunk>>();
         private List<Chunk> chunks = new List<Chunk>();
 
-        public void AddBlock(int x, int y, BlockType type) {
-            GetChunk(x, y).AddBlock(x, y, type);
+
+        public void AddBlock(int x, int y) {
+            GetChunk(x, y).AddBlock(x, y);
+        }
+
+        public void AddCollisionBlock(int x, int y) {
+            GetChunk(x, y).AddCollisionBlock(x, y);
         }
 
 
@@ -100,12 +125,17 @@ public static class TrackDeserializer {
             return row[chunkY];
         }
 
-        public void Assemble(Track track) {
+        /// <summary>
+        /// Builds the current chunks/blocks and add them
+        /// to the given Track.
+        /// </summary>
+        /// <param name="track"></param>
+        public void Build(Track track) {
 
             // Sequentialize the chunks
             foreach( var row in chunkMap.Values) {
                 foreach( var chunk in row.Values) {
-                    chunk.Sequentialize();
+                    chunk.Build();
                 }
             }
 

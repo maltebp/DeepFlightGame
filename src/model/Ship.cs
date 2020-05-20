@@ -1,7 +1,5 @@
 ﻿
 
-using Microsoft.Xna.Framework;
-
 /// <summary>
 /// The Ship entity, consisting of a movable Ship Texture and a
 /// Triangle collider

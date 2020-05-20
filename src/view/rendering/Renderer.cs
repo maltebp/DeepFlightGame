@@ -220,7 +220,7 @@ public class Renderer {
 
         // Draw each chunk
         var chunkCount = 0;
-        track.ForChunkInRange(
+        track.ForChunksInRange(
             (int) (camera.X-renderRadius),
             (int) (camera.X+renderRadius),
             (int) (camera.Y-renderRadius),

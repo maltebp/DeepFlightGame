@@ -3,11 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 
 namespace DeepFlight.utility.KeyboardController {
 
-    static class KeyboardController {
+    /// <summary>
+    /// Class which handles Keyboard events by comparing keyboard states
+    /// The keyboard state is updated by the Application in the update loop
+    /// </summary>
+    public static class KeyboardController {
 
         private static KeyboardState currentState;
         private static KeyboardState previousState;
@@ -89,7 +93,6 @@ namespace DeepFlight.utility.KeyboardController {
     }
 
 
-    // TODO: Implement this
     public class CharEventArgs : EventArgs {
         public Keys Key { get; }
         public char Character { get;  }

@@ -19,15 +19,17 @@ public class TextView : View {
         get { return text; }
         set { text = value; UpdateSize(); }
     }
-        
-    public Color Color { get; set; } = Color.White;
 
-    // Font size
     private double size;
     public double Size {
         get => size;
         set { size = value < 0 ? 0 : value; UpdateSize(); }
     }
+
+    public Color Color { get; set; } = Color.White;
+
+    // Font size
+    
 
 
     public TextView(Camera camera, string text, Font font = null, double size = 24, Color? color = null, double x = 0, double y = 0) : base(camera) {

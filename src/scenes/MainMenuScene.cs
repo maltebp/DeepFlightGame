@@ -18,6 +18,7 @@ namespace DeepFlight.scenes {
         private TextView text_UserName;
         private TextView text_Guest;
         private TextView text_Rank;
+        private TextView text_Version;
 
 
         protected override void OnInitialize() {
@@ -40,6 +41,12 @@ namespace DeepFlight.scenes {
             title.X = width * 0.22;
             title.Y = height * 0.45;
             AddChild(title);
+
+            // Version text
+            text_Version = new TextView(ui, "Version: " + Settings.VERSION, color: new Color(Color.White, 0.50f), size: 15, x: width * 0.49, y: height * 0.99);
+            text_Version.HOrigin = HorizontalOrigin.RIGHT;
+            text_Version.VOrigin = VerticalOrigin.BOTTOM;
+            AddChild(text_Version);
 
             // Player box
             border_User = new BorderView(ui, borderWidth: 5f, x: menuX, y: height* 0.20, width: width * 0.27f, height: height * 0.23f);

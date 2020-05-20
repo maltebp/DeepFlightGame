@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DeepFlight.view.gui {
+
+    // View which represents a border
+    // It may have a background as any other view, allowing it to be
+    // a bordered, colored rectangle.
     public class BorderView : View {
 
         public float borderWidth = 1f;
@@ -44,16 +48,13 @@ namespace DeepFlight.view.gui {
         }
 
 
-
-
-
+        // Update border depending on the size of the view
         private void UpdateLayout() {
 
             if( lines[0] != null) {
-                foreach (var line in lines) {
-
+                foreach (var line in lines)
                     line.Color = color;
-                }
+    
 
                 lines[0].X = X;
                 lines[0].Y = Y - Height / 2.0f;
@@ -65,7 +66,6 @@ namespace DeepFlight.view.gui {
                 lines[1].Y = Y;
                 lines[1].Height = Height -1f;
                 lines[1].Width = borderWidth;
-
 
                 lines[2].X = X;
                 lines[2].Y = Y + Height / 2.0f;

@@ -18,6 +18,7 @@ namespace DeepFlight.scenes {
         private TextureView title;
         private TextView errorText;
         private TextView text_Login;
+        private TextView text_Version;
         private LoadingTextView loader;
         private TextInput textinput_Username, textinput_Password;
         private SimpleMenuOption menuoption_LoginAsGuest;
@@ -78,6 +79,11 @@ namespace DeepFlight.scenes {
             menu.AddMenuOption(textinput_Password, AttemptLogin);
             menu.AddMenuOption(menuoption_LoginAsGuest, LoginAsGuest);
             AddChild(menu);
+
+            text_Version = new TextView(ui, "Version: " + Settings.VERSION, color: new Color(Color.White, 0.50f), size: 15, x: width * 0.49, y: height * 0.99);
+            text_Version.HOrigin = HorizontalOrigin.RIGHT;
+            text_Version.VOrigin = VerticalOrigin.BOTTOM;
+            AddChild(text_Version);
 
         }
 

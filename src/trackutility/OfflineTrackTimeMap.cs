@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DeepFlight.control.offlinetracktime {
     
     /// <summary>
-    /// Object which maps track times to track names
+    /// Serializable object which maps track times to track names
     /// </summary>
     [Serializable]
     class OfflineTrackTimeMap {

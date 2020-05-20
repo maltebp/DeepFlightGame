@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 /// </summary>
 public static class Settings {
 
+    public static readonly string VERSION = "1.2.3";
+
     // Visuals
     public static readonly Color COLOR_PRIMARY  = new Color(40, 44, 52);
     public static readonly Color CLEAR_COLOR    = Color.Green;
@@ -30,4 +32,5 @@ public static class Settings {
     public static readonly string OFFLINE_TRACKS_FOLDER = "offlinetracks";
     public static readonly string WEBSITE_URL = "http://www.maltebp.dk";
     public static readonly string GAME_API_URL = "http://maltebp.dk:10000/gameapi";
+
 }
