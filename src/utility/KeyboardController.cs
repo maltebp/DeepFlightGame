@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 
 namespace DeepFlight.utility.KeyboardController {
-
+    
     /// <summary>
     /// Class which handles Keyboard events by comparing keyboard states
     /// The keyboard state is updated by the Application in the update loop
@@ -24,7 +24,7 @@ namespace DeepFlight.utility.KeyboardController {
 
 
         public static void Initialize(GameWindow window) {
-            window.TextInput += OnTextInput;
+            window.TextInput += SignalTextInputEvent;
         }
 
         /// <summary>
@@ -42,37 +42,51 @@ namespace DeepFlight.utility.KeyboardController {
             foreach( Keys key in currentState.GetPressedKeys()) {
                 if( oldKeys.Contains(key) ) {
                     oldKeys.Remove(key);
-                    OnKeyEvent(new KeyEventArgs(key, KeyAction.HELD));
+                    SignalKeyEvent(new KeyEventArgs(key, KeyAction.HELD));
                 } else {
-                    OnKeyEvent(new KeyEventArgs(key, KeyAction.PRESSED));
+                    SignalKeyEvent(new KeyEventArgs(key, KeyAction.PRESSED));
                 }
             }
 
             // Old keys that are not pressed now 
             foreach(Keys key in oldKeys) {
-                OnKeyEvent(new KeyEventArgs(key, KeyAction.RELEASED));
+                SignalKeyEvent(new KeyEventArgs(key, KeyAction.RELEASED));
             }
         }
 
-        public static void OnKeyEvent(KeyEventArgs args) {
+        // Signals that a new key event has occured (any key has been pressed)
+        public static void SignalKeyEvent(KeyEventArgs args) {
             KeyEvent?.Invoke(args);
         }
 
-        public static bool ShiftHeld() {
+        // Signals character input events (i.e. differs between small and large characters)
+        public static void SignalTextInputEvent(object sender, TextInputEventArgs args) {
+            CharEvent?.Invoke(new CharEventArgs(args.Key, args.Character));
+        }
+
+        // Determines whether or not shift is held
+        public static bool IsShiftHeld() {
             return previousState != null && (IsHeld(Keys.LeftShift) || IsHeld(Keys.RightShift));
         }
 
+        // Determines whether or not CTRL is held down
+        public static bool IsCtrlHeld() {
+            return previousState != null && (IsHeld(Keys.LeftControl) || IsHeld(Keys.RightControl));
+        }
+
+        // Tests whether or not a certain key is pressed
+        // A key is pressed if it was tabbed in the frame, and not in the previous
         public static bool IsPressed(Keys key) {
             return currentState.IsKeyDown(key) && previousState.IsKeyUp(key);
         }
 
+        // Tests whether or not a certain key is held
+        // A key is held if it was pressed this frame and the previous frame
         public static bool IsHeld(Keys key) {
             return currentState.IsKeyDown(key) && previousState.IsKeyDown(key);
         }
 
-        public static void OnTextInput(object sender, TextInputEventArgs args) {
-            CharEvent?.Invoke(new CharEventArgs(args.Key, args.Character));
-        }
+        
     }
 
     public class KeyEventArgs : EventArgs {

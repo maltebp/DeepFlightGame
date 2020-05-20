@@ -45,13 +45,16 @@ public class Application : Game {
     protected override void LoadContent() {
 
         // Setup keyboard controller
+        // The Application registers itself to the KeyboardController's
+        // character and key input events
         KeyboardController.Initialize(Window);
         KeyboardController.KeyEvent += OnKeyInput;
         KeyboardController.CharEvent += OnCharInput;
 
+    
         ScreenController.Initialize(graphics);
 
-
+        // Initialize Renderer and loads fonts and textures
         renderer = new Renderer(graphics);
         Textures.LoadTextures(graphics.GraphicsDevice, Content);
         Font.LoadAll(Content);

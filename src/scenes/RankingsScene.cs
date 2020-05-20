@@ -7,13 +7,14 @@ using DeepFlight.utility.KeyboardController;
 using DeepFlight.view.gui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DeepFlight.scenes {
+    
+    /// <summary>
+    /// Scene displaying the current Universal Ranking, as well as the rankings
+    /// of the previous Round.
+    /// </summary>
     class RankingsScene : Scene {
 
         private Camera camera_UI = new Camera();
@@ -29,6 +30,7 @@ namespace DeepFlight.scenes {
         private RatingboardView 
             ratingboard_LastRound,
             ratingboard_Universal;
+
 
         protected override void OnInitialize() {
 
@@ -51,6 +53,7 @@ namespace DeepFlight.scenes {
             text_Error.Hidden = true;
             AddChild(text_Error);
 
+            // Ratingboards: Displays Universal and Round rankings
             ratingboard_Universal = new RatingboardView(camera_UI, "Universal Rankings (Top 5)", -width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
             ratingboard_LastRound = new RatingboardView(camera_UI, "Previous Round Ratings (Top 5)", width * 0.23, height * 0.55, width * 0.40f, height * 0.45f);
             AddChildren(ratingboard_Universal, ratingboard_LastRound);
@@ -142,23 +145,25 @@ namespace DeepFlight.scenes {
                 DisplayError("An unknown mishap seems to have occured :(");
             }
         }
+        
 
-
-        protected override bool OnKeyInput(KeyEventArgs e) {
-            if( e.Action == KeyAction.PRESSED) {
-                if( e.Key == Keys.Escape) {
-                    RequestSceneSwitch(new MainMenuScene());
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
+        // Displays an error on the screen
         private void DisplayError(string message) {
             loader.Hidden = true;
             text_Error.Text = "Error: " + message;
             text_Error.Hidden = false;
+        }
+
+
+        // Exit to main menu on escape pressed
+        protected override bool OnKeyInput(KeyEventArgs e) {
+            if (e.Action == KeyAction.PRESSED) {
+                if (e.Key == Keys.Escape) {
+                    RequestSceneSwitch(new MainMenuScene());
+                    return true;
+                }
+            }
+            return false;
         }
 
     }

@@ -8,6 +8,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace DeepFlight.scenes {
+
+
+    /// <summary>
+    /// The main menu of the game
+    /// </summary>
     class MainMenuScene : Scene {
 
         private Camera ui = new Camera();
@@ -48,14 +53,13 @@ namespace DeepFlight.scenes {
             text_Version.VOrigin = VerticalOrigin.BOTTOM;
             AddChild(text_Version);
 
-            // Player box
+            // Playing as box and text
             border_User = new BorderView(ui, borderWidth: 5f, x: menuX, y: height* 0.20, width: width * 0.27f, height: height * 0.23f);
             border_User.BackgroundColor = new Color(Color.Black, 0.25f);
-            AddChild(border_User);
-
             text_PlayingAs = new TextView(ui, "Playing as", size: 24, x: menuX, y:  height * 0.13);
-            AddChild(text_PlayingAs);
+            AddChildren(text_PlayingAs, border_User);
 
+            // Add player name and rank to "Playing as"-box
             if( User.LocalUser.Guest) {
                 text_Guest = new TextView(ui, "Guest", size: 34, x: menuX, y: height * 0.23);
                 AddChild(text_Guest);
@@ -67,8 +71,7 @@ namespace DeepFlight.scenes {
                 AddChildren(text_UserName, text_Rank);
             }
 
-
-            // Setup Menu
+            // Setup Menu 
             menu = new SimpleMenuView(ui, Font.DEFAULT, 24, Color.White, 24);
             menu.Y = height * 0.40;
             menu.X = menuX;
@@ -88,6 +91,7 @@ namespace DeepFlight.scenes {
             menu.Focused = true;
         }
 
+        // Exit to login scene if escape is presed
         protected override bool OnKeyInput(KeyEventArgs e) {
             if( e.Action == KeyAction.PRESSED) {
                 if( e.Key == Keys.Escape) {
@@ -99,6 +103,7 @@ namespace DeepFlight.scenes {
         }
 
 
+        // Resets user and request scene switch to login scene
         private void ToLoginScene() {
             User.ResetLocalUser();
             RequestSceneSwitch(new LoginScene());

@@ -1,6 +1,4 @@
-﻿
-
-using DeepFlight.utility;
+﻿using DeepFlight.utility;
 using DeepFlight.utility.KeyboardController;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -8,7 +6,15 @@ using System;
 using System.Linq;
 
 namespace DeepFlight.gui {
-    public class TextInput : View {
+
+
+    /// <summary>
+    /// Generic View which handles a single line of text input.
+    /// The View draws the input text, a bottom line, which thickens
+    /// when the view is focused, as well as a text carret which blinks
+    /// where the next character will be inserted
+    /// </summary>
+    public class TextInputView : View {
 
         private static readonly int LINE_THICKNESS = 3;
         private static readonly int LINE_MARGIN = 3;
@@ -25,7 +31,7 @@ namespace DeepFlight.gui {
         public TextView Label { get; }
 
         private TextView inputText;
-        private TextureView cursor;
+        private TextureView caret;
         private TextureView line;
 
         private double blinkDuration = 0.75;
@@ -33,7 +39,7 @@ namespace DeepFlight.gui {
         private bool duringBlink = false;
 
 
-        public TextInput(Camera camera, string label, Font font, int fontSize, Color color, double x, double y, float width) : base(camera) {
+        public TextInputView(Camera camera, string label, Font font, int fontSize, Color color, double x, double y, float width) : base(camera) {
             X = x;
             Y = y;
             Width = (int) width;
@@ -44,8 +50,8 @@ namespace DeepFlight.gui {
             AddChild(inputText);
 
             // Cursor
-            cursor = new TextureView(Camera, Textures.SQUARE, color, x, inputText.GetCenterY() - 8, DEFAULT_CURSOR_WIDTH, inputText.Height*0.75f );
-            cursor.HOrigin = HorizontalOrigin.LEFT;
+            caret = new TextureView(Camera, Textures.SQUARE, color, x, inputText.GetCenterY() - 8, DEFAULT_CURSOR_WIDTH, inputText.Height*0.75f );
+            caret.HOrigin = HorizontalOrigin.LEFT;
 
             // Fancy line below input
             line = new TextureView(Camera, Textures.SQUARE, color, x, y - LINE_MARGIN, width, LINE_THICKNESS);
@@ -59,21 +65,20 @@ namespace DeepFlight.gui {
             blinkCooldown = blinkDuration;
         }
 
+        // Restart carret blinking and thicken the bottom line
         protected override void OnFocus() {
             duringBlink = false;
             blinkCooldown = 1;
             line.Height *= 2f;
         }
 
+        // Turn off blinking, hide carret and makes the line thin again
         protected override void OnUnfocus() {
             line.Height *= 0.5f;
         }
 
-        /// <summary>
-        /// Returns true
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+
+        // Handle backspace and enter
         protected override bool OnKeyInput(KeyEventArgs e) {
             if (e.Action == KeyAction.PRESSED && e.Key == Keys.Back) {
                 if (Text.Length > 0) {
@@ -86,6 +91,7 @@ namespace DeepFlight.gui {
         }
 
 
+        // Consume character event, and insert it into the text view
         protected override bool OnCharInput(CharEventArgs e) {
             if (Dictionairy.Contains(e.Character)) {
                 if( MaxLength < 0 || Text.Length < MaxLength) {
@@ -95,6 +101,7 @@ namespace DeepFlight.gui {
             }
             return false;
         }
+
 
         protected override void OnUpdate(double timeDelta) {
             blinkCooldown -= timeDelta;
@@ -106,7 +113,7 @@ namespace DeepFlight.gui {
                 inputText.Text = new string('*', Text.Length);
             else
                 inputText.Text = Text;
-            cursor.X = inputText.GetCenterX() + inputText.Width / 2+ 1;
+            caret.X = inputText.GetCenterX() + inputText.Width / 2+ 1;
         }
 
 
@@ -119,7 +126,7 @@ namespace DeepFlight.gui {
             }
 
             if( Focused && !duringBlink) {
-                renderer.DrawTexture(Camera, cursor);
+                renderer.DrawTexture(Camera, caret);
             }  
         }
     }

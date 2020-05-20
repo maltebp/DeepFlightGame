@@ -29,6 +29,8 @@ namespace DeepFlight.scenes {
 
         private Round round;
 
+        private bool loadingTracks = false;
+
         protected override void OnInitialize() {
 
             float height = (float) ScreenController.BaseHeight;
@@ -37,16 +39,17 @@ namespace DeepFlight.scenes {
             BackgroundColor = Settings.COLOR_PRIMARY;
             BackgroundTexture = Textures.BACKGROUND;
 
+            // Text: Round title ("scene title")
             text_SceneTitle = new TextView(camera_UI, "<ROUND TITLE>", Font.DEFAULT, 42, Color.White, width * 0.50, height * 0.20);
             text_SceneTitle.Hidden = true;
             AddChild(text_SceneTitle);
 
-
+            // Text: Time left of round 
             text_TimeLeft = new TextView(camera_UI, "", x: width * 0.5, y: height*0.28);
             text_TimeLeft.Hidden = false;
             AddChild(text_TimeLeft);
 
-            // Menu which contains the different Tracks
+            // Menu: Contains the different Tracks (tracks are added once loaded)
             menu_Tracks = new MenuView(orientation: MenuView.MenuOrientation.HORIZONTAL);
             menu_Tracks.Hidden = true;
             AddChild(menu_Tracks);
@@ -56,12 +59,12 @@ namespace DeepFlight.scenes {
             text_Error.Hidden = true;
             AddChild(text_Error);
 
-
             // Loader 
             loader = new LoadingTextView(camera_UI, "Loading tracks for current round", Font.DEFAULT, 24, Color.White, width*0.5, height*0.5);
             loader.Hidden = true;
             AddChild(loader);
 
+            // Guest user shouldn't be allowed to play the online tracks
             if (User.LocalUser.Guest) {
                 DisplayError("Sorry, you cannot play the online tracks as a guest!");
             }
@@ -72,19 +75,11 @@ namespace DeepFlight.scenes {
         }
 
 
-        protected override bool OnKeyInput(KeyEventArgs e) {
-            if (e.Action == KeyAction.PRESSED) {
-                if (e.Key == Keys.Escape) {
-                    RequestSceneSwitch(new MainMenuScene());
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
+        // Loads the tracks asynchronously, and creates the Track info views
+        // once finished, and adds them to the menu.
         private async void LoadTracks() {
             loader.Hidden = false;
+            loadingTracks = true;
 
             // Load current round from GameAPI
             try {
@@ -109,10 +104,6 @@ namespace DeepFlight.scenes {
             // Create Track Info views (the planets)
             int count = 0;
             foreach (var track in round.Tracks) {
-                Console.WriteLine($"Track Times for '{track.Name}':");
-                foreach(var time in track.Times) {
-                    Console.WriteLine($"\t{time.username}: {time.time}");
-                }
                 TrackInfoView planet = new TrackInfoView(
                     camera_UI,
                     track,
@@ -126,15 +117,15 @@ namespace DeepFlight.scenes {
             }
 
             loader.Hidden = true;
-
             menu_Tracks.Focused = true;
-
             text_TimeLeft.Hidden = false;
             text_SceneTitle.Hidden = false;
-            text_SceneTitle.Text = string.Format("Round #{0} Tracks", round.RoundNumber);
+            text_SceneTitle.Text = $"Round #{round.RoundNumber} Tracks";
+            loadingTracks = false;
         }
 
 
+        // Update the round countdown
         protected override void OnUpdate(double deltaTime) {
             if( round != null) {
                 var remainingTimeMs = round.EndDate - DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -150,11 +141,26 @@ namespace DeepFlight.scenes {
         }
 
 
+        // Displays an error, hiding the Track menu
         private void DisplayError(string errorMessage) {
             text_Error.Text = "Error: " + errorMessage;
             text_Error.Hidden = false;
             menu_Tracks.Hidden = true;
             loader.Hidden = true;
+        }
+
+
+        // Return to Main menu on exit
+        protected override bool OnKeyInput(KeyEventArgs e) {
+            if (e.Action == KeyAction.PRESSED) {
+                if (e.Key == Keys.Escape) {
+                    if( !loadingTracks) {
+                        RequestSceneSwitch(new MainMenuScene());
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
     }

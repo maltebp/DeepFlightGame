@@ -12,6 +12,12 @@ using static DeepFlight.src.gui.SimpleMenuOption;
 using static DeepFlight.src.gui.SimpleMenuView;
 
 namespace DeepFlight.src.gui {
+
+
+    /// <summary>
+    /// The simple menu view, allows for easy creation of simple text menus
+    /// (a menu option is just a text).
+    /// </summary>
     public class SimpleMenuView : MenuView {
 
         public double OptionSpacing { get; }

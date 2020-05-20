@@ -1,7 +1,10 @@
 ﻿
-// Custom struct to represent a set of double coordinates
 using System;
 
+
+/// <summary>
+/// Custom struct to represent a set of double coordinates
+/// </summary>
 public struct Point {
 
     public double X { get; }

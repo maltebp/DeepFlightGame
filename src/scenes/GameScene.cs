@@ -1,17 +1,13 @@
-﻿
-
-
-using DeepFlight.rendering;
+﻿using DeepFlight.rendering;
 using DeepFlight.src.gui.debugoverlay;
-using DeepFlight.track;
 using DeepFlight.utility.KeyboardController;
-using DeepFlight.view.gui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace DeepFlight.scenes {
 
@@ -48,15 +44,13 @@ namespace DeepFlight.scenes {
         private bool crashed = true;
         private float targetZoom = 7f;
 
-
+        // Lines to add to the debug info view
         private DebugInfoLine 
             infoLine_ShipPos,
             infoLine_ShipVel,
             infoLine_ShipRot,
             infoLine_ChunksDrawn,
             infoLine_CameraZoom;
-
-        
 
         public GameScene(Track track, bool onlineTrack) {
             this.track = track;
@@ -134,6 +128,7 @@ namespace DeepFlight.scenes {
             Restart();
         }
 
+        // Remove the Debug Info lines
         protected override void OnTerminate() {
             DebugOverlay.Info.RemoveInfoLine(infoLine_ShipPos);
             DebugOverlay.Info.RemoveInfoLine(infoLine_ShipVel);
@@ -143,6 +138,7 @@ namespace DeepFlight.scenes {
         }
 
 
+        // Restart the Track (resets the ship position, the camera initializes the countdown etc)
         private async void Restart() {
             if( !restarting) {
                 restarting = true;
@@ -211,6 +207,7 @@ namespace DeepFlight.scenes {
                     return true;
                 }
 
+                // Allows to turn the collision on and off in debug mode
                 #if DEBUG
                 if( e.Key == Keys.C) {
                     collisionEnabled = !collisionEnabled;
@@ -218,7 +215,6 @@ namespace DeepFlight.scenes {
                 }
                 #endif
             }
-
 
             if( e.Action == KeyAction.HELD ) {
                 if (!shipPaused) {
@@ -298,12 +294,12 @@ namespace DeepFlight.scenes {
         }
 
 
+        // Sets the time text to correct text
         private void UpdateTimeText() {
             string time = "";
             time += stopWatch.Elapsed.Minutes.ToString("0:");
             time += stopWatch.Elapsed.Seconds.ToString("00:");
             time += (stopWatch.Elapsed.Milliseconds / 10).ToString("00");
-
             timeText.Text = time;
         }
 
@@ -316,6 +312,7 @@ namespace DeepFlight.scenes {
         }
 
 
+        // Runs the "crash" scene, and resets the track
         private async void ShipCrashed() {
             crashed = true;
             shipPaused = true;
@@ -326,10 +323,11 @@ namespace DeepFlight.scenes {
 
 
         protected override void OnDraw(Renderer renderer) {
-            // Draw the ship and a 
+            // Move camera to the towards the ship
             gameCamera.X = ship.X + ship.VelocityX * 0.03;
             gameCamera.Y = ship.Y + ship.VelocityY * 0.03;
 
+            // Draw the Track with special rendering technique
             blocksDrawn = renderer.DrawTrack(gameCamera, track);
         }
 

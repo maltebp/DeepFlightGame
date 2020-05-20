@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DeepFlight.view.gui {
     
     /// <summary>
-    /// A board to show the highest player ratings
+    /// A board to show the highest player ratings in rows.
     /// </summary>
     class RatingboardView : View {
 

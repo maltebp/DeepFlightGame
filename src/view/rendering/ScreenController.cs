@@ -8,7 +8,7 @@ namespace DeepFlight.rendering {
 
     /// <summary>
     /// Handles information of the screen, including logical base dimensions, and
-    /// resolutions.
+    /// screen resolutions.
     /// </summary>
     public static class ScreenController {
         private static readonly double  BASE_HEIGHT = 720;
