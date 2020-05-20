@@ -72,22 +72,22 @@
     <Compile Include="src\model\Ship.cs" />
     <Compile Include="src\network\exceptions\AuthenticationException.cs" />
     <Compile Include="src\network\exceptions\UnknownUserException.cs" />
-    <Compile Include="src\view\gui\BorderView.cs" />
-    <Compile Include="src\view\gui\debugoverlay\DebugInfoView.cs" />
-    <Compile Include="src\view\gui\debugoverlay\DebugOverlay.cs" />
-    <Compile Include="src\view\gui\LoadingTextView.cs" />
-    <Compile Include="src\view\gui\MenuView.cs" />
-    <Compile Include="src\view\gui\RatingboardView.cs" />
-    <Compile Include="src\view\gui\trackinfo\PlanetBoxView.cs" />
-    <Compile Include="src\view\gui\trackinfo\TextPlanetBoxView.cs" />
-    <Compile Include="src\view\gui\trackinfo\TimeLabelView.cs" />
-    <Compile Include="src\view\gui\trackinfo\TrackInfoView.cs" />
-    <Compile Include="src\view\gui\SimpleMenuView.cs" />
-    <Compile Include="src\view\gui\TextInputView.cs" />
-    <Compile Include="src\view\gui\TextureView.cs" />
-    <Compile Include="src\view\gui\TextView.cs" />
-    <Compile Include="src\view\gui\trackinfo\TrackTimeList.cs" />
-    <Compile Include="src\view\gui\View.cs" />
+    <Compile Include="src\gui\BorderView.cs" />
+    <Compile Include="src\gui\debugoverlay\DebugInfoView.cs" />
+    <Compile Include="src\gui\debugoverlay\DebugOverlay.cs" />
+    <Compile Include="src\gui\LoadingTextView.cs" />
+    <Compile Include="src\gui\MenuView.cs" />
+    <Compile Include="src\gui\RatingboardView.cs" />
+    <Compile Include="src\gui\trackinfo\PlanetBoxView.cs" />
+    <Compile Include="src\gui\trackinfo\TextPlanetBoxView.cs" />
+    <Compile Include="src\gui\trackinfo\TimeLabelView.cs" />
+    <Compile Include="src\gui\trackinfo\TrackInfoView.cs" />
+    <Compile Include="src\gui\SimpleMenuView.cs" />
+    <Compile Include="src\gui\TextInputView.cs" />
+    <Compile Include="src\gui\TextureView.cs" />
+    <Compile Include="src\gui\TextView.cs" />
+    <Compile Include="src\gui\trackinfo\TrackTimeList.cs" />
+    <Compile Include="src\gui\View.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="src\network\exceptions\APIException.cs" />
     <Compile Include="src\network\exceptions\ConnectionException.cs" />
@@ -97,11 +97,11 @@
     <Compile Include="src\network\UserAPIConnector.cs" />
     <Compile Include="src\model\entity\Collidable.cs" />
     <Compile Include="src\model\entity\Movable.cs" />
-    <Compile Include="src\view\rendering\Camera.cs" />
-    <Compile Include="src\view\rendering\Font.cs" />
-    <Compile Include="src\view\rendering\Renderer.cs" />
-    <Compile Include="src\view\rendering\ScreenController.cs" />
-    <Compile Include="src\view\rendering\Textures.cs" />
+    <Compile Include="src\rendering\Camera.cs" />
+    <Compile Include="src\rendering\Font.cs" />
+    <Compile Include="src\rendering\Renderer.cs" />
+    <Compile Include="src\rendering\ScreenController.cs" />
+    <Compile Include="src\rendering\Textures.cs" />
     <Compile Include="src\scenes\GameScene.cs" />
     <Compile Include="src\scenes\LoginScene.cs" />
     <Compile Include="src\scenes\OfflineTracksScene.cs" />
@@ -421,6 +421,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

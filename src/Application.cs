@@ -46,7 +46,7 @@ public class Application : Game {
 
         // Setup keyboard controller
         // The Application registers itself to the KeyboardController's
-        // character and key input events
+        // character and key input events 
         KeyboardController.Initialize(Window);
         KeyboardController.KeyEvent += OnKeyInput;
         KeyboardController.CharEvent += OnCharInput;
